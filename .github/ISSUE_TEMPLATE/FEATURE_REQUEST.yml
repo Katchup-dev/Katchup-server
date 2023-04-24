@@ -1,3 +1,7 @@
 name: 🥫 Feature Request
 description: File a feature request here
 title: "[FEAT]: "
+body:
+- type: markdown
+  attributes:
+    value: "Bugs are the worst!"

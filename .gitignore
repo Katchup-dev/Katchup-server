@@ -25,7 +25,7 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+ide
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -37,6 +37,5 @@ out/
 .vscode/
 .env
 
-application-local.yml
-application-prod.yml
-application-auth.yml
+resources/
+.jpb/

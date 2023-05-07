@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.common.exception;
+package site.katchup.katchupserver.common.response;
 
 
 import lombok.AccessLevel;

@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import site.katchup.katchupserver.common.exception.ErrorStatus;
-import site.katchup.katchupserver.common.exception.SuccessStatus;
+import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.SuccessStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

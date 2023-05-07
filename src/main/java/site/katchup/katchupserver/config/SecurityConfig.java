@@ -28,4 +28,20 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
+    @Bean
+    @Profile("!local")
+    SecurityFilterChain prodSecurityConfig (HttpSecurity http) throws Exception{
+        return http
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .cors()
+                .and()
+                .authorizeHttpRequests()
+                .anyRequest().authenticated()
+                .and()
+                .build();
+    }
 }

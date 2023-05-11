@@ -11,7 +11,7 @@ import site.katchup.katchupserver.common.response.ErrorStatus;
 @RestControllerAdvice
 public class ControllerExceptionAdvice {
 
-    /*
+    /**
      * 400 BAD_REQUEST
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)

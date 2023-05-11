@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.link.domain;
+package site.katchup.katchupserver.api.screenshot.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,31 +13,27 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Link extends BaseEntity {
-
+public class Screenshot extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
+    private int index;
+
+    @Column(nullable = false)
     private String url;
-
-    @Column(name = "start_index", nullable = false)
-    private int startIndex;
-
-    @Column(name = "end_index", nullable = false)
-    private int endIndex;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "task_id")
     private Task task;
 
     @Builder
-    public Link(Long id, String url, Task task, int startIndex, int endIndex) {
+    public Screenshot(Long id, int index, String url, Task task) {
         this.id = id;
+        this.index = index;
         this.url = url;
         this.task = task;
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
+        this.task.addScreenshot(this);
     }
 }

@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.folder.domain.Folder;
+import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -43,9 +46,18 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "folder_id")
     private Folder folder;
 
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Screenshot> screenshots = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<File> files = new ArrayList<>();
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<Link> links = new ArrayList<>();
+
+
     @Builder
-    public Task(Long id, Long index, String name, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Folder folder) {
-        this.id = id;
+    public Task(Long index, String name, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Folder folder) {
         this.index = index;
         this.name = name;
         this.content = content;
@@ -53,5 +65,16 @@ public class Task extends BaseEntity {
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
         this.folder = folder;
+        this.folder.addTask(this);
+    }
+
+    public void addScreenshot(Screenshot screenshot) {
+        screenshots.add(screenshot);
+    }
+    public void addFile(File file) {
+        files.add(file);
+    }
+    public void addLink(Link link) {
+        links.add(link);
     }
 }

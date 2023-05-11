@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.TaskKeyword.domain;
+package site.katchup.katchupserver.api.keyword.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

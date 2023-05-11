@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.withdraw.domain;
+package site.katchup.katchupserver.api.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,6 +12,7 @@ import site.katchup.katchupserver.common.domain.BaseEntity;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
+import static java.time.LocalDateTime.now;
 
 @Entity
 @Getter
@@ -33,5 +34,6 @@ public class Withdraw {
     public Withdraw(Member member, String reason) {
         this.member = member;
         this.reason = reason;
+        this.createdAt = now();
     }
 }

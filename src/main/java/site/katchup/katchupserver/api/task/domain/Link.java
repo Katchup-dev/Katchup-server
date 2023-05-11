@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.file.domain;
+package site.katchup.katchupserver.api.task.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,27 +13,32 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class File extends BaseEntity {
+public class Link extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String name;
-
-    @Column(nullable = false)
     private String url;
+
+    @Column(name = "start_index", nullable = false)
+    private int startIndex;
+
+    @Column(name = "end_index", nullable = false)
+    private int endIndex;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "task_id")
     private Task task;
 
     @Builder
-    public File(Long id, String name, String url, Task task) {
+    public Link(Long id, String url, Task task, int startIndex, int endIndex) {
         this.id = id;
-        this.name = name;
         this.url = url;
         this.task = task;
+        this.startIndex = startIndex;
+        this.endIndex = endIndex;
+        this.task.addLink(this);
     }
 }

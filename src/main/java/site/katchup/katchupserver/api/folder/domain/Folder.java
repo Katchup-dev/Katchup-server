@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.category.domain.Category;
+import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -34,12 +37,19 @@ public class Folder extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
+
     @Builder
-    public Folder(Long id, String name, boolean isDeleted, LocalDateTime deletedAt, Category category) {
-        this.id = id;
+    public Folder(String name, boolean isDeleted, LocalDateTime deletedAt, Category category) {
         this.name = name;
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
         this.category = category;
+        this.category.addFolder(this);
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 }

@@ -32,10 +32,10 @@ public class Card extends BaseEntity {
     @Column(nullable = false)
     private Long index;
 
-    @Column
+    @Column(length = 2000)
     private String content;
 
-    @Column
+    @Column(length = 200)
     private String note;
 
     @Column(name = "is_deleted", nullable = false)

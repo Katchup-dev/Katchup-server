@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.task.domain.Task;
+import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -25,15 +25,15 @@ public class Screenshot extends BaseEntity {
     private String url;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "task_id")
-    private Task task;
+    @JoinColumn(name = "card_id")
+    private Card card;
 
     @Builder
-    public Screenshot(Long id, int index, String url, Task task) {
+    public Screenshot(Long id, int index, String url, Card card) {
         this.id = id;
         this.index = index;
         this.url = url;
-        this.task = task;
-        this.task.addScreenshot(this);
+        this.card = card;
+        this.card.addScreenshot(this);
     }
 }

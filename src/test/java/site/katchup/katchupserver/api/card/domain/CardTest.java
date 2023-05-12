@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.task.domain;
+package site.katchup.katchupserver.api.card.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,16 +12,18 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
+import site.katchup.katchupserver.api.card.repository.CardRepository;
+import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 
 @DataJpaTest
-public class TaskTest {
+public class CardTest {
+
+    @Autowired
+    private CardRepository cardRepository;
 
     @Autowired
     private TaskRepository taskRepository;
-
-    @Autowired
-    private FolderRepository folderRepository;
 
     @DisplayName("Task 엔티티 저장 테스트")
     @Test
@@ -29,28 +31,27 @@ public class TaskTest {
         // given
         Category category = Category.builder().name("Test Category").build();
         Folder folder = Folder.builder().category(category).name("Test Folder").build();
-        folderRepository.save(folder);
+        Task task = Task.builder().folder(folder).name("Test Task").build();
+        taskRepository.save(task);
 
-        Task task = Task.builder()
+        Card card = Card.builder()
                 .index(1L)
-                .name("Test Task")
                 .content("Test Content")
                 .note("Test Note")
                 .isDeleted(false)
                 .deletedAt(LocalDateTime.now())
-                .folder(folder)
+                .task(task)
                 .build();
 
         // when
-        taskRepository.save(task);
+        cardRepository.save(card);
 
         // then
-        Task savedTask = taskRepository.findById(task.getId()).orElseThrow();
-        assertThat(savedTask.getIndex()).isEqualTo(1L);
-        assertThat(savedTask.getName()).isEqualTo("Test Task");
-        assertThat(savedTask.getContent()).isEqualTo("Test Content");
-        assertThat(savedTask.getNote()).isEqualTo("Test Note");
-        assertThat(savedTask.isDeleted()).isFalse();
-        assertThat(savedTask.getFolder().getName()).isEqualTo("Test Folder");
+        Card savedCard = cardRepository.findById(card.getId()).orElseThrow();
+        assertThat(savedCard.getIndex()).isEqualTo(1L);
+        assertThat(savedCard.getContent()).isEqualTo("Test Content");
+        assertThat(savedCard.getNote()).isEqualTo("Test Note");
+        assertThat(savedCard.isDeleted()).isFalse();
+        assertThat(savedCard.getTask().getName()).isEqualTo("Test Task");
     }
 }

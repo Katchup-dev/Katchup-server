@@ -3,10 +3,8 @@ package site.katchup.katchupserver.api.keyword.domain;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.keyword.domain.Keyword;
-import site.katchup.katchupserver.api.task.domain.Task;
+import site.katchup.katchupserver.api.card.domain.Card;
 
 @Entity
 @Table(name = "task_keyword")
@@ -18,17 +16,17 @@ public class TaskKeyword {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
+    @JoinColumn(name = "card_id")
+    private Card card;
 
     @ManyToOne
     @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 
     @Builder
-    public TaskKeyword(Long id, Task task, Keyword keyword) {
+    public TaskKeyword(Long id, Card card, Keyword keyword) {
         this.id = id;
-        this.task = task;
+        this.card = card;
         this.keyword = keyword;
     }
 }

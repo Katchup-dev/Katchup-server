@@ -16,7 +16,7 @@ class MemberTest {
 
     @Test
     @DisplayName("멤버 저장 테스트")
-    void saveMember() {
+    void successSaveMember() {
         // given
         Member member = Member.builder()
                 .nickname("캐쳐비")

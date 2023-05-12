@@ -25,9 +25,9 @@ public class CardTest {
     @Autowired
     private TaskRepository taskRepository;
 
-    @DisplayName("Task 엔티티 저장 테스트")
+    @DisplayName("업무 카드 저장 테스트")
     @Test
-    void testSaveTask() {
+    void successSaveCard() {
         // given
         Category category = Category.builder().name("Test Category").build();
         Folder folder = Folder.builder().category(category).name("Test Folder").build();

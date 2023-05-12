@@ -3,10 +3,12 @@ package site.katchup.katchupserver.api.member.domain;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     @Id
@@ -16,8 +18,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String nickname;
 
-    @Column
-    private String memo;
+    @Column(nullable = false)
+    private String email;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -32,9 +34,9 @@ public class Member extends BaseEntity {
     private String refreshToken;
 
     @Builder
-    public Member(String nickname, String memo, String imageUrl, boolean isDeleted, boolean isNewUser, String refreshToken) {
+    public Member(String nickname, String email, String imageUrl, boolean isDeleted, boolean isNewUser, String refreshToken) {
         this.nickname = nickname;
-        this.memo = memo;
+        this.email = email;
         this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
         this.isNewUser = isNewUser;

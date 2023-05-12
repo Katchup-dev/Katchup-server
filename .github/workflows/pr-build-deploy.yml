@@ -56,7 +56,21 @@ jobs:
 
       - name: Docker Build and Push
         run: |
-          run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_NAME }}" --password-stdin
           docker build -f Dockerfile -t ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest .
           docker push ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+
+      - name: Pull and Deploy
+        uses: appleboy/ssh-action@master
+        if: github.event.pull_request.merged == true
+        with:
+          host: ${{ secrets.REMOTE_IP }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.SSH_REMOTE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            sudo docker stop $(sudo docker ps -q)
+            sudo docker rm -f $(docker ps -qa)
+            docker pull ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_REPOSITORY }}-dev ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            docker image rm -f $(docker images -f "dangling=true" -q)

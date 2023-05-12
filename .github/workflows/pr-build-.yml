@@ -23,6 +23,7 @@ jobs:
         working-directory: ./
         run: |
           pwd
+          mkdir src/main/resources
           touch src/main/resources/application-aws.yml
           echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> src/main/resources/application-aws.yml
           echo AWS_REGION=${{ secrets.AWS_REGION }} >> src/main/resources/application-aws.yml

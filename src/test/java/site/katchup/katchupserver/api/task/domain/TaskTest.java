@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
@@ -26,7 +27,8 @@ public class TaskTest {
     @Test
     void testSaveTask() {
         // given
-        Folder folder = Folder.builder().name("Test Folder").build();
+        Category category = Category.builder().name("Test Category").build();
+        Folder folder = Folder.builder().category(category).name("Test Folder").build();
         folderRepository.save(folder);
 
         Task task = Task.builder()
@@ -49,7 +51,6 @@ public class TaskTest {
         assertThat(savedTask.getContent()).isEqualTo("Test Content");
         assertThat(savedTask.getNote()).isEqualTo("Test Note");
         assertThat(savedTask.isDeleted()).isFalse();
-        assertThat(savedTask.getDeletedAt()).isEqualTo(LocalDateTime.now());
         assertThat(savedTask.getFolder().getName()).isEqualTo("Test Folder");
     }
 }

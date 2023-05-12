@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.link.domain.Link;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.task.domain.Task;

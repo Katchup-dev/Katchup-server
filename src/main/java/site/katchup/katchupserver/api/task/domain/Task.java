@@ -1,8 +1,6 @@
 package site.katchup.katchupserver.api.task.domain;
 
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

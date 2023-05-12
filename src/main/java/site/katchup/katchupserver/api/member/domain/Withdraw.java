@@ -1,13 +1,10 @@
 package site.katchup.katchupserver.api.member.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import site.katchup.katchupserver.api.member.domain.Member;
-import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
 

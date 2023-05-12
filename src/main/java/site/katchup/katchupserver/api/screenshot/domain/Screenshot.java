@@ -1,7 +1,6 @@
 package site.katchup.katchupserver.api.screenshot.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;

@@ -13,15 +13,18 @@ import site.katchup.katchupserver.common.domain.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.*;
+import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class Task extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -31,7 +34,7 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "folder_id")
     private Folder folder;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = ALL)
     private List<Card> cards = new ArrayList<>();
 
     @Builder

@@ -15,15 +15,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.FetchType.LAZY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class Card extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -45,15 +48,14 @@ public class Card extends BaseEntity {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = ALL)
     private List<Screenshot> screenshots = new ArrayList<>();
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = ALL)
     private List<File> files = new ArrayList<>();
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = ALL)
     private List<Link> links = new ArrayList<>();
-
 
     @Builder
     public Card(Long index, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
@@ -69,9 +71,11 @@ public class Card extends BaseEntity {
     public void addScreenshot(Screenshot screenshot) {
         screenshots.add(screenshot);
     }
+
     public void addFile(File file) {
         files.add(file);
     }
+
     public void addLink(Link link) {
         links.add(link);
     }

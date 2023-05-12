@@ -13,10 +13,11 @@ import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static java.time.LocalDateTime.now;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED)
 public class Withdraw {
 
     @Id

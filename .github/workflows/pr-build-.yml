@@ -58,5 +58,5 @@ jobs:
         run: |
           run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_NAME }}" --password-stdin
-          docker build -f Dockerfile -t ${{ secret.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest .
-          docker push ${{ secret.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest .
+          docker push ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}

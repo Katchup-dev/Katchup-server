@@ -51,5 +51,12 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew clean build
         shell: bash
+
+      - name: Docker Build and Push
+        run: |
+          run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_NAME }}" --password-stdin
+          docker build -f Dockerfile -t ${{ secret.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest .
+          docker push ${{ secret.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}

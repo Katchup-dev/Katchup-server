@@ -10,6 +10,9 @@ import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;
+import java.util.UUID;
+
+import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -17,8 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class Screenshot extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false)
     private int index;
@@ -31,8 +33,8 @@ public class Screenshot extends BaseEntity {
     private Card card;
 
     @Builder
-    public Screenshot(Long id, int index, String url, Card card) {
-        this.id = id;
+    public Screenshot(int index, String url, Card card) {
+        this.id = randomUUID();
         this.index = index;
         this.url = url;
         this.card = card;

@@ -21,7 +21,7 @@ public class Screenshot extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private int index;
+    private int tag_order;
 
     @Column(nullable = false)
     private String url;
@@ -31,9 +31,9 @@ public class Screenshot extends BaseEntity {
     private Card card;
 
     @Builder
-    public Screenshot(int index, String url, Card card) {
+    public Screenshot(int tag_order, String url, Card card) {
         this.id = randomUUID();
-        this.index = index;
+        this.tag_order = tag_order;
         this.url = url;
         this.card = card;
         this.card.addScreenshot(this);

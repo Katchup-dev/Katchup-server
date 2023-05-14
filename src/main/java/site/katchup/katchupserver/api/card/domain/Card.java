@@ -29,7 +29,7 @@ public class Card extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long index;
+    private Long placement_order;
 
     @Column(length = 2000)
     private String content;
@@ -57,8 +57,8 @@ public class Card extends BaseEntity {
     private List<Link> links = new ArrayList<>();
 
     @Builder
-    public Card(Long index, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
-        this.index = index;
+    public Card(Long placement_order, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
+        this.placement_order = placement_order;
         this.content = content;
         this.note = note;
         this.isDeleted = isDeleted;

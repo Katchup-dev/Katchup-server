@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import site.katchup.katchupserver.api.category.domain.Category;
-import site.katchup.katchupserver.api.folder.domain.Folder;
+import site.katchup.katchupserver.api.category.domain.domain.Folder;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
@@ -34,7 +34,7 @@ public class CardTest {
         taskRepository.save(task);
 
         Card card = Card.builder()
-                .index(1L)
+                .placement_order(1L)
                 .content("Test Content")
                 .note("Test Note")
                 .isDeleted(false)
@@ -47,7 +47,7 @@ public class CardTest {
 
         // then
         Card savedCard = cardRepository.findById(card.getId()).orElseThrow();
-        assertThat(savedCard.getIndex()).isEqualTo(1L);
+        assertThat(savedCard.getPlacement_order()).isEqualTo(1L);
         assertThat(savedCard.getContent()).isEqualTo("Test Content");
         assertThat(savedCard.getNote()).isEqualTo("Test Note");
         assertThat(savedCard.isDeleted()).isFalse();

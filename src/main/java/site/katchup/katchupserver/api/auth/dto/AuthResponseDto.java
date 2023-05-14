@@ -5,6 +5,9 @@ import lombok.Builder;
 
 @Builder
 public class AuthResponseDto {
+    @JsonProperty("id")
+    private long id;
+
     @JsonProperty("nickname")
     private String nickname;
 

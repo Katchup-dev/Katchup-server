@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import site.katchup.katchupserver.api.category.domain.Category;
-import site.katchup.katchupserver.api.category.domain.domain.Folder;
+import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;

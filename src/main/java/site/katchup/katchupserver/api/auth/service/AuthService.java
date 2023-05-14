@@ -54,7 +54,6 @@ public class AuthService {
         String nickname = signedMember.getNickname();
 
         return AuthResponseDto.builder()
-                .id(signedMember.getId())
                 .nickname(nickname)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)

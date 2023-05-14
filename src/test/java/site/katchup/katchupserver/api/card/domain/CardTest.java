@@ -34,7 +34,7 @@ public class CardTest {
         taskRepository.save(task);
 
         Card card = Card.builder()
-                .index(1L)
+                .placement_order(1L)
                 .content("Test Content")
                 .note("Test Note")
                 .isDeleted(false)
@@ -47,7 +47,7 @@ public class CardTest {
 
         // then
         Card savedCard = cardRepository.findById(card.getId()).orElseThrow();
-        assertThat(savedCard.getIndex()).isEqualTo(1L);
+        assertThat(savedCard.getPlacement_order()).isEqualTo(1L);
         assertThat(savedCard.getContent()).isEqualTo("Test Content");
         assertThat(savedCard.getNote()).isEqualTo("Test Note");
         assertThat(savedCard.isDeleted()).isFalse();

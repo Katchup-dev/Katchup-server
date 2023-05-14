@@ -26,10 +26,10 @@ class ScreenshotTest {
         Category category = Category.builder().name("Test Category").build();
         Folder folder = Folder.builder().category(category).name("Test Folder").build();
         Task task = Task.builder().folder(folder).name("Test Task").build();
-        Card card = Card.builder().index(1L).isDeleted(false).task(task).build();
+        Card card = Card.builder().placement_order(1L).isDeleted(false).task(task).build();
 
         Screenshot screenshot = Screenshot.builder()
-                .index(1)
+                .tag_order(1)
                 .url("https://example.com/katchup_screenshot.png")
                 .card(card)
                 .build();
@@ -41,7 +41,7 @@ class ScreenshotTest {
         Assertions.assertNotNull(savedScreenshot.getId());
         Assertions.assertTrue(isValidUUID(savedScreenshot.getId().toString()));
         Assertions.assertEquals(savedScreenshot.getId().toString(), screenshot.getId().toString());
-        Assertions.assertEquals(savedScreenshot.getIndex(), screenshot.getIndex());
+        Assertions.assertEquals(savedScreenshot.getTag_order(), screenshot.getTag_order());
         Assertions.assertEquals(savedScreenshot.getUrl(), screenshot.getUrl());
         Assertions.assertEquals(savedScreenshot.getCard().getId(), screenshot.getCard().getId());
     }

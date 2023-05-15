@@ -18,13 +18,13 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${jwt.secret}")
-    private String secretKey;
+    private final String secretKey;
 
     @Value("${jwt.access-token.expire-length}")
-    private Long accessTokenExpireLength;
+    private final Long accessTokenExpireLength;
 
     @Value("${jwt.refresh-token.expire-length}")
-    private Long refreshTokenExpireLength;
+    private final Long refreshTokenExpireLength;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 

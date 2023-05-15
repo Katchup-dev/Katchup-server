@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.common.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,5 +19,14 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ApiResponseDto handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         return ApiResponseDto.error(ErrorStatus.VALIDATION_REQUEST_MISSING_EXCEPTION);
+    }
+
+    /**
+     * 500 INTERNAL_SERVER_ERROR
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public ApiResponseDto unhandledExceptionHandler(final Exception e) {
+        return ApiResponseDto.error(ErrorStatus.INTERNAL_SERVER_ERROR);
     }
 }

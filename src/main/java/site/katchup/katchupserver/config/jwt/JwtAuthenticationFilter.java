@@ -18,14 +18,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String accessToken = jwtTokenProvider.resolveToken(request);
+        JwtExceptionType jwtException = jwtTokenProvider.validateToken(accessToken);
 
         if (accessToken != null) {
             // 토큰 검증
-            if (jwtTokenProvider.validateToken(accessToken)) {
+            if (jwtException == JwtExceptionType.VALID_JWT_TOKEN) {
                 setAuthentication(accessToken);
             } else {
-                HttpServletResponse res = response;
-                res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 토큰입니다.");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 토큰입니다.");
             }
         }
         chain.doFilter(request, response);

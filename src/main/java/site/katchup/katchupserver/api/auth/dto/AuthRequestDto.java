@@ -1,12 +1,12 @@
 package site.katchup.katchupserver.api.auth.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import static lombok.AccessLevel.PROTECTED;
+
+@Data
+@NoArgsConstructor(access = PROTECTED)
 public class AuthRequestDto {
 
     private String accessToken;

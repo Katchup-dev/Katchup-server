@@ -9,7 +9,7 @@ import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -20,7 +20,7 @@ public class AuthController {
         AuthResponseDto responseDto = authService.socialLogin(authRequestDto);
 
         // 로그인
-        if (!responseDto.isNewUser) {
+        if (!responseDto.isNewUser()) {
             return ApiResponseDto.success(SuccessStatus.SIGNIN_SUCCESS, responseDto);
         }
 

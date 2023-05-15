@@ -27,6 +27,7 @@ public class AuthService {
         GoogleInfoDto googleInfoDto = login(authRequestDto.getAccessToken());
 
         String email = googleInfoDto.getEmail();
+        String refreshToken = jwtTokenProvider.generateRefreshToken();
 
         boolean isExistUser = isMemberByEmail(email);
 
@@ -38,11 +39,12 @@ public class AuthService {
                     .nickname(googleInfoDto.getNickname())
                     .email(googleInfoDto.getEmail())
                     .imageUrl(googleInfoDto.getImageUrl())
+                    .refreshToken(refreshToken)
                     .build();
 
             memberRepository.save(member);
         }
-        else findMemberByEmail(email).updateMemberStatus(false);
+        else findMemberByEmail(email).updateMemberStatus(false, refreshToken);
 
         // 등록된 유저 찾기
         Member signedMember = findMemberByEmail(email);
@@ -50,7 +52,7 @@ public class AuthService {
         Authentication authentication = new UserAuthentication(signedMember.getId(), null, null);
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
-        String refreshToken = jwtTokenProvider.generateRefreshToken();
+
         String nickname = signedMember.getNickname();
 
         return AuthResponseDto.builder()

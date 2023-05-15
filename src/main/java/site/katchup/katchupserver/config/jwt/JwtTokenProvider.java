@@ -6,6 +6,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -18,18 +19,17 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${jwt.secret}")
-    private final String secretKey;
+    private String secretKey;
 
     @Value("${jwt.access-token.expire-length}")
-    private final Long accessTokenExpireLength;
+    private Long accessTokenExpireLength;
 
     @Value("${jwt.refresh-token.expire-length}")
-    private final Long refreshTokenExpireLength;
+    private Long refreshTokenExpireLength;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
     public String generateAccessToken(Authentication authentication) {
-
         Date now = new Date();
         Date expiration = new Date(now.getTime() + accessTokenExpireLength);
 

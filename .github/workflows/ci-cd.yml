@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'temurin'
+          distribution: 'corretto'
           cache: gradle
 
       - name: create application-aws file
@@ -85,5 +85,5 @@ jobs:
             sudo docker stop $(sudo docker ps -q)
             sudo docker rm -f $(docker ps -qa)
             docker pull ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
-            docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_REPOSITORY }}-dev ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
-            docker image rm -f $(docker images -f "dangling=true" -q)
+            docker run -d -p 8080:8080 --name katchup-dev ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            docker image  rm -f $(docker images -f "dangling=true" -q)

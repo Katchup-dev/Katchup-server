@@ -44,4 +44,10 @@ public class Member extends BaseEntity {
         this.isNewUser = isNewUser;
         this.refreshToken = refreshToken;
     }
+
+    public void updateMemberStatus(boolean isNewUser, String refreshToken) {
+
+        this.isNewUser = isNewUser;
+        this.refreshToken = refreshToken;
+    }
 }

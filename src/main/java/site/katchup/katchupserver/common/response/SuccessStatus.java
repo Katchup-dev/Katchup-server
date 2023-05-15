@@ -13,8 +13,8 @@ public enum SuccessStatus {
     /*
     user
     */
-    SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입이 완료되었습니다."),
-    SIGNIN_SUCCESS(HttpStatus.OK, "로그인을 성공하였습니다.")
+    SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
+    SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공")
     ;
 
     private final HttpStatus httpStatus;

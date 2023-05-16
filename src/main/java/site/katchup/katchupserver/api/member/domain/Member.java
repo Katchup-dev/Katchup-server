@@ -62,3 +62,4 @@ public class Member extends BaseEntity {
         return Long.valueOf(principal.getName());
     }
 }
+

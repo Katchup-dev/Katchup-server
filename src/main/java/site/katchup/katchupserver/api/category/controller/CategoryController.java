@@ -1,7 +1,5 @@
 package site.katchup.katchupserver.api.category.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +8,6 @@ import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
-import site.katchup.katchupserver.config.jwt.JwtTokenProvider;
 
 import java.security.Principal;
 import java.util.List;

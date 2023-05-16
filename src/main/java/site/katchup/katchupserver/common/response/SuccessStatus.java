@@ -10,11 +10,16 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessStatus {
 
-    /*
-    user
-    */
+    /**
+     * user
+     */
     SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
-    SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공")
+    SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
+
+    /**
+     * category
+     */
+    READ_ALL_CATEGORY_SUCCESS(HttpStatus.OK, "대분류 카테고리 목록 조회 성공"),
     ;
 
     private final HttpStatus httpStatus;

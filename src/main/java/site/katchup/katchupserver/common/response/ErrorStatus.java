@@ -18,6 +18,7 @@ public enum ErrorStatus {
      * 401 UNAUTHORIZED
      */
     UNAUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    INVALID_MEMBER(HttpStatus.UNAUTHORIZED, "유효하지 않은 유저입니다."),
     GOOGLE_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "구글 로그인 실패. 만료되었거나 잘못된 구글 토큰입니다."),
 
     /**

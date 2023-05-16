@@ -20,7 +20,6 @@ public enum SuccessStatus {
      * category
      */
     READ_ALL_CATEGORY_SUCCESS(HttpStatus.OK, "대분류 카테고리 목록 조회 성공"),
-    ;
 
     /**
      *member

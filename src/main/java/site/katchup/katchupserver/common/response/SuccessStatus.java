@@ -11,11 +11,15 @@ import org.springframework.http.HttpStatus;
 public enum SuccessStatus {
 
     /*
-    user
+    auth
     */
     SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
-    SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공")
-    ;
+    SIGNIN_SUCCESS(HttpStatus.OK, "로그인 성공"),
+
+    /*
+    member
+     */
+    GET_MEMBER_SUCCESS(HttpStatus.OK, "프로필 팝업 조회 성공");
 
     private final HttpStatus httpStatus;
     private final String message;

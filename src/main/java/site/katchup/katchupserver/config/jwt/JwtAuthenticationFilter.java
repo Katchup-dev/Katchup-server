@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.io.IOException;
 
@@ -25,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtException == JwtExceptionType.VALID_JWT_TOKEN) {
                 setAuthentication(accessToken);
             } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "잘못된 토큰입니다.");
+                throw new CustomException(ErrorStatus.UNAUTHORIZED_TOKEN);
             }
         }
         chain.doFilter(request, response);

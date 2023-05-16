@@ -5,8 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.common.domain.BaseEntity;
+import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.response.ErrorStatus;
+
+import java.security.Principal;
 
 import static jakarta.persistence.GenerationType.*;
+import static java.util.Objects.isNull;
 import static lombok.AccessLevel.*;
 
 @Entity
@@ -46,8 +51,14 @@ public class Member extends BaseEntity {
     }
 
     public void updateMemberStatus(boolean isNewUser, String refreshToken) {
-
         this.isNewUser = isNewUser;
         this.refreshToken = refreshToken;
+    }
+
+    public static Long getMemberId(Principal principal) {
+        if (isNull(principal)) {
+            throw new CustomException(ErrorStatus.INVALID_MEMBER);
+        }
+        return Long.valueOf(principal.getName());
     }
 }

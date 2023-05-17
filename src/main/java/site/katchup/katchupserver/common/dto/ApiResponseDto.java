@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import site.katchup.katchupserver.common.response.SuccessStatus;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponseDto<T> {
 
     private final int status;

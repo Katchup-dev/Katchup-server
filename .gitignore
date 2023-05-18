@@ -39,3 +39,5 @@ ide
 
 resources/
 .jpb/
+
+.DS_Store

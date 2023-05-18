@@ -22,6 +22,11 @@ public enum SuccessStatus {
     READ_ALL_CATEGORY_SUCCESS(HttpStatus.OK, "대분류 카테고리 목록 조회 성공"),
 
     /**
+     * folder
+     */
+    READ_ALL_FOLDER_SUCCESS(HttpStatus.OK, "중분류 폴더 전체 목록 조회 성공"),
+
+    /**
      *member
      */
     GET_MEMBER_SUCCESS(HttpStatus.OK, "프로필 팝업 조회 성공");

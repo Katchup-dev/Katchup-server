@@ -11,7 +11,6 @@ import site.katchup.katchupserver.common.response.SuccessStatus;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponseDto<T> {
 
     private final int status;

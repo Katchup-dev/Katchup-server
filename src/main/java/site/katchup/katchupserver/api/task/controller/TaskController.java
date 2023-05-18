@@ -11,6 +11,7 @@ import site.katchup.katchupserver.api.task.dto.TaskResponseDto;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
+import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,8 +25,7 @@ public class TaskController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<TaskResponseDto>> getAllTask(Principal principal) {
-        Long memberId = Member.getMemberId(principal);
-
+        Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.GET_ALL_TASK_SUCCESS, taskService.getAllTask(memberId));
     }
 }

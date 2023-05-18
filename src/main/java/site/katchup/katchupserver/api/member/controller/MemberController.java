@@ -7,6 +7,7 @@ import site.katchup.katchupserver.api.member.dto.MemberResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
+import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
 
@@ -18,7 +19,7 @@ public class MemberController {
 
     @GetMapping("/profile")
     public ApiResponseDto<MemberResponseDto> getMemberProfile(Principal principal) {
-        Long memberId = Member.getMemberId(principal);
+        Long memberId = MemberUtil.getMemberId(principal);
 
         MemberResponseDto responseDto = memberService.getMemberProfile(memberId);
 

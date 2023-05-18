@@ -25,6 +25,7 @@ public enum SuccessStatus {
      * folder
      */
     READ_ALL_FOLDER_SUCCESS(HttpStatus.OK, "중분류 폴더 전체 목록 조회 성공"),
+    READ_BY_CATEGORY_SUCCESS(HttpStatus.OK, "특정 카테고리 내 중분류 폴더 조회 성공"),
 
     /**
      * member

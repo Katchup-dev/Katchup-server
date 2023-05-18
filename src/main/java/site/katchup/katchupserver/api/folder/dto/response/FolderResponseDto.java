@@ -11,10 +11,10 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 public class FolderResponseDto {
 
-    private Long id;
+    private Long folderId;
     private String name;
 
-    public static FolderResponseDto of(Long id, String name) {
-        return new FolderResponseDto(id, name);
+    public static FolderResponseDto of(Long folderId, String name) {
+        return new FolderResponseDto(folderId, name);
     }
 }

@@ -55,11 +55,5 @@ public class Member extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    public static Long getMemberId(Principal principal) {
-        if (isNull(principal)) {
-            throw new CustomException(ErrorStatus.INVALID_MEMBER);
-        }
-        return Long.valueOf(principal.getName());
-    }
 }
 

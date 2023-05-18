@@ -13,7 +13,7 @@ public class CategoryResponseDto {
 
     private Long categoryId;
     private String name;
-    private boolean isShared;
+    private Boolean isShared;
 
     public static CategoryResponseDto of(Long categoryId, String name, boolean isShared) {
         return new CategoryResponseDto(categoryId, name, isShared);

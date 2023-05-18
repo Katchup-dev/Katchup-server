@@ -9,6 +9,7 @@ import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
+import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,8 +26,7 @@ public class FolderController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderResponseDto>> getAllCategory(Principal principal) {
-        Long memberId = Member.getMemberId(principal);
-
+        Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
     }
 

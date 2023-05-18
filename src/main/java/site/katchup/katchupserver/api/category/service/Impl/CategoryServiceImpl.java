@@ -18,7 +18,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponseDto> getAllCategory(Long memberId) {
         return categoryRepository.findByMemberId(memberId).stream()
-                .map(category -> new CategoryResponseDto(category.getId(), category.getName(), category.isShared()))
+                .map(category -> CategoryResponseDto.of(category.getId(), category.getName(), category.isShared()))
                 .collect(Collectors.toList());
     }
 }

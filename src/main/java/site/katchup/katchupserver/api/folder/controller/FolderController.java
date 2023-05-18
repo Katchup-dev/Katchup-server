@@ -1,11 +1,9 @@
 package site.katchup.katchupserver.api.folder.controller;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
 import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.member.domain.Member;
@@ -30,5 +28,11 @@ public class FolderController {
         Long memberId = Member.getMemberId(principal);
 
         return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
+    }
+
+    @GetMapping("/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto<List<FolderResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
+        return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
     }
 }

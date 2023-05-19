@@ -22,9 +22,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class ScreenshotServiceImpl implements ScreenshotService{
 
     private static final String SCREENSHOT_FOLDER_NAME = "screenshots";

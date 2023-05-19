@@ -10,7 +10,6 @@ import site.katchup.katchupserver.common.domain.BaseEntity;
 import static jakarta.persistence.FetchType.LAZY;
 import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -20,8 +19,8 @@ public class Screenshot extends BaseEntity {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
-    private int tag_order;
+    @Column(name="sticker_order", columnDefinition = "integer default 0")
+    private int stickerOrder;
 
     @Column(nullable = false)
     private String url;
@@ -31,11 +30,14 @@ public class Screenshot extends BaseEntity {
     private Card card;
 
     @Builder
-    public Screenshot(int tag_order, String url, Card card) {
-        this.id = randomUUID();
-        this.tag_order = tag_order;
+    public Screenshot(UUID id, String url, Card card) {
+        this.id = id;
         this.url = url;
         this.card = card;
-        this.card.addScreenshot(this);
     }
+
+    public void updateCard(Card card) {
+        this.card = card;
+    }
+
 }

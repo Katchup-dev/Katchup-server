@@ -1,15 +1,15 @@
 package site.katchup.katchupserver.api.task.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import site.katchup.katchupserver.api.member.domain.Member;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+import site.katchup.katchupserver.api.task.dto.TaskCreateRequestDto;
 import site.katchup.katchupserver.api.task.dto.TaskResponseDto;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
+import site.katchup.katchupserver.common.response.ErrorStatus;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 
@@ -27,5 +27,12 @@ public class TaskController {
     public ApiResponseDto<List<TaskResponseDto>> getAllTask(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.GET_ALL_TASK_SUCCESS, taskService.getAllTask(memberId));
+    }
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponseDto createTask(@Valid @RequestBody TaskCreateRequestDto requestDto) {
+        taskService.createTask(requestDto);
+        return ApiResponseDto.success(SuccessStatus.CREATE_TASK_SUCCESS);
     }
 }

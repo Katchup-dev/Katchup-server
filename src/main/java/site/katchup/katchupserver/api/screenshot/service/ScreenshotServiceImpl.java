@@ -64,8 +64,7 @@ public class ScreenshotServiceImpl implements ScreenshotService{
             throw new CustomException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
         }
     }
-
-
+    
     private String getUUIDFileName() {
         return UUID.randomUUID().toString();
     }

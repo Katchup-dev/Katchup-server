@@ -27,5 +27,4 @@ public class ScreenshotValidator {
                 throw new IllegalArgumentException("5MB 미만의 파일을 업로드해야합니다.");
         }
     }
-
 }

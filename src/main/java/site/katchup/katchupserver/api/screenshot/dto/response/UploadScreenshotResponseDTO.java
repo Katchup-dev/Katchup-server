@@ -2,7 +2,6 @@ package site.katchup.katchupserver.api.screenshot.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class UploadScreenshotResponseDTO {

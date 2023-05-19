@@ -23,7 +23,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-@Transactional()
+@Transactional(readOnly = true)
 @Service
 public class ScreenshotServiceImpl implements ScreenshotService{
 
@@ -55,7 +55,10 @@ public class ScreenshotServiceImpl implements ScreenshotService{
 
             screenshotRepository.save(screenshot);
 
-            return new UploadScreenshotResponseDTO(screenshot.getId().toString(), screenshot.getUrl());
+            return UploadScreenshotResponseDTO.builder()
+                    .id(screenshot.getId().toString())
+                    .screenshotUrl(screenshot.getUrl())
+                    .build();
 
         } catch (IOException e) {
             throw new CustomException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);

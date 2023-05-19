@@ -19,7 +19,7 @@ public class ScreenshotController {
     private final ScreenshotService screenshotService;
 
     @PostMapping("/cards/{cardId}/screenshot")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto<UploadScreenshotResponseDTO> uploadScreenshot(
             Principal principal,
             @PathVariable Long cardId,

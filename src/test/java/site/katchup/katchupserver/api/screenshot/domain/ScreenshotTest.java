@@ -28,8 +28,10 @@ class ScreenshotTest {
         Task task = Task.builder().folder(folder).name("Test Task").build();
         Card card = Card.builder().placement_order(1L).isDeleted(false).task(task).build();
 
+        UUID uuid = UUID.randomUUID();
+
         Screenshot screenshot = Screenshot.builder()
-                .tag_order(1)
+                .id(uuid)
                 .url("https://example.com/katchup_screenshot.png")
                 .card(card)
                 .build();
@@ -39,21 +41,9 @@ class ScreenshotTest {
 
         // Then
         Assertions.assertNotNull(savedScreenshot.getId());
-        Assertions.assertTrue(isValidUUID(savedScreenshot.getId().toString()));
-        Assertions.assertEquals(savedScreenshot.getId().toString(), screenshot.getId().toString());
-        Assertions.assertEquals(savedScreenshot.getTag_order(), screenshot.getTag_order());
+        Assertions.assertEquals(savedScreenshot.getId(), uuid);
+        Assertions.assertEquals(savedScreenshot.getStickerOrder(), 0);
         Assertions.assertEquals(savedScreenshot.getUrl(), screenshot.getUrl());
         Assertions.assertEquals(savedScreenshot.getCard().getId(), screenshot.getCard().getId());
     }
-
-    private boolean isValidUUID(String uuidString) {
-        try {
-            UUID.fromString(uuidString);
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-
 }

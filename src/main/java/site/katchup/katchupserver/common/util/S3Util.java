@@ -1,11 +1,13 @@
 package site.katchup.katchupserver.common.util;
 
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import site.katchup.katchupserver.config.AwsS3Config;
 
+import java.io.InputStream;
 import java.net.URLDecoder;
 
 @Configuration
@@ -18,8 +20,8 @@ public class S3Util {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     // 파일 업로드
-    public String upload(String fileName, String filePath) {
-        awsS3Config.amazonS3Client().putObject(bucket, fileName, filePath);
+    public String upload(InputStream file, String fileName, ObjectMetadata objectMetadata) {
+        awsS3Config.amazonS3Client().putObject(bucket, fileName, file, objectMetadata);
         return awsS3Config.amazonS3Client().getUrl(bucket, fileName).toString();
     }
 
@@ -27,5 +29,9 @@ public class S3Util {
     public void delete(String fileName) {
         String key = URLDecoder.decode(fileName.split("/")[3]);
         awsS3Config.amazonS3Client().deleteObject(bucket, key);
+    }
+
+    public String getImageUrl(String filePath) {
+        return awsS3Config.amazonS3Client().getUrl(bucket, filePath).toString();
     }
 }

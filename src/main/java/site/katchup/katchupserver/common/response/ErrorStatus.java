@@ -22,6 +22,11 @@ public enum ErrorStatus {
     GOOGLE_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "구글 로그인 실패. 만료되었거나 잘못된 구글 토큰입니다."),
 
     /**
+     * 404 NOT_FOUND
+     */
+    NOT_FOUND_FOLDER(HttpStatus.NOT_FOUND, "존재하지 않는 중분류 폴더입니다."),
+
+    /**
      * 500 SERVER_ERROR
      */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "예상치 못한 서버 에러가 발생했습니다."),

@@ -6,10 +6,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
+import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 @RestControllerAdvice
 public class ControllerExceptionAdvice {
+
+    /**
+     * CustomException
+     */
+    @ExceptionHandler(CustomException.class)
+    protected ApiResponseDto handleCustomException(final CustomException e) {
+        return ApiResponseDto.error(e.getErrorStatus());
+    }
 
     /**
      * 400 BAD_REQUEST

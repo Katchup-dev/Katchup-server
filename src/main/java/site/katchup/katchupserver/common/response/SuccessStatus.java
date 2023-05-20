@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessStatus {
   
-   /**
+    /**
      * auth
      */
     SIGNUP_SUCCESS(HttpStatus.CREATED, "회원가입 성공"),
@@ -36,7 +36,12 @@ public enum SuccessStatus {
      * task
      */
     GET_ALL_TASK_SUCCESS(HttpStatus.OK, "업무 소분류 목록 조회 성공"),
-    CREATE_TASK_SUCCESS(HttpStatus.CREATED, "업무 소분류 추가 성공");
+    CREATE_TASK_SUCCESS(HttpStatus.CREATED, "업무 소분류 추가 성공"),
+
+    /**
+     * screenshot
+     */
+    UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공");
 
     private final HttpStatus httpStatus;
     private final String message;

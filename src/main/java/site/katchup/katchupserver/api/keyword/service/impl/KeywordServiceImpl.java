@@ -12,6 +12,7 @@ import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.KeywordRepository;
 import site.katchup.katchupserver.api.keyword.repository.TaskKeywordRepository;
 import site.katchup.katchupserver.api.keyword.service.KeywordService;
+import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +51,6 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     private Card getCardById(Long cardId) {
-        return cardRepository.findById(cardId).orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
+        return cardRepository.findById(cardId).orElseThrow(() -> new EntityNotFoundException(String.valueOf(ErrorStatus.NOT_FOUND_CARD)));
     }
 }

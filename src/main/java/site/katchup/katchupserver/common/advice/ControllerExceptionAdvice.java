@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.common.advice;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,14 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(CustomException.class)
     protected ApiResponseDto handleCustomException(final CustomException e) {
         return ApiResponseDto.error(e.getErrorStatus());
+    }
+
+    /**
+     * EntityNotFoundException
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ApiResponseDto handleEntityNotFoundException(final EntityNotFoundException e) {
+        return ApiResponseDto.error(ErrorStatus.valueOf(e.getMessage()));
     }
 
     /**

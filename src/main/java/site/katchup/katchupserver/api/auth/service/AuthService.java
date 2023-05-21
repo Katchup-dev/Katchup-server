@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import site.katchup.katchupserver.api.auth.dto.AuthRequestDto;
 import site.katchup.katchupserver.api.auth.dto.AuthResponseDto;
+import site.katchup.katchupserver.api.auth.dto.AuthTokenResponseDto;
 import site.katchup.katchupserver.api.auth.dto.GoogleInfoDto;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
@@ -60,6 +61,13 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .isNewUser(signedMember.isNewUser())
+                .build();
+    }
+
+    public AuthTokenResponseDto getNewToken(String accessToken, String refreshToken) {
+        return AuthTokenResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

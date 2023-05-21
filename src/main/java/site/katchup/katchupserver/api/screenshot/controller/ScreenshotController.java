@@ -11,6 +11,8 @@ import site.katchup.katchupserver.common.response.SuccessStatus;
 
 import java.security.Principal;
 
+import static site.katchup.katchupserver.common.dto.ApiResponseDto.success;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -25,7 +27,16 @@ public class ScreenshotController {
             @PathVariable Long cardId,
             @RequestPart MultipartFile file
     ) {
-        return ApiResponseDto.success(SuccessStatus.UPLOAD_SCREENSHOT_SUCCESS, screenshotService.uploadScreenshot(file, cardId));
+        return success(SuccessStatus.UPLOAD_SCREENSHOT_SUCCESS, screenshotService.uploadScreenshot(file, cardId));
+    }
+
+    @DeleteMapping("/cards/{cardId}/screenshots/{screenshotId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteScreenshot(
+            Principal principal, @PathVariable Long cardId, @PathVariable String screenshotId
+    ) {
+        screenshotService.delete(cardId, screenshotId);
+        return success(SuccessStatus.DELETE_SCREENSHOT_SUCCESS);
     }
 
 }

@@ -1,23 +1,28 @@
 package site.katchup.katchupserver.config.jwt;
 
+import com.auth0.jwt.JWT;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import site.katchup.katchupserver.api.member.repository.MemberRepository;
+import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
+    private final MemberRepository memberRepository;
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -28,6 +33,7 @@ public class JwtTokenProvider {
     private Long refreshTokenExpireLength;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String REFRESH_AUTHORIZATION_HEADER = "Refresh";
 
     public String generateAccessToken(Authentication authentication) {
         Date now = new Date();
@@ -69,6 +75,12 @@ public class JwtTokenProvider {
         }
     }
 
+    public String resolveRefreshToken(HttpServletRequest request) {
+        String header = request.getHeader(REFRESH_AUTHORIZATION_HEADER);
+
+        return Objects.requireNonNullElse(header, "");
+    }
+
     // 토큰 유효성 검증
     public JwtExceptionType validateToken(String token) {
         try {
@@ -95,5 +107,15 @@ public class JwtTokenProvider {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public Long validateMemberRefreshToken(String accessToken, String refreshToken) {
+        Long memberId = Long.valueOf(JWT.decode(accessToken).getSubject());
+
+        memberRepository.findByIdAndRefreshToken(memberId, refreshToken)
+                .orElseThrow(() -> new CustomException(ErrorStatus.INVALID_MEMBER)
+        );
+
+        return memberId;
     }
 }

@@ -23,11 +23,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
 
-    private void setResponse(HttpServletResponse response, ErrorStatus status) throws IOException {
+    public void setResponse(HttpServletResponse response, ErrorStatus status) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        ApiResponseDto<Object> apiResponse = ApiResponseDto.error(status);
+        ApiResponseDto apiResponse = ApiResponseDto.error(status);
         response.getWriter().println(mapper.writeValueAsString(apiResponse));
     }
 }

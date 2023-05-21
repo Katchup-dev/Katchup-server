@@ -13,6 +13,7 @@ public enum ErrorStatus {
      */
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청값이 입력되지 않았습니다."),
+    NO_TOKEN(HttpStatus.BAD_REQUEST, "토큰을 넣어주세요."),
 
     /**
      * 401 UNAUTHORIZED
@@ -20,6 +21,8 @@ public enum ErrorStatus {
     UNAUTHORIZED_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     INVALID_MEMBER(HttpStatus.UNAUTHORIZED, "유효하지 않은 유저입니다."),
     GOOGLE_UNAUTHORIZED_USER(HttpStatus.UNAUTHORIZED, "구글 로그인 실패. 만료되었거나 잘못된 구글 토큰입니다."),
+    SIGNIN_REQUIRED(HttpStatus.UNAUTHORIZED, "access, refreshToken 모두 만료되었습니다. 재로그인이 필요합니다."),
+    VALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "아직 유효한 accessToken 입니다."),
 
     /**
      * 404 NOT_FOUND

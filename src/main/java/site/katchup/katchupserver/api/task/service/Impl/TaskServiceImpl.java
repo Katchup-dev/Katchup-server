@@ -14,7 +14,6 @@ import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

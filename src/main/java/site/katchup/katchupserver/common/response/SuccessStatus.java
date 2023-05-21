@@ -47,7 +47,8 @@ public enum SuccessStatus {
     /**
      * keyword
      */
-    GET_ALL_KEYWORD_SUCCESS(HttpStatus.OK, "키워드 목록 조회 성공");
+    GET_ALL_KEYWORD_SUCCESS(HttpStatus.OK, "키워드 목록 조회 성공"),
+    CREATE_KEYWORD_SUCCESS(HttpStatus.CREATED, "키워드 추가 성공");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -41,7 +41,12 @@ public enum SuccessStatus {
     /**
      * screenshot
      */
-    UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공");
+    UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공"),
+
+    /**
+     * keyword
+     */
+    GET_ALL_KEYWORD_SUCCESS(HttpStatus.OK, "키워드 목록 조회 성공");
 
     private final HttpStatus httpStatus;
     private final String message;

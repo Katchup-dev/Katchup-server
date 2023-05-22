@@ -1,21 +1,20 @@
 package site.katchup.katchupserver.api.card.service.Impl;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.card.dto.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.CardResponseDto;
-import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.card.service.CardService;
-import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
-import site.katchup.katchupserver.api.keyword.domain.Keyword;
+import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
+import site.katchup.katchupserver.api.trash.domain.Trash;
+import site.katchup.katchupserver.api.trash.repository.TrashRepository;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,9 +23,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
 
-    private final CardRepository cardRepository;
     private final TaskRepository taskRepository;
     private final CardKeywordRepository cardKeywordRepository;
+    private final TrashRepository trashRepository;
+    private final CardProvider cardProvider;
 
     @Override
     @Transactional
@@ -46,5 +46,14 @@ public class CardServiceImpl implements CardService {
                 .collect(Collectors.toList());
     }
 
-
+    @Override
+    @Transactional
+    public void deleteCardList(CardDeleteRequestDto cardDeleteRequestDto) {
+        cardDeleteRequestDto.getCardIdList().stream()
+                .map(cardProvider::getCardById)
+                .forEach(findCard -> {
+                    findCard.deletedCard();
+                    trashRepository.save(Trash.builder().card(findCard).build());
+        });
+    }
 }

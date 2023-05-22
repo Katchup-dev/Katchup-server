@@ -79,4 +79,9 @@ public class Card extends BaseEntity {
     public void addLink(Link link) {
         links.add(link);
     }
+
+    public void deletedCard() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
 }

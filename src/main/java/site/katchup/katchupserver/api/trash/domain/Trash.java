@@ -1,21 +1,25 @@
-package site.katchup.katchupserver.api.keyword.domain;
+package site.katchup.katchupserver.api.trash.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.folder.domain.Folder;
+import site.katchup.katchupserver.common.domain.BaseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.ALL;
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
-import static lombok.AccessLevel.*;
+import static jakarta.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
-@Table(name = "card_keyword")
 @NoArgsConstructor(access = PROTECTED)
-public class CardKeyword {
-
+public class Trash extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -24,14 +28,9 @@ public class CardKeyword {
     @JoinColumn(name = "card_id")
     private Card card;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "keyword_id")
-    private Keyword keyword;
-
     @Builder
-    public CardKeyword(Long id, Card card, Keyword keyword) {
-        this.id = id;
+    public Trash (Card card) {
         this.card = card;
-        this.keyword = keyword;
     }
+
 }

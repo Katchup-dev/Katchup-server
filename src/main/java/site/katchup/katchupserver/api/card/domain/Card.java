@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.katchup.katchupserver.api.keyword.domain.Keyword;
 import site.katchup.katchupserver.api.link.domain.Link;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.task.domain.Task;
@@ -28,8 +29,8 @@ public class Card extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long placement_order;
+    @Column(name = "placement_order", nullable = false)
+    private Long placementOrder;
 
     @Column(length = 2000)
     private String content;
@@ -57,8 +58,8 @@ public class Card extends BaseEntity {
     private List<Link> links = new ArrayList<>();
 
     @Builder
-    public Card(Long placement_order, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
-        this.placement_order = placement_order;
+    public Card(Long placementOrder, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
+        this.placementOrder = placementOrder;
         this.content = content;
         this.note = note;
         this.isDeleted = isDeleted;

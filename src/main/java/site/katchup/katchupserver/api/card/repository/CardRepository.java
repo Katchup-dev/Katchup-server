@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
-    List<Card> findByTaskId(Long taskd);
+    List<Card> findByTaskId(Long taskid);
 }

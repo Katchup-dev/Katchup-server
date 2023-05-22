@@ -2,6 +2,7 @@ package site.katchup.katchupserver.api.keyword.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import site.katchup.katchupserver.api.keyword.domain.Keyword;
 
 @Getter
 @AllArgsConstructor
@@ -10,7 +11,7 @@ public class KeywordResponseDto {
 
     private String name;
 
-    public static KeywordResponseDto of(Long keywordId, String name) {
-        return new KeywordResponseDto(keywordId, name);
+    public static KeywordResponseDto of(Keyword keyword) {
+        return new KeywordResponseDto(keyword.getId(), keyword.getName());
     }
 }

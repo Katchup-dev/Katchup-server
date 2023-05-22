@@ -14,7 +14,7 @@ import static lombok.AccessLevel.*;
 @Getter
 @Table(name = "task_keyword")
 @NoArgsConstructor(access = PROTECTED)
-public class TaskKeyword {
+public class CardKeyword {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -29,7 +29,7 @@ public class TaskKeyword {
     private Keyword keyword;
 
     @Builder
-    public TaskKeyword(Long id, Card card, Keyword keyword) {
+    public CardKeyword(Long id, Card card, Keyword keyword) {
         this.id = id;
         this.card = card;
         this.keyword = keyword;

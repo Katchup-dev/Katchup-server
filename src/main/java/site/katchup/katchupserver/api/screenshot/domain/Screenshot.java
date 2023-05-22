@@ -34,6 +34,7 @@ public class Screenshot extends BaseEntity {
         this.id = id;
         this.url = url;
         this.card = card;
+        this.card.addScreenshot(this);
     }
 
     public void updateCard(Card card) {

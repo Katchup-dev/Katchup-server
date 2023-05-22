@@ -26,7 +26,7 @@ class ScreenshotTest {
         Category category = Category.builder().name("Test Category").build();
         Folder folder = Folder.builder().category(category).name("Test Folder").build();
         Task task = Task.builder().folder(folder).name("Test Task").build();
-        Card card = Card.builder().placement_order(1L).isDeleted(false).task(task).build();
+        Card card = Card.builder().placementOrder(1L).isDeleted(false).task(task).build();
 
         UUID uuid = UUID.randomUUID();
 

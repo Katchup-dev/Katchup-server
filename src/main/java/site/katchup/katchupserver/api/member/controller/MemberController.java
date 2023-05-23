@@ -2,7 +2,6 @@ package site.katchup.katchupserver.api.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.dto.MemberResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;

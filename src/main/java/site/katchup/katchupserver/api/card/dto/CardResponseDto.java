@@ -1,11 +1,7 @@
 package site.katchup.katchupserver.api.card.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.keyword.domain.Keyword;
 import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
 import site.katchup.katchupserver.api.task.domain.Task;
 

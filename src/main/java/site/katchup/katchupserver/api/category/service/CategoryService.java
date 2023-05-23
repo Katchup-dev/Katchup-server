@@ -16,4 +16,7 @@ public interface CategoryService {
 
     //* 대분류명 추가
     void createCategoryName(Long memberId, CategoryCreateRequestDto categoryCreateRequestDto);
+
+    void deleteCategory(Long categoryId);
 }
+

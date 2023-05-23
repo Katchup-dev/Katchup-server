@@ -4,13 +4,13 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class UploadScreenshotResponseDTO {
+public class UploadScreenshotResponseDto {
 
     private String id;
     private String screenshotUrl;
 
     @Builder
-    public UploadScreenshotResponseDTO(String id, String screenshotUrl) {
+    public UploadScreenshotResponseDto(String id, String screenshotUrl) {
         this.id = id;
         this.screenshotUrl = screenshotUrl;
     }

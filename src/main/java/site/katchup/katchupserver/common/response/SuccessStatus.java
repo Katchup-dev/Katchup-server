@@ -23,6 +23,7 @@ public enum SuccessStatus {
     READ_ALL_CATEGORY_SUCCESS(HttpStatus.OK, "대분류 카테고리 목록 조회 성공"),
     UPDATE_CATEGORY_NAME_SUCCESS(HttpStatus.OK, "업무 대분류명 수정 성공"),
     CREATE_CATEGORY_NAME_SUCCESS(HttpStatus.OK, "업무 대분류명 추가 성공"),
+    DELETE_CATEGORY_SUCCESS(HttpStatus.OK, "업무 대분류 삭제 성공"),
 
     /**
      * folder
@@ -45,13 +46,15 @@ public enum SuccessStatus {
     /**
      * card
      */
-    GET_ALL_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 성공"),
+    GET_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 성공"),
+    GET_ALL_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 목록 성공"),
     DELETE_CARD_LIST_SUCCESS(HttpStatus.OK, "업무 카드 삭제 성공"),
 
     /**
      * screenshot
      */
     UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공"),
+    DELETE_SCREENSHOT_SUCCESS(HttpStatus.OK, "스크린샷 삭제 성공"),
 
     /**
      * keyword

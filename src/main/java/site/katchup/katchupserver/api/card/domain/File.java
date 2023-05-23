@@ -25,16 +25,20 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     private String url;
 
+    @Column(nullable = false)
+    private int size;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 
     @Builder
-    public File(Long id, String name, String url, Card card) {
+    public File(Long id, String name, String url, int size, Card card) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.card = card;
+        this.size = size;
         this.card.addFile(this);
     }
 }

@@ -1,8 +1,11 @@
 package site.katchup.katchupserver.api.category.service.Impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
@@ -13,6 +16,7 @@ import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.exception.EntityNotFoundException;
+import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
@@ -69,5 +73,23 @@ public class CategoryServiceImpl implements CategoryService {
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorStatus.INVALID_MEMBER));
+    }
+
+    @Override
+    @Transactional
+    public void deleteCategory(Long categoryId) {
+        Category findCategory = getById(categoryId);
+
+        categoryRepository.deleteById(categoryId);
+
+        findCategory.getFolders().stream()
+                .flatMap(folder -> folder.getTasks().stream())
+                .forEach(task -> task.getCards()
+                        .forEach(Card::deletedCard));
+    }
+
+    private Category getById(Long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(
+                () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CATEGORY.getMessage()));
     }
 }

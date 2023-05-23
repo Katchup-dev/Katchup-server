@@ -15,7 +15,7 @@ import java.util.List;
 import static lombok.AccessLevel.PRIVATE;
 
 @RestController
-@RequiredArgsConstructor(access = PRIVATE)
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
 

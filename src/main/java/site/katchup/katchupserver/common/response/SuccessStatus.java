@@ -40,6 +40,12 @@ public enum SuccessStatus {
     CREATE_TASK_SUCCESS(HttpStatus.CREATED, "업무 소분류 추가 성공"),
 
     /**
+     * card
+     */
+    GET_ALL_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 성공"),
+    DELETE_CARD_LIST_SUCCESS(HttpStatus.OK, "업무 카드 삭제 성공"),
+
+    /**
      * screenshot
      */
     UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공"),

@@ -8,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
+import site.katchup.katchupserver.api.card.service.CardService;
+import site.katchup.katchupserver.api.card.service.Impl.CardServiceImpl;
+import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDTO;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
@@ -35,7 +38,7 @@ public class ScreenshotServiceImpl implements ScreenshotService{
 
     private final ScreenshotRepository screenshotRepository;
 
-    private final CardRepository cardRepository;
+    private final CardProvider cardProvider;
 
     @Override
     @Transactional
@@ -50,7 +53,7 @@ public class ScreenshotServiceImpl implements ScreenshotService{
             Screenshot screenshot =  Screenshot.builder()
                     .id(UUID.fromString(imageId))
                     .url(uploadImageUrl)
-                    .card(getCardById(cardId))
+                    .card(cardProvider.getCardById(cardId))
                     .build();
 
             screenshotRepository.save(screenshot);
@@ -67,10 +70,6 @@ public class ScreenshotServiceImpl implements ScreenshotService{
     
     private String getUUIDFileName() {
         return UUID.randomUUID().toString();
-    }
-
-    private Card getCardById(Long cardId) {
-        return cardRepository.findById(cardId).orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
     }
 
     private String getFoldername() {

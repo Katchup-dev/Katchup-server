@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.screenshot.service;
+package site.katchup.katchupserver.api.screenshot.service.impl;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,8 @@ import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
+import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
+import site.katchup.katchupserver.api.screenshot.service.ScreenshotValidator;
 import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 import site.katchup.katchupserver.common.util.S3Util;
@@ -27,7 +29,7 @@ import java.util.UUID;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ScreenshotServiceImpl implements ScreenshotService{
+public class ScreenshotServiceImpl implements ScreenshotService {
 
     private static final String SCREENSHOT_FOLDER_NAME = "screenshots";
 

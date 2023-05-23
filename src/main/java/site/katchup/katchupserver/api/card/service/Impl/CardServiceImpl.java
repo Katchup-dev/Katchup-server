@@ -108,6 +108,7 @@ public class CardServiceImpl implements CardService {
                         .of(screenshot.getId(), screenshot.getStickerOrder(), screenshot.getUrl())
                 ).collect(Collectors.toList());
     }
+
     private List<FileResponseDto> getFileDtoList(Long cardId) {
         return fileRepository.findAllByCardId(cardId).stream()
                 .map(file -> FileResponseDto

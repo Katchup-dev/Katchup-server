@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.card.dto.CardResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
-import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
-import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderCreateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
@@ -52,7 +50,7 @@ public class FolderController {
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
     }
     @PostMapping()
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto createFolderName(@RequestBody @Valid final FolderCreateRequestDto requestDto) {
         folderService.createFolderName(requestDto);
         return ApiResponseDto.success(SuccessStatus.CREATE_FOLDER_NAME_SUCCESS);

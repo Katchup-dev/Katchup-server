@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
 import site.katchup.katchupserver.api.category.service.CategoryService;
@@ -14,7 +15,6 @@ import site.katchup.katchupserver.common.util.MemberUtil;
 import java.security.Principal;
 import java.util.List;
 
-import static lombok.AccessLevel.PRIVATE;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +22,15 @@ import static lombok.AccessLevel.PRIVATE;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponseDto createCategoryName(Principal principal,
+                                             @RequestBody @Valid final CategoryCreateRequestDto requestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        categoryService.createCategoryName(memberId, requestDto);
+        return ApiResponseDto.success(SuccessStatus.CREATE_CATEGORY_NAME_SUCCESS);
+    }
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)

@@ -15,14 +15,10 @@ import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.exception.CustomException;
-import site.katchup.katchupserver.common.exception.EntityNotFoundException;
-import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static site.katchup.katchupserver.common.response.ErrorStatus.NOT_FOUND_CATEGORY;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void updateCategoryName(Long memberId, Long categoryId, CategoryUpdateRequestDto requestDto) {
         Category findCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_CATEGORY));
+                .orElseThrow(() -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CATEGORY.getMessage()));
 
         if (checkDuplicateCategoryName(memberId, requestDto.getName())) {
             throw new CustomException(ErrorStatus.DUPLICATE_CATEGORY_NAME);

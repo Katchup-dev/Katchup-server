@@ -3,13 +3,11 @@ package site.katchup.katchupserver.api.task.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.task.dto.TaskCreateRequestDto;
 import site.katchup.katchupserver.api.task.dto.TaskResponseDto;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.ErrorStatus;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 

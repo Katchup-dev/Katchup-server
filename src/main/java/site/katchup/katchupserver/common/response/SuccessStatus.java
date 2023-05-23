@@ -51,6 +51,7 @@ public enum SuccessStatus {
      * screenshot
      */
     UPLOAD_SCREENSHOT_SUCCESS(HttpStatus.CREATED, "스크린샷 추가 성공"),
+    DELETE_SCREENSHOT_SUCCESS(HttpStatus.OK, "스크린샷 삭제 성공"),
 
     /**
      * keyword

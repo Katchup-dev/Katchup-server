@@ -62,6 +62,13 @@ public class ScreenshotServiceImpl implements ScreenshotService{
             throw new CustomException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
         }
     }
+
+    @Override
+    @Transactional
+    public void delete(Long cardId, String screenshotId) {
+        screenshotRepository.deleteById(UUID.fromString(screenshotId));
+    }
+
     
     private String getUUIDFileName() {
         return UUID.randomUUID().toString();

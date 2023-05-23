@@ -29,8 +29,7 @@ public class CardKeyword {
     private Keyword keyword;
 
     @Builder
-    public CardKeyword(Long id, Card card, Keyword keyword) {
-        this.id = id;
+    public CardKeyword(Card card, Keyword keyword) {
         this.card = card;
         this.keyword = keyword;
     }

@@ -25,8 +25,10 @@ public class CardResponseDto {
     private String cardName;
     private List<KeywordResponseDto> keywordList = new ArrayList<>();
     private String content;
+    private Boolean existFile;
 
     public static CardResponseDto of (Card card, Task task, List<KeywordResponseDto> keywordList) {
+        Boolean existFile = card.getFiles().isEmpty() ? false : true;
         return CardResponseDto.builder()
                 .cardId(card.getId())
                 .taskId(task.getId())
@@ -34,6 +36,7 @@ public class CardResponseDto {
                 .cardName(task.getName())
                 .keywordList(keywordList)
                 .content(card.getContent())
+                .existFile(existFile)
                 .build();
     }
 }

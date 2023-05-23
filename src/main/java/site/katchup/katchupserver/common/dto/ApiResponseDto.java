@@ -1,16 +1,13 @@
 package site.katchup.katchupserver.common.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class ApiResponseDto<T> {
 
     private final int status;
@@ -19,7 +16,11 @@ public class ApiResponseDto<T> {
     private T data;
 
     public static ApiResponseDto success(SuccessStatus successStatus) {
-        return new ApiResponseDto<>(successStatus.getHttpStatus().value(), true, successStatus.getMessage());
+        return ApiResponseDto.builder()
+                .status(successStatus.getHttpStatus().value())
+                .success(true)
+                .message(successStatus.getMessage())
+                .build();
     }
 
     public static <T> ApiResponseDto<T> success(SuccessStatus successStatus, T data) {

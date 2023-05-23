@@ -54,4 +54,8 @@ public class Folder extends BaseEntity {
     public void addTask(Task task) {
         tasks.add(task);
     }
+
+    public void updateFolderName(String folderName) {
+        this.name = folderName;
+    }
 }

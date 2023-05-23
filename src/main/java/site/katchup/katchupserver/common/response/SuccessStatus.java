@@ -21,6 +21,7 @@ public enum SuccessStatus {
      * category
      */
     READ_ALL_CATEGORY_SUCCESS(HttpStatus.OK, "대분류 카테고리 목록 조회 성공"),
+    UPDATE_CATEGORY_NAME_SUCCESS(HttpStatus.OK, "업무 대분류명 수정 성공"),
 
     /**
      * folder

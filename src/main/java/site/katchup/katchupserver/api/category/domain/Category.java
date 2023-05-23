@@ -49,4 +49,8 @@ public class Category extends BaseEntity {
         folders.add(folder);
     }
 
+    public void updateCategoryName(String newName) {
+        this.name = newName;
+    }
+
 }

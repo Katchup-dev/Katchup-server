@@ -3,6 +3,7 @@ package site.katchup.katchupserver.api.category.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
@@ -26,6 +27,15 @@ public class CategoryController {
     public ApiResponseDto<List<CategoryResponseDto>> getAllCategory(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.READ_ALL_CATEGORY_SUCCESS, categoryService.getAllCategory(memberId));
+    }
+
+    @PatchMapping("/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto updateCategoryName(Principal principal, @PathVariable final Long categoryId,
+                                             @RequestBody final CategoryUpdateRequestDto requestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        categoryService.updateCategoryName(categoryId, requestDto);
+        return ApiResponseDto.success(SuccessStatus.UPDATE_CATEGORY_NAME_SUCCESS);
     }
 
 }

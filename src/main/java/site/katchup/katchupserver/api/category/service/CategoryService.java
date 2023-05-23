@@ -12,4 +12,6 @@ public interface CategoryService {
 
     //* 대분류명 수정
     void updateCategoryName(Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
+
+    void deleteCategory(Long categoryId);
 }

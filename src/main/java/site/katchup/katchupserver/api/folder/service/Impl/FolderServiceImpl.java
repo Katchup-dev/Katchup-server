@@ -24,7 +24,6 @@ public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final CategoryRepository categoryRepository;
-
     @Override
     @Transactional
     public List<FolderResponseDto> getAllFolder(Long memberId) {

@@ -5,7 +5,7 @@ import lombok.Getter;
 import site.katchup.katchupserver.api.keyword.domain.Keyword;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 public class KeywordResponseDto {
     private Long keywordId;
 

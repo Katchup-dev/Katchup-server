@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     List<Folder> findByCategoryId(Long categoryId);
-
-    boolean existsByCategoryIdAndName(Long id, String name);
 }

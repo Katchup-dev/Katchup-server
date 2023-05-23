@@ -50,7 +50,6 @@ public class CategoryServiceImpl implements CategoryService {
                         .forEach(Card::deletedCard));
     }
 
-
     private Category getById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CATEGORY.getMessage()));

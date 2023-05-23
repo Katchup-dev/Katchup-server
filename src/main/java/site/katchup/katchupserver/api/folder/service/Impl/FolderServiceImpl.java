@@ -3,8 +3,6 @@ package site.katchup.katchupserver.api.folder.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.katchup.katchupserver.api.category.domain.Category;
-import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
@@ -16,7 +14,6 @@ import site.katchup.katchupserver.common.exception.EntityNotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static site.katchup.katchupserver.common.response.ErrorStatus.NOT_FOUND_FOLDER;

@@ -13,6 +13,7 @@ public enum ErrorStatus {
      */
     VALIDATION_EXCEPTION(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
     VALIDATION_REQUEST_MISSING_EXCEPTION(HttpStatus.BAD_REQUEST, "요청값이 입력되지 않았습니다."),
+    VALIDATION_NAMING_EXCEPTION(HttpStatus.BAD_REQUEST, "이모지 및 특수기호 입력은 불가능합니다. 제외하여 입력해 주세요."),
     NO_TOKEN(HttpStatus.BAD_REQUEST, "토큰을 넣어주세요."),
     DUPLICATE_FOLDER_NAME(HttpStatus.BAD_REQUEST, "해당 중분류명은 이미 존재합니다. 다른 업무명을 입력해 주세요."),
     DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "해당 대분류명은 이미 존재합니다. 다른 업무명을 입력해 주세요."),
@@ -42,4 +43,5 @@ public enum ErrorStatus {
 
     private final HttpStatus httpStatus;
     private final String message;
+
 }

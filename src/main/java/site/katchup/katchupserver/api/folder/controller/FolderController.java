@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.api.folder.controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class FolderController {
     @PatchMapping("/{folderId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto updateFolderName(Principal principal, @PathVariable final Long folderId,
-                                             @RequestBody final FolderUpdateRequestDto requestDto) {
+                                             @RequestBody @Valid final FolderUpdateRequestDto requestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         folderService.updateFolderName(folderId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);

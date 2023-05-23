@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.api.category.service;
 
+import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
 
@@ -13,5 +14,9 @@ public interface CategoryService {
     //* 대분류명 수정
     void updateCategoryName(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
 
+    //* 대분류명 추가
+    void createCategoryName(Long memberId, CategoryCreateRequestDto categoryCreateRequestDto);
+
     void deleteCategory(Long categoryId);
 }
+

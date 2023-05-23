@@ -16,6 +16,7 @@ import site.katchup.katchupserver.common.response.ErrorStatus;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
+    @Override
     public MemberResponseDto getMemberProfile(Long memberId) {
         Member member = findMember(memberId);
 

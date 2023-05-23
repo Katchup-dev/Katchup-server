@@ -20,8 +20,7 @@ public class Keyword {
     private String name;
 
     @Builder
-    public Keyword(Long id, String name) {
-        this.id = id;
+    public Keyword(String name) {
         this.name = name;
     }
 }

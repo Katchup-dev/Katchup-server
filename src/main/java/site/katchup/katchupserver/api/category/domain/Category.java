@@ -8,6 +8,7 @@ import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,10 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private boolean isDeleted;
+
+    private LocalDateTime deletedAt;
+
     @OneToMany(mappedBy = "category", cascade = ALL)
     private List<Folder> folders = new ArrayList<>();
 
@@ -43,6 +48,11 @@ public class Category extends BaseEntity {
         this.name = name;
         this.isShared = isShared;
         this.member = member;
+    }
+
+    public void deleted() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 
     public void addFolder(Folder folder) {

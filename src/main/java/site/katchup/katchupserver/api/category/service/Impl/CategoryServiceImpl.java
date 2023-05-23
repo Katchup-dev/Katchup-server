@@ -5,20 +5,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.category.service.CategoryService;
+import site.katchup.katchupserver.api.folder.domain.Folder;
+import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.exception.CustomException;
-import site.katchup.katchupserver.common.exception.EntityNotFoundException;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static site.katchup.katchupserver.api.task.domain.QTask.task;
 import static site.katchup.katchupserver.common.response.ErrorStatus.NOT_FOUND_CATEGORY;
 
 @Service
@@ -38,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void updateCategoryName(Long memberId, Long categoryId, CategoryUpdateRequestDto requestDto) {
         Category findCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_CATEGORY));
+                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_CATEGORY.getMessage()));
 
         if (checkDuplicateCategoryName(memberId, requestDto.getName())) {
             throw new CustomException(ErrorStatus.DUPLICATE_FOLDER_NAME);
@@ -55,17 +56,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void deleteCategory(Long categoryId) {
         Category findCategory = getById(categoryId);
-
-        categoryRepository.deleteById(categoryId);
-
-        findCategory.getFolders().stream()
-                .flatMap(folder -> folder.getTasks().stream())
-                .forEach(task -> task.getCards()
-                        .forEach(Card::deletedCard));
+        findCategory.deleted();
+        findCategory.getFolders().forEach(this::deleteFolderAndTaskAndCard);
     }
 
     private Category getById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CATEGORY.getMessage()));
+    }
+
+    private void deleteFolderAndTaskAndCard(Folder folder) {
+        folder.deleted();
+        folder.getTasks().forEach(Task::deleted);
+        folder.getTasks().stream()
+                .flatMap(task -> task.getCards().stream())
+                .forEach(Card::deletedCard);
     }
 }

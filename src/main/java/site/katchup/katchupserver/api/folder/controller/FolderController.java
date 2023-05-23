@@ -46,4 +46,11 @@ public class FolderController {
         folderService.updateFolderName(folderId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
     }
+
+    @DeleteMapping("/{folderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteFolder(@PathVariable Long folderId) {
+        folderService.deleteFolder(folderId);
+        return ApiResponseDto.success(SuccessStatus.DELETE_FOLDER_SUCCESS);
+    }
 }

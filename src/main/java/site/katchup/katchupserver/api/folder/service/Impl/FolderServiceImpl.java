@@ -3,12 +3,15 @@ package site.katchup.katchupserver.api.folder.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
 import site.katchup.katchupserver.api.folder.service.FolderService;
+import site.katchup.katchupserver.api.task.domain.Task;
+import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.exception.EntityNotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
@@ -24,6 +27,7 @@ public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final CategoryRepository categoryRepository;
+
     @Override
     @Transactional
     public List<FolderResponseDto> getAllFolder(Long memberId) {
@@ -52,6 +56,25 @@ public class FolderServiceImpl implements FolderService {
         }
 
         findFolder.updateFolderName(requestDto.getName());
+    }
+
+    @Override
+    @Transactional
+    public void deleteFolder(Long folderId) {
+        Folder findFolder = getFolderById(folderId);
+
+        findFolder.deleted();
+        findFolder.getTasks().forEach(this::deleteTaskAndCard);
+    }
+
+    private void deleteTaskAndCard(Task task) {
+        task.deleted();
+        task.getCards().stream().forEach(Card::deletedCard);
+    }
+
+    private Folder getFolderById(Long folderId) {
+        return folderRepository.findById(folderId)
+                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_FOLDER));
     }
 
     private boolean checkDuplicateFolderName(Folder findFolder, String name) {

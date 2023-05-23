@@ -29,10 +29,10 @@ public class Folder extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(nullable = false)
     private boolean isDeleted;
 
-    @Column(name = "deleted_at")
+    @Column
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = LAZY)
@@ -49,6 +49,11 @@ public class Folder extends BaseEntity {
         this.deletedAt = deletedAt;
         this.category = category;
         this.category.addFolder(this);
+    }
+
+    public void deleted() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
     }
 
     public void addTask(Task task) {

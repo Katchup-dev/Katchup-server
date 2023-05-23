@@ -16,4 +16,6 @@ public interface FolderService {
 
     //* 중분류명 수정
     void updateFolderName(Long folderId, FolderUpdateRequestDto folderUpdateRequestDto);
+
+    void deleteFolder(Long folderId);
 }

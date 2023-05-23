@@ -2,7 +2,6 @@ package site.katchup.katchupserver.api.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter

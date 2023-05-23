@@ -1,5 +1,6 @@
 package site.katchup.katchupserver.api.category.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +33,16 @@ public class CategoryController {
     @PatchMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto updateCategoryName(Principal principal, @PathVariable final Long categoryId,
-                                             @RequestBody final CategoryUpdateRequestDto requestDto) {
+                                             @RequestBody @Valid final CategoryUpdateRequestDto requestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
-        categoryService.updateCategoryName(categoryId, requestDto);
+        categoryService.updateCategoryName(memberId, categoryId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_CATEGORY_NAME_SUCCESS);
     }
 
+    @DeleteMapping("/{categoryId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ApiResponseDto.success(SuccessStatus.DELETE_CATEGORY_SUCCESS);
+    }
 }

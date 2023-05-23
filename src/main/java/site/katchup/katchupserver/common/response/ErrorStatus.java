@@ -29,8 +29,6 @@ public enum ErrorStatus {
      */
     NOT_FOUND_FOLDER(HttpStatus.NOT_FOUND, "존재하지 않는 중분류 폴더입니다."),
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "존재하지 않는 업무 카드입니다."),
-    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "존재하지 않는 카테고리입니다."),
-    DELETED_CARD(HttpStatus.NOT_FOUND, "이미 삭제된 카드입니다."),
 
     /**
      * 500 SERVER_ERROR

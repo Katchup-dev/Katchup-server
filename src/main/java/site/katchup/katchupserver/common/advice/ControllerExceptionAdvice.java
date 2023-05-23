@@ -10,6 +10,9 @@ import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
 public class ControllerExceptionAdvice {
 
@@ -35,7 +38,10 @@ public class ControllerExceptionAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ApiResponseDto handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        return ApiResponseDto.error(ErrorStatus.VALIDATION_REQUEST_MISSING_EXCEPTION);
+        String errorMessage = e.getFieldError().getDefaultMessage();
+        if (errorMessage.equals(ErrorStatus.VALIDATION_NAMING_EXCEPTION.getMessage()))
+            return ApiResponseDto.error(ErrorStatus.VALIDATION_NAMING_EXCEPTION);
+        return ApiResponseDto.error(ErrorStatus.VALIDATION_EXCEPTION);
     }
 
     /**

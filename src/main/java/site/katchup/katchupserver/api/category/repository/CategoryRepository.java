@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByMemberId(Long memberId);
+
+    boolean existsByMemberIdAndName(Long memberId, String name);
 }

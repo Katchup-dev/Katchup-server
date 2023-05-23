@@ -5,10 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.card.repository.CardRepository;
-import site.katchup.katchupserver.api.card.service.CardService;
-import site.katchup.katchupserver.api.card.service.Impl.CardServiceImpl;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDto;
@@ -68,6 +64,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             throw new CustomException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
         }
     }
+
+    @Override
+    @Transactional
+    public void delete(Long cardId, String screenshotId) {
+        screenshotRepository.deleteById(UUID.fromString(screenshotId));
+    }
+
     
     private String getUUIDFileName() {
         return UUID.randomUUID().toString();

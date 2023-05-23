@@ -11,5 +11,7 @@ public interface CategoryService {
     List<CategoryResponseDto> getAllCategory(Long memberId);
 
     //* 대분류명 수정
-    void updateCategoryName(Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
+    void updateCategoryName(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
+
+    void deleteCategory(Long categoryId);
 }

@@ -41,9 +41,8 @@ public class FolderController {
 
     @PatchMapping("/{folderId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto updateFolderName(Principal principal, @PathVariable final Long folderId,
+    public ApiResponseDto updateFolderName(@PathVariable final Long folderId,
                                              @RequestBody @Valid final FolderUpdateRequestDto requestDto) {
-        Long memberId = MemberUtil.getMemberId(principal);
         folderService.updateFolderName(folderId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
     }

@@ -37,5 +37,4 @@ public class CategoryController {
         categoryService.updateCategoryName(categoryId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_CATEGORY_NAME_SUCCESS);
     }
-
 }

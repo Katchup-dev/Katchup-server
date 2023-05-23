@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
+import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
 import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.member.domain.Member;
@@ -34,5 +36,14 @@ public class FolderController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
         return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
+    }
+
+    @PatchMapping("/{folderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto updateFolderName(Principal principal, @PathVariable final Long folderId,
+                                             @RequestBody final FolderUpdateRequestDto requestDto) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        folderService.updateFolderName(folderId, requestDto);
+        return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
     }
 }

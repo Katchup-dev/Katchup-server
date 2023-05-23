@@ -1,6 +1,8 @@
-name: Katchup Server CI
+name: Katchup Server CI & CD
 
 on:
+  push:
+    branches: [ develop ]
   pull_request:
     branches: [ develop ]
 
@@ -16,7 +18,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 17
-          distribution: 'temurin'
+          distribution: 'corretto'
           cache: gradle
 
       - name: create application-aws file
@@ -54,23 +56,34 @@ jobs:
         run: ./gradlew clean build
         shell: bash
 
-      - name: Docker Build and Push
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_NAME }}" --password-stdin
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest .
-          docker push ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+      - name: Docker Hub Login
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_NAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}:latest
 
       - name: Pull and Deploy
         uses: appleboy/ssh-action@master
-        if: github.event.pull_request.merged == true
+
+        # if:  github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_REMOTE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            echo "Pull and Deploy"
             sudo docker stop $(sudo docker ps -q)
             sudo docker rm -f $(docker ps -qa)
             docker pull ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
-            docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_REPOSITORY }}-dev ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
-            docker image rm -f $(docker images -f "dangling=true" -q)
+            docker run -d -p 8080:8080 --name katchup-dev ${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_REPOSITORY }}
+            docker image  rm -f $(docker images -f "dangling=true" -q)

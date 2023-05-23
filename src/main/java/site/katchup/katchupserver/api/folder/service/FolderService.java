@@ -1,6 +1,5 @@
 package site.katchup.katchupserver.api.folder.service;
 
-import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderCreateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
@@ -19,4 +18,5 @@ public interface FolderService {
     void updateFolderName(Long folderId, FolderUpdateRequestDto folderUpdateRequestDto);
 
     void createFolderName(FolderCreateRequestDto folderCreateRequestDto);
+    void deleteFolder(Long folderId);
 }

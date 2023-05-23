@@ -8,6 +8,7 @@ import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,10 @@ public class Task extends BaseEntity {
     @JoinColumn(name = "folder_id")
     private Folder folder;
 
+    private boolean isDeleted;
+
+    private LocalDateTime deletedAt;
+
     @OneToMany(mappedBy = "task", cascade = ALL)
     private List<Card> cards = new ArrayList<>();
 
@@ -42,5 +47,9 @@ public class Task extends BaseEntity {
         this.folder.addTask(this);
     }
 
+    public void deleted() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
     public void addCard(Card card) { cards.add(card); }
 }

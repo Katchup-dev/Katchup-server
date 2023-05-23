@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public enum SuccessStatus {
-  
+
     /**
      * auth
      */
@@ -31,7 +31,8 @@ public enum SuccessStatus {
     READ_ALL_FOLDER_SUCCESS(HttpStatus.OK, "중분류 폴더 전체 목록 조회 성공"),
     READ_BY_CATEGORY_SUCCESS(HttpStatus.OK, "특정 카테고리 내 중분류 폴더 조회 성공"),
     UPDATE_FOLDER_NAME_SUCCESS(HttpStatus.OK, "업무 중분류명 수정 성공"),
-    CREATE_FOLDER_NAME_SUCCESS(HttpStatus.OK, "업무 대분류명 추가 성공"),
+    CREATE_FOLDER_NAME_SUCCESS(HttpStatus.OK, "업무 중분류명 추가 성공"),
+    DELETE_FOLDER_SUCCESS(HttpStatus.OK, "업무 중분류 삭제 성공"),
 
     /**
      * member

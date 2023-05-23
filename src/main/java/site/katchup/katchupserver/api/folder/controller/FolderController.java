@@ -38,7 +38,7 @@ public class FolderController {
         return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
         return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
@@ -51,7 +51,6 @@ public class FolderController {
         folderService.updateFolderName(folderId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
     }
-
     @PostMapping()
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto createFolderName(@RequestBody @Valid final FolderCreateRequestDto requestDto) {
@@ -63,5 +62,11 @@ public class FolderController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<CardResponseDto>> getCardList(@PathVariable final Long folderId) {
         return ApiResponseDto.success(SuccessStatus.GET_ALL_CARD_SUCCESS, cardService.getCardList(folderId));
+    }
+    @DeleteMapping("/{folderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteFolder(@PathVariable Long folderId) {
+        folderService.deleteFolder(folderId);
+        return ApiResponseDto.success(SuccessStatus.DELETE_FOLDER_SUCCESS);
     }
 }

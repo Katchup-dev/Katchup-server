@@ -1,7 +1,6 @@
 package site.katchup.katchupserver.api.screenshot.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +11,7 @@ import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.card.service.Impl.CardServiceImpl;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
-import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDTO;
+import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
@@ -42,7 +41,7 @@ public class ScreenshotServiceImpl implements ScreenshotService{
 
     @Override
     @Transactional
-    public UploadScreenshotResponseDTO uploadScreenshot(MultipartFile file, Long cardId) {
+    public UploadScreenshotResponseDto uploadScreenshot(MultipartFile file, Long cardId) {
         screenshotValidator.validate(file);
         final String imageId = getUUIDFileName();
         String uploadFilePath = SCREENSHOT_FOLDER_NAME + "/" + getFoldername();
@@ -58,7 +57,7 @@ public class ScreenshotServiceImpl implements ScreenshotService{
 
             screenshotRepository.save(screenshot);
 
-            return UploadScreenshotResponseDTO.builder()
+            return UploadScreenshotResponseDto.builder()
                     .id(screenshot.getId().toString())
                     .screenshotUrl(screenshot.getUrl())
                     .build();

@@ -17,7 +17,6 @@ public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final CategoryRepository categoryRepository;
-
     @Override
     public List<FolderResponseDto> getAllFolder(Long memberId) {
         return categoryRepository.findByMemberId(memberId).stream()

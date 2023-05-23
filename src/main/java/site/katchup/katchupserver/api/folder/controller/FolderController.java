@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
+import site.katchup.katchupserver.api.card.dto.CardResponseDto;
+import site.katchup.katchupserver.api.card.service.CardService;
+import site.katchup.katchupserver.api.folder.dto.request.FolderCreateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
 import site.katchup.katchupserver.api.folder.service.FolderService;
@@ -25,15 +27,16 @@ import static lombok.AccessLevel.PRIVATE;
 public class FolderController {
 
     private final FolderService folderService;
+    private final CardService cardService;
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<FolderResponseDto>> getAllCategory(Principal principal) {
+    public ApiResponseDto<List<FolderResponseDto>> getAllFolder(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
         return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
@@ -45,5 +48,23 @@ public class FolderController {
                                              @RequestBody @Valid final FolderUpdateRequestDto requestDto) {
         folderService.updateFolderName(folderId, requestDto);
         return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
+    }
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponseDto createFolderName(@RequestBody @Valid final FolderCreateRequestDto requestDto) {
+        folderService.createFolderName(requestDto);
+        return ApiResponseDto.success(SuccessStatus.CREATE_FOLDER_NAME_SUCCESS);
+    }
+
+    @GetMapping("/{folderId}/cards")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto<List<CardResponseDto>> getCardList(@PathVariable final Long folderId) {
+        return ApiResponseDto.success(SuccessStatus.GET_ALL_CARD_SUCCESS, cardService.getCardList(folderId));
+    }
+    @DeleteMapping("/{folderId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteFolder(@PathVariable Long folderId) {
+        folderService.deleteFolder(folderId);
+        return ApiResponseDto.success(SuccessStatus.DELETE_FOLDER_SUCCESS);
     }
 }

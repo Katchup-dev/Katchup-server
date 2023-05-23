@@ -54,6 +54,7 @@ public class CardServiceImpl implements CardService {
                 .collect(Collectors.groupingBy(Card::getTask))  // taskId로 그룹화
                 .values().stream()
                 .flatMap(cards -> cards.stream().sorted(Comparator.comparing(Card::getPlacementOrder)))  // 그룹 내에서 placementOrder 값으로 정렬
+                .filter(card -> !card.isDeleted())  // isDeleted가 false인 card 필터링
                 .map(card -> {
                     List<KeywordResponseDto> keywords = cardKeywordRepository.findByCardId(card.getId()).stream()
                             .map(cardKeyword -> KeywordResponseDto.of(cardKeyword.getKeyword()))

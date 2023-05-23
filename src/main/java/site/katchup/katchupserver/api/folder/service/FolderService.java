@@ -1,6 +1,6 @@
 package site.katchup.katchupserver.api.folder.service;
 
-import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
+import site.katchup.katchupserver.api.folder.dto.request.FolderCreateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
 
@@ -16,4 +16,7 @@ public interface FolderService {
 
     //* 중분류명 수정
     void updateFolderName(Long folderId, FolderUpdateRequestDto folderUpdateRequestDto);
+
+    void createFolderName(FolderCreateRequestDto folderCreateRequestDto);
+    void deleteFolder(Long folderId);
 }

@@ -24,6 +24,7 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
+import site.katchup.katchupserver.common.exception.CustomException;
 import site.katchup.katchupserver.common.exception.EntityNotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
@@ -115,9 +116,14 @@ public class CardServiceImpl implements CardService {
     }
 
     private Card getCardById(Long cardId) {
-        return cardRepository.findById(cardId).orElseThrow(
+        Card card = cardRepository.findById(cardId).orElseThrow(
                 () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CARD)
         );
+
+        if (card.isDeleted()) {
+            throw new CustomException(ErrorStatus.DELETED_CARD);
+        }
+        return card;
     }
 
     private Folder getFolderById(Long folderId) {

@@ -26,14 +26,14 @@ public class File extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
-    private Long size;
+    private Double size;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 
     @Builder
-    public File(Long id, String name, String url, Long size, Card card) {
+    public File(Long id, String name, String url, Double size, Card card) {
         this.id = id;
         this.name = name;
         this.url = url;
@@ -43,7 +43,7 @@ public class File extends BaseEntity {
     }
 
     @Builder
-    public File(String name, String url, Long size, Card card) {
+    public File(String name, String url, Double size, Card card) {
         this.name = name;
         this.url = url;
         this.size = size;

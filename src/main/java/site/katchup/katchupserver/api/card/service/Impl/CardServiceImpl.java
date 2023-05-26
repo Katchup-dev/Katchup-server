@@ -31,6 +31,7 @@ import site.katchup.katchupserver.common.util.S3Util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -100,6 +101,7 @@ public class CardServiceImpl implements CardService {
 
         cardRepository.save(card);
 
+
         try {
             for (MultipartFile file : fileList) {
                 String fileName = UUID.randomUUID().toString() + ".pdf";
@@ -107,11 +109,12 @@ public class CardServiceImpl implements CardService {
                 validateFileSize(file);
                 String uploadPath = FILE_FOLDER_NAME + getFoldername() + fileName;
                 String fileUrl = s3Util.upload(getInputStream(file), uploadPath, getObjectMetadata(file));
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
                 fileRepository.save(File.builder()
                         .card(card)
                         .name(file.getOriginalFilename())
                         .url(fileUrl)
-                        .size(file.getSize() / MB)
+                        .size( Double.parseDouble(decimalFormat.format((double) file.getSize() / MB)))
                         .build());
             }
         } catch (IOException e) {

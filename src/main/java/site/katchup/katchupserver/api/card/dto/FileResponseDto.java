@@ -10,5 +10,5 @@ public class FileResponseDto {
     private Long id;
     private String name;
     private String url;
-    private Long size;
+    private Double size;
 }

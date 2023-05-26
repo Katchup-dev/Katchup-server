@@ -3,17 +3,30 @@ package site.katchup.katchupserver.api.card.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import site.katchup.katchupserver.api.card.dto.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cards")
 public class CardController {
     private final CardService cardService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponseDto createCard(
+            @RequestPart List<MultipartFile> fileList,
+            CardCreateRequestDto cardCreateRequestDto ) {
+        cardService.createCard(fileList, cardCreateRequestDto);
+        return ApiResponseDto.success(SuccessStatus.CREATE_CARD_SUCCESS);
+    }
 
     @GetMapping("/{cardId}")
     @ResponseStatus(HttpStatus.OK)

@@ -48,6 +48,7 @@ public enum SuccessStatus {
     /**
      * card
      */
+    CREATE_CARD_SUCCESS(HttpStatus.CREATED, "업무 카드 추가 성공"),
     GET_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 성공"),
     GET_ALL_CARD_SUCCESS(HttpStatus.OK, "업무 카드 조회 목록 성공"),
     DELETE_CARD_LIST_SUCCESS(HttpStatus.OK, "업무 카드 삭제 성공"),

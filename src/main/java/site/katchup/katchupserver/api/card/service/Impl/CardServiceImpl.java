@@ -53,6 +53,7 @@ public class CardServiceImpl implements CardService {
     private static final String FILE_FOLDER_NAME = "files/";
     private static final String PDF_TYPE = "application/pdf";
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024;
+    private static final long MB = 1024 * 1024;
 
     @Override
     @Transactional
@@ -110,7 +111,7 @@ public class CardServiceImpl implements CardService {
                         .card(card)
                         .name(file.getOriginalFilename())
                         .url(fileUrl)
-                        .size(file.getSize() / (1024 * 1024))
+                        .size(file.getSize() / MB)
                         .build());
             }
         } catch (IOException e) {
@@ -139,7 +140,7 @@ public class CardServiceImpl implements CardService {
 
             for (Task sortedTask: taskList) {
                 placementOrder += sortedTask.getCards().size();
-                if (sortedTask.getId() == task.getId()) {
+                if (sortedTask.getId().equals(task.getId())) {
                     placementOrder += 1;
                     break;
                 }

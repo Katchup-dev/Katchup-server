@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDto;
@@ -47,6 +48,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
         try {
             String uploadImageUrl = s3Util.upload(getInputStream(file), uploadFileName, getObjectMetadata(file));
+            Card card = cardProvider.getCardById(cardId);
             Screenshot screenshot =  Screenshot.builder()
                     .id(UUID.fromString(imageId))
                     .url(uploadImageUrl)
@@ -60,7 +62,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
                     .screenshotUrl(screenshot.getUrl())
                     .build();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CustomException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
         }
     }

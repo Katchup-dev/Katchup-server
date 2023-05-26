@@ -5,10 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor(staticName = "of", onConstructor = @__(@Builder))
+@AllArgsConstructor(staticName = "of")
 public class FileResponseDto {
     private Long id;
     private String name;
     private String url;
-    private int size;
+    private Long size;
 }

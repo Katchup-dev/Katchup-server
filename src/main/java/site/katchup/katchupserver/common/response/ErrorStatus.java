@@ -17,6 +17,10 @@ public enum ErrorStatus {
     NO_TOKEN(HttpStatus.BAD_REQUEST, "토큰을 넣어주세요."),
     DUPLICATE_FOLDER_NAME(HttpStatus.BAD_REQUEST, "해당 중분류명은 이미 존재합니다. 다른 업무명을 입력해 주세요."),
     DUPLICATE_CATEGORY_NAME(HttpStatus.BAD_REQUEST, "해당 대분류명은 이미 존재합니다. 다른 업무명을 입력해 주세요."),
+    NOT_PDF_FILE_TYPE(HttpStatus.BAD_REQUEST, "PDF 파일만 업로드 가능합니다."),
+    FILE_UPLOAD_ERROR(HttpStatus.BAD_REQUEST, "파일 업로드를 실패했습니다."),
+    FILE_SIZE_EXCEED(HttpStatus.BAD_REQUEST, "파일 사이즈가 10MB를 초과했습니다."),
+    INVALID_TASK(HttpStatus.BAD_REQUEST, "존재하지 않는 업무입니다."),
 
     /**
      * 401 UNAUTHORIZED

@@ -31,7 +31,6 @@ public class Card extends BaseEntity {
     @Column(nullable = false)
     private Long placementOrder;
 
-    @Column(length = 2000)
     private String content;
 
     @Column(length = 200)
@@ -55,6 +54,14 @@ public class Card extends BaseEntity {
 
     @OneToMany(mappedBy = "card", cascade = ALL)
     private List<Link> links = new ArrayList<>();
+
+    @Builder
+    public Card(Long placementOrder, String content, String note, Task task) {
+        this.placementOrder = placementOrder;
+        this.content = content;
+        this.note = note;
+        this.task = task;
+    }
 
     @Builder
     public Card(Long placementOrder, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
@@ -82,5 +89,9 @@ public class Card extends BaseEntity {
     public void deletedCard() {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
+    }
+    
+    public void plusPlacementOrder() {
+        this.placementOrder += 1;
     }
 }

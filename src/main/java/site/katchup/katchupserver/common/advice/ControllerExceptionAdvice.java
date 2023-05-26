@@ -44,6 +44,12 @@ public class ControllerExceptionAdvice {
         return ApiResponseDto.error(ErrorStatus.VALIDATION_EXCEPTION);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ApiResponseDto handleIllegalArgumentException(IllegalArgumentException e )  {
+        return ApiResponseDto.error(ErrorStatus.valueOf(e.getMessage()));
+    }
+
     /**
      * 500 INTERNAL_SERVER_ERROR
      */

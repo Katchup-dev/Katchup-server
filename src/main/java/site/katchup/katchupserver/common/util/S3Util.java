@@ -22,7 +22,10 @@ public class S3Util {
     // 파일 업로드
     public String upload(InputStream file, String fileName, ObjectMetadata objectMetadata) {
         awsS3Config.amazonS3Client().putObject(bucket, fileName, file, objectMetadata);
-        return awsS3Config.amazonS3Client().getUrl(bucket, fileName).toString();
+        System.out.println("upload 성공!!");
+        String url = awsS3Config.amazonS3Client().getUrl(bucket, fileName).toString();
+        System.out.println("return URL : "+ url);
+        return url;
     }
 
     // 파일 삭제

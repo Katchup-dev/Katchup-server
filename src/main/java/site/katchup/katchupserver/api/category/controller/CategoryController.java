@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
-import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
+import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseDto;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
@@ -34,7 +34,7 @@ public class CategoryController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<CategoryResponseDto>> getAllCategory(Principal principal) {
+    public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.READ_ALL_CATEGORY_SUCCESS, categoryService.getAllCategory(memberId));
     }

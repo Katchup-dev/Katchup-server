@@ -1,12 +1,11 @@
-package site.katchup.katchupserver.api.card.dto;
+package site.katchup.katchupserver.api.card.dto.response;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
-public class FileResponseDto {
+public class FileGetResponseDto {
     private Long id;
     private String name;
     private String url;

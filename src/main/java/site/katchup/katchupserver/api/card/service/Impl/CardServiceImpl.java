@@ -7,7 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.card.domain.File;
-import site.katchup.katchupserver.api.card.dto.*;
+import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
+import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
+import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
+import site.katchup.katchupserver.api.card.dto.response.CardListGetResponseDto;
+import site.katchup.katchupserver.api.card.dto.response.FileGetResponseDto;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.card.repository.FileRepository;
 import site.katchup.katchupserver.api.card.service.CardService;
@@ -16,9 +20,9 @@ import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
-import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
+import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
-import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotResponseDto;
+import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
@@ -58,7 +62,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public List<CardResponseDto> getCardList(Long folderId) {
+    public List<CardListGetResponseDto> getCardList(Long folderId) {
         return taskRepository.findByFolderId(folderId).stream()
                 .flatMap(task -> task.getCards().stream())
                 .collect(Collectors.groupingBy(Card::getTask))  // taskId로 그룹화
@@ -66,11 +70,11 @@ public class CardServiceImpl implements CardService {
                 .flatMap(cards -> cards.stream().sorted(Comparator.comparing(Card::getPlacementOrder)))  // 그룹 내에서 placementOrder 값으로 정렬
                 .filter(card -> !card.isDeleted())  // isDeleted가 false인 card 필터링
                 .map(card -> {
-                    List<KeywordResponseDto> keywords = cardKeywordRepository.findByCardId(card.getId()).stream()
-                            .map(cardKeyword -> KeywordResponseDto.of(cardKeyword.getKeyword()))
+                    List<KeywordGetResponseDto> keywords = cardKeywordRepository.findByCardId(card.getId()).stream()
+                            .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword()))
                             .collect(Collectors.toList());
                     Task relatedTask = card.getTask();  // Card와 연관된 Task 가져오기
-                    return CardResponseDto.of(card, relatedTask, keywords);
+                    return CardListGetResponseDto.of(card, relatedTask, keywords);
                 })
                 .collect(Collectors.toList());
     }
@@ -128,11 +132,11 @@ public class CardServiceImpl implements CardService {
         Folder folder = getFolderById(card.getTask().getFolder().getId());
         Category category = getCategoryById(folder.getCategory().getId());
 
-        List<KeywordResponseDto> keywordResponseDtoList = getKeywordDtoList(cardId);
-        List<FileResponseDto> fileResponseDTOList = getFileDtoList(cardId);
-        List<ScreenshotResponseDto> screenshotResponseDtoList = getScreenshotDtoList(cardId);
+        List<KeywordGetResponseDto> keywordResponseDtoList = getKeywordDtoList(cardId);
+        List<FileGetResponseDto> fileGetResponseDTOList = getFileDtoList(cardId);
+        List<ScreenshotGetResponseDto> screenshotResponseDtoList = getScreenshotDtoList(cardId);
 
-        return CardGetResponseDto.of(card.getId(), category.getName(), folder.getName(), card.getTask().getName(), keywordResponseDtoList, screenshotResponseDtoList, fileResponseDTOList);
+        return CardGetResponseDto.of(card.getId(), category.getName(), folder.getName(), card.getTask().getName(), keywordResponseDtoList, screenshotResponseDtoList, fileGetResponseDTOList);
     }
 
     private Long getPlacementOrder(Task task) {
@@ -174,22 +178,22 @@ public class CardServiceImpl implements CardService {
         }
     }
 
-    private List<KeywordResponseDto> getKeywordDtoList(Long cardId) {
+    private List<KeywordGetResponseDto> getKeywordDtoList(Long cardId) {
         return cardKeywordRepository.findByCardId(cardId)
                 .stream()
-                .map(cardKeyword -> KeywordResponseDto.of(cardKeyword.getKeyword().getId(), cardKeyword.getKeyword().getName()))
+                .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword().getId(), cardKeyword.getKeyword().getName()))
                 .collect(Collectors.toList());
     }
-    private List<ScreenshotResponseDto> getScreenshotDtoList(Long cardId) {
+    private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return screenshotRepository.findAllByCardId(cardId).stream()
-                .map(screenshot -> ScreenshotResponseDto
+                .map(screenshot -> ScreenshotGetResponseDto
                         .of(screenshot.getId(), screenshot.getStickerOrder(), screenshot.getUrl())
                 ).collect(Collectors.toList());
     }
 
-    private List<FileResponseDto> getFileDtoList(Long cardId) {
+    private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return fileRepository.findAllByCardId(cardId).stream()
-                .map(file -> FileResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize())).collect(Collectors.toList());
+                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize())).collect(Collectors.toList());
     }
 
     private Card getCardById(Long cardId) {

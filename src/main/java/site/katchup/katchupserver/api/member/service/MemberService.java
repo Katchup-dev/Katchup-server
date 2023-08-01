@@ -1,7 +1,7 @@
 package site.katchup.katchupserver.api.member.service;
 
-import site.katchup.katchupserver.api.member.dto.MemberResponseDto;
+import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
 
 public interface MemberService {
-    MemberResponseDto getMemberProfile(Long memberId);
+    MemberProfileGetResponseDto getMemberProfile(Long memberId);
 }

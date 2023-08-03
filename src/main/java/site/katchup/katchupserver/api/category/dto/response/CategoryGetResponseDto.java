@@ -9,13 +9,13 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
-public class CategoryResponseDto {
+public class CategoryGetResponseDto {
 
     private Long categoryId;
     private String name;
     private Boolean isShared;
 
-    public static CategoryResponseDto of(Long categoryId, String name, boolean isShared) {
-        return new CategoryResponseDto(categoryId, name, isShared);
+    public static CategoryGetResponseDto of(Long categoryId, String name, boolean isShared) {
+        return new CategoryGetResponseDto(categoryId, name, isShared);
     }
 }

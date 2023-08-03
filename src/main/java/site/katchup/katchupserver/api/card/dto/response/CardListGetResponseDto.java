@@ -1,8 +1,8 @@
-package site.katchup.katchupserver.api.card.dto;
+package site.katchup.katchupserver.api.card.dto.response;
 
 import lombok.*;
 import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
+import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.task.domain.Task;
 
 import java.util.ArrayList;
@@ -14,18 +14,18 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
 @Builder
-public class CardResponseDto {
+public class CardListGetResponseDto {
     private Long taskId;
     private Long cardId;
     private Long placementOrder;
     private String cardName;
-    private List<KeywordResponseDto> keywordList = new ArrayList<>();
+    private List<KeywordGetResponseDto> keywordList = new ArrayList<>();
     private String content;
     private Boolean existFile;
 
-    public static CardResponseDto of (Card card, Task task, List<KeywordResponseDto> keywordList) {
+    public static CardListGetResponseDto of (Card card, Task task, List<KeywordGetResponseDto> keywordList) {
         Boolean existFile = card.getFiles().isEmpty() ? false : true;
-        return CardResponseDto.builder()
+        return CardListGetResponseDto.builder()
                 .cardId(card.getId())
                 .taskId(task.getId())
                 .placementOrder(card.getPlacementOrder())

@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.auth.dto;
+package site.katchup.katchupserver.api.auth.dto.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

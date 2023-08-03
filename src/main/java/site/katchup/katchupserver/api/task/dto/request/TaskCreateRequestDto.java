@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.task.dto;
+package site.katchup.katchupserver.api.task.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

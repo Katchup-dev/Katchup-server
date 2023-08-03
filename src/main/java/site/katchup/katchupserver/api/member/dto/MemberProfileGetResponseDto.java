@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class MemberResponseDto {
+public class MemberProfileGetResponseDto {
     private String imageUrl;
 
     private String nickname;

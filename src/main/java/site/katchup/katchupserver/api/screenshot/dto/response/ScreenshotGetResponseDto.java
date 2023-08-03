@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
-public class ScreenshotResponseDto {
+public class ScreenshotGetResponseDto {
     private UUID id;
     private int stickerOrder;
     private String url;

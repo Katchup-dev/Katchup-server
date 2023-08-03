@@ -1,17 +1,15 @@
 package site.katchup.katchupserver.api.folder.controller;
 
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.card.dto.CardResponseDto;
+import site.katchup.katchupserver.api.card.dto.response.CardListGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.folder.dto.request.FolderCreateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
-import site.katchup.katchupserver.api.folder.dto.response.FolderResponseDto;
+import site.katchup.katchupserver.api.folder.dto.response.FolderGetResponseDto;
 import site.katchup.katchupserver.api.folder.service.FolderService;
-import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
@@ -31,14 +29,14 @@ public class FolderController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<FolderResponseDto>> getAllFolder(Principal principal) {
+    public ApiResponseDto<List<FolderGetResponseDto>> getAllFolder(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
     }
 
     @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<FolderResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
+    public ApiResponseDto<List<FolderGetResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
         return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
     }
 
@@ -58,7 +56,7 @@ public class FolderController {
 
     @GetMapping("/{folderId}/cards")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<CardResponseDto>> getCardList(@PathVariable final Long folderId) {
+    public ApiResponseDto<List<CardListGetResponseDto>> getCardList(@PathVariable final Long folderId) {
         return ApiResponseDto.success(SuccessStatus.GET_ALL_CARD_SUCCESS, cardService.getCardList(folderId));
     }
     @DeleteMapping("/{folderId}")

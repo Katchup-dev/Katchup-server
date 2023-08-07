@@ -9,7 +9,6 @@ import site.katchup.katchupserver.common.response.SuccessStatus;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 public class ApiResponseDto<T> {
-
     private final int status;
     private final boolean success;
     private final String message;

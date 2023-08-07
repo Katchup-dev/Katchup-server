@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     @Profile("local")
     protected SecurityFilterChain localSecurityConfig(HttpSecurity http) throws Exception{
-         http
+         return http
                 .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -37,12 +37,8 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().permitAll()
-                .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, jwtAuthenticationEntryPoint), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+                .and().build();
     }
 
     @Bean

@@ -13,7 +13,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import site.katchup.katchupserver.api.auth.dto.GoogleInfoDto;
-import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.exception.UnauthorizedException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 @RequiredArgsConstructor
@@ -48,7 +48,7 @@ public class GoogleAuthService  {
 
             return new GoogleInfoDto(nickname, email, imageUrl);
         } catch (HttpClientErrorException e) {
-            throw new CustomException(ErrorStatus.GOOGLE_UNAUTHORIZED_USER);
+            throw new UnauthorizedException(ErrorStatus.GOOGLE_UNAUTHORIZED_USER);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

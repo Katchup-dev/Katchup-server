@@ -13,8 +13,8 @@ import site.katchup.katchupserver.api.folder.dto.response.FolderGetResponseDto;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
 import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.task.domain.Task;
-import site.katchup.katchupserver.common.exception.CustomException;
-import site.katchup.katchupserver.common.exception.EntityNotFoundException;
+import site.katchup.katchupserver.common.exception.BadRequestException;
+import site.katchup.katchupserver.common.exception.NotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
@@ -51,10 +51,10 @@ public class FolderServiceImpl implements FolderService {
     @Transactional
     public void updateFolderName(Long folderId, FolderUpdateRequestDto requestDto) {
         Folder findFolder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_FOLDER));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLDER));
 
         if (checkDuplicateFolderName(findFolder.getCategory().getId(), requestDto.getName())) {
-            throw new CustomException(ErrorStatus.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorStatus.DUPLICATE_FOLDER_NAME);
         }
 
         findFolder.updateFolderName(requestDto.getName());
@@ -64,9 +64,9 @@ public class FolderServiceImpl implements FolderService {
     @Transactional
     public void createFolderName(FolderCreateRequestDto requestDto) {
         Category category = categoryRepository.findById(requestDto.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_CATEGORY));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_CATEGORY));
         if (checkDuplicateFolderName(requestDto.getCategoryId(), requestDto.getName())) {
-            throw new CustomException(ErrorStatus.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorStatus.DUPLICATE_FOLDER_NAME);
         }
 
         folderRepository.save(Folder.builder()
@@ -94,6 +94,6 @@ public class FolderServiceImpl implements FolderService {
 
     private Folder getFolderById(Long folderId) {
         return folderRepository.findById(folderId)
-                .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_FOLDER));
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLDER));
     }
 }

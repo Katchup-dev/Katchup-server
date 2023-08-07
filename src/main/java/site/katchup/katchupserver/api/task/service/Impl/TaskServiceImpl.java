@@ -10,7 +10,7 @@ import site.katchup.katchupserver.api.task.dto.request.TaskCreateRequestDto;
 import site.katchup.katchupserver.api.task.dto.response.TaskGetResponseDto;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.task.service.TaskService;
-import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.exception.NotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void createTask(TaskCreateRequestDto requestDto) {
         Folder folder = folderRepository.findById(requestDto.getFolderId())
-                .orElseThrow(() -> new CustomException(ErrorStatus.NOT_FOUND_FOLDER));
+                .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_FOLDER));
 
         Task task = new Task(requestDto.getName(), folder);
 

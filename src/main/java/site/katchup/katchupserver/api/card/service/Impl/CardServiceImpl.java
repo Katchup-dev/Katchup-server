@@ -28,8 +28,8 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
-import site.katchup.katchupserver.common.exception.CustomException;
-import site.katchup.katchupserver.common.exception.EntityNotFoundException;
+import site.katchup.katchupserver.common.exception.BadRequestException;
+import site.katchup.katchupserver.common.exception.NotFoundException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 import site.katchup.katchupserver.common.util.S3Util;
 
@@ -122,7 +122,7 @@ public class CardServiceImpl implements CardService {
                         .build());
             }
         } catch (IOException e) {
-            throw new CustomException(ErrorStatus.FILE_UPLOAD_ERROR);
+            throw new BadRequestException(ErrorStatus.FILE_UPLOAD_ERROR);
         }
     }
 
@@ -174,7 +174,7 @@ public class CardServiceImpl implements CardService {
 
     private void validateFileSize(MultipartFile file) {
         if (file.getSize() >= MAX_FILE_SIZE) {
-            throw new CustomException(ErrorStatus.FILE_SIZE_EXCEED);
+            throw new BadRequestException(ErrorStatus.FILE_SIZE_EXCEED);
         }
     }
 
@@ -198,34 +198,34 @@ public class CardServiceImpl implements CardService {
 
     private Card getCardById(Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CARD)
+                () -> new NotFoundException(ErrorStatus.NOT_FOUND_CARD)
         );
 
         if (card.isDeleted()) {
-            throw new CustomException(ErrorStatus.DELETED_CARD);
+            throw new NotFoundException(ErrorStatus.DELETED_CARD);
         }
         return card;
     }
 
     private Folder getFolderById(Long folderId) {
         return folderRepository.findById(folderId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_FOLDER));
+                () -> new NotFoundException(ErrorStatus.NOT_FOUND_FOLDER));
     }
 
     private Category getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorStatus.NOT_FOUND_CATEGORY));
+                () -> new NotFoundException(ErrorStatus.NOT_FOUND_CATEGORY));
     }
 
     private void validatePdf(MultipartFile file) {
         if (!file.getContentType().equals(PDF_TYPE)) {
-            throw new CustomException(ErrorStatus.NOT_PDF_FILE_TYPE);
+            throw new BadRequestException(ErrorStatus.NOT_PDF_FILE_TYPE);
         }
     }
 
     private Task getTaskById(Long taskId) {
         return taskRepository.findById(taskId).orElseThrow(
-                () -> new EntityNotFoundException(ErrorStatus.INVALID_TASK));
+                () -> new NotFoundException(ErrorStatus.INVALID_TASK));
     }
 
 

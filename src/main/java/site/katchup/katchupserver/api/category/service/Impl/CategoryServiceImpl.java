@@ -16,7 +16,8 @@ import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.exception.BadRequestException;
+import site.katchup.katchupserver.common.exception.UnauthorizedException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void createCategoryName(Long memberId, CategoryCreateRequestDto requestDto) {
         if (checkDuplicateCategoryName(memberId, requestDto.getName())) {
-            throw new CustomException(ErrorStatus.DUPLICATE_CATEGORY_NAME);
+            throw new BadRequestException(ErrorStatus.DUPLICATE_CATEGORY_NAME);
         }
 
         categoryRepository.save(Category.builder()
@@ -61,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND_CATEGORY.getMessage()));
 
         if (checkDuplicateCategoryName(memberId, requestDto.getName())) {
-            throw new CustomException(ErrorStatus.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorStatus.DUPLICATE_FOLDER_NAME);
         }
 
         findCategory.updateCategoryName(requestDto.getName());
@@ -94,6 +95,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.INVALID_MEMBER));
+                .orElseThrow(() -> new UnauthorizedException(ErrorStatus.INVALID_MEMBER));
     }
 }

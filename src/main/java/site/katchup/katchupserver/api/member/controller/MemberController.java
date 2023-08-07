@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.member.dto.MemberResponseDto;
+import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
@@ -29,10 +29,10 @@ public class MemberController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             })
     @GetMapping("/profile")
-    public ApiResponseDto<MemberResponseDto> getMemberProfile(Principal principal) {
+    public ApiResponseDto<MemberProfileGetResponseDto> getMemberProfile(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
 
-        MemberResponseDto responseDto = memberService.getMemberProfile(memberId);
+        MemberProfileGetResponseDto responseDto = memberService.getMemberProfile(memberId);
 
         return ApiResponseDto.success(SuccessStatus.GET_MEMBER_SUCCESS, responseDto);
     }

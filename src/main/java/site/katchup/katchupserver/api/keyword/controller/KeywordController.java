@@ -9,8 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.keyword.dto.KeywordCreateRequestDto;
-import site.katchup.katchupserver.api.keyword.dto.KeywordResponseDto;
+import site.katchup.katchupserver.api.keyword.dto.request.KeywordCreateRequestDto;
+import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.service.KeywordService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
@@ -33,7 +33,7 @@ public class KeywordController {
     )
     @GetMapping("/{cardId}/keywords")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<KeywordResponseDto>> getAllKeyword(@PathVariable Long cardId) {
+    public ApiResponseDto<List<KeywordGetResponseDto>> getAllKeyword(@PathVariable Long cardId) {
         return ApiResponseDto.success(SuccessStatus.GET_ALL_KEYWORD_SUCCESS, keywordService.getAllKeyword(cardId));
     }
 

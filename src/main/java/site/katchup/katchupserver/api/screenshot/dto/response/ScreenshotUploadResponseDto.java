@@ -6,13 +6,14 @@ import lombok.Data;
 
 @Data
 @Schema(description = "스크린샷 업로드 응답 DTO")
-public class UploadScreenshotResponseDto {
+public class ScreenshotUploadResponseDto {
     @Schema(description = "스크린샷 고유 id", example = "1")
     private String id;
+    @Schema(description = "스크린샷 url", example ="https://~")
     private String screenshotUrl;
 
     @Builder
-    public UploadScreenshotResponseDto(String id, String screenshotUrl) {
+    public ScreenshotUploadResponseDto(String id, String screenshotUrl) {
         this.id = id;
         this.screenshotUrl = screenshotUrl;
     }

@@ -7,8 +7,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Schema(description = "회원 응답 DTO")
-public class MemberResponseDto {
-    @Schema(description = "회원 고유 id", example = "1")
+public class MemberProfileGetResponseDto {
+
+    @Schema(description = "회원 프로필 이미지 url", example = "1")
     private String imageUrl;
     @Schema(description = "회원 닉네임", example = "unan")
     private String nickname;

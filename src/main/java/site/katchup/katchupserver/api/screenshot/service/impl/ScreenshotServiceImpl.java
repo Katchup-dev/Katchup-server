@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
-import site.katchup.katchupserver.api.screenshot.dto.response.UploadScreenshotResponseDto;
+import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotValidator;
@@ -40,7 +40,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     @Override
     @Transactional
-    public UploadScreenshotResponseDto uploadScreenshot(MultipartFile file, Long cardId) {
+    public ScreenshotUploadResponseDto uploadScreenshot(MultipartFile file, Long cardId) {
         screenshotValidator.validate(file);
         final String imageId = getUUIDFileName();
         String uploadFilePath = SCREENSHOT_FOLDER_NAME + "/" + getFoldername();
@@ -57,7 +57,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
             screenshotRepository.save(screenshot);
 
-            return UploadScreenshotResponseDto.builder()
+            return ScreenshotUploadResponseDto.builder()
                     .id(screenshot.getId().toString())
                     .screenshotUrl(screenshot.getUrl())
                     .build();

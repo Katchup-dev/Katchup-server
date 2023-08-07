@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import site.katchup.katchupserver.api.auth.dto.AuthRequestDto;
-import site.katchup.katchupserver.api.auth.dto.AuthResponseDto;
-import site.katchup.katchupserver.api.auth.dto.AuthTokenResponseDto;
+import site.katchup.katchupserver.api.auth.dto.request.AuthRequestDto;
+import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
+import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
 import site.katchup.katchupserver.api.auth.dto.GoogleInfoDto;
 import site.katchup.katchupserver.api.auth.service.AuthService;
 import site.katchup.katchupserver.api.auth.service.GoogleAuthService;
@@ -26,7 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
 
     @Override
-    public AuthResponseDto socialLogin(AuthRequestDto authRequestDto) {
+    public AuthLoginResponseDto socialLogin(AuthRequestDto authRequestDto) {
 
         GoogleInfoDto googleInfoDto = login(authRequestDto.getAccessToken());
 
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
 
         String nickname = signedMember.getNickname();
 
-        return AuthResponseDto.builder()
+        return AuthLoginResponseDto.builder()
                 .nickname(nickname)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -68,8 +68,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthTokenResponseDto getNewToken(String accessToken, String refreshToken) {
-        return AuthTokenResponseDto.builder()
+    public AuthTokenGetResponseDto getNewToken(String accessToken, String refreshToken) {
+        return AuthTokenGetResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

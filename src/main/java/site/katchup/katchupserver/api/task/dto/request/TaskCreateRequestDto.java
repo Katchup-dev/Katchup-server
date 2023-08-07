@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.task.dto;
+package site.katchup.katchupserver.api.task.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

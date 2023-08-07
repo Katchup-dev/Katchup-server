@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.card.dto;
+package site.katchup.katchupserver.api.card.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

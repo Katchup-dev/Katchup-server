@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
-import site.katchup.katchupserver.api.category.dto.response.CategoryResponseDto;
+import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseDto;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 
@@ -48,9 +48,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public List<CategoryResponseDto> getAllCategory(Long memberId) {
+    public List<CategoryGetResponseDto> getAllCategory(Long memberId) {
         return categoryRepository.findByMemberId(memberId).stream()
-                .map(category -> CategoryResponseDto.of(category.getId(), category.getName(), category.isShared()))
+                .map(category -> CategoryGetResponseDto.of(category.getId(), category.getName(), category.isShared()))
                 .collect(Collectors.toList());
     }
 

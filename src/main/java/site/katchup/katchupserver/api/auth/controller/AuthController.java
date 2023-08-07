@@ -9,9 +9,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.auth.dto.AuthRequestDto;
-import site.katchup.katchupserver.api.auth.dto.AuthResponseDto;
-import site.katchup.katchupserver.api.auth.dto.AuthTokenResponseDto;
+import site.katchup.katchupserver.api.auth.dto.request.AuthRequestDto;
+import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
+import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
 import site.katchup.katchupserver.api.auth.service.AuthService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
@@ -32,8 +32,9 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @PostMapping()
-    public ApiResponseDto<AuthResponseDto> socialLogin(@RequestBody AuthRequestDto authRequestDto) {
-        AuthResponseDto responseDto = authService.socialLogin(authRequestDto);
+    public ApiResponseDto<AuthLoginResponseDto> socialLogin(@RequestBody AuthRequestDto authRequestDto) {
+
+        AuthLoginResponseDto responseDto = authService.socialLogin(authRequestDto);
 
         // 로그인
         if (!responseDto.isNewUser()) {
@@ -52,7 +53,7 @@ public class AuthController {
             })
     @GetMapping("/token")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<AuthTokenResponseDto> getNewToken(HttpServletRequest request) {
+    public ApiResponseDto<AuthTokenGetResponseDto> getNewToken(HttpServletRequest request) {
         String accessToken = (String) request.getAttribute("newAccessToken");
         String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
 

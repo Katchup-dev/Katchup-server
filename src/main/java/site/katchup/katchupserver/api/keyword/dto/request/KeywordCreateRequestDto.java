@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.keyword.dto;
+package site.katchup.katchupserver.api.keyword.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

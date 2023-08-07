@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.katchup.katchupserver.api.member.domain.Member;
-import site.katchup.katchupserver.api.member.dto.MemberResponseDto;
+import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.exception.CustomException;
@@ -17,10 +17,10 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberResponseDto getMemberProfile(Long memberId) {
+    public MemberProfileGetResponseDto getMemberProfile(Long memberId) {
         Member member = findMember(memberId);
 
-        return new MemberResponseDto(member.getImageUrl(), member.getNickname(), member.getEmail());
+        return new MemberProfileGetResponseDto(member.getImageUrl(), member.getNickname(), member.getEmail());
     }
 
     private Member findMember(Long memberId) {

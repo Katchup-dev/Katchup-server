@@ -9,8 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.task.dto.TaskCreateRequestDto;
-import site.katchup.katchupserver.api.task.dto.TaskResponseDto;
+import site.katchup.katchupserver.api.task.dto.request.TaskCreateRequestDto;
+import site.katchup.katchupserver.api.task.dto.response.TaskGetResponseDto;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.response.SuccessStatus;
@@ -35,7 +35,7 @@ public class TaskController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    public ApiResponseDto<List<TaskResponseDto>> getAllTask(Principal principal) {
+    public ApiResponseDto<List<TaskGetResponseDto>> getAllTask(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(SuccessStatus.GET_ALL_TASK_SUCCESS, taskService.getAllTask(memberId));
     }

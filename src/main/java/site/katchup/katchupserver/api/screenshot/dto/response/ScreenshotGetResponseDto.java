@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @AllArgsConstructor(staticName = "of")
-public class ScreenshotResponseDto {
+public class ScreenshotGetResponseDto {
     @Schema(description = "스크린샷 고유 id", example = "ddwd-wdwd-wdwd-wdwdwdwd")
     private UUID id;
     @Schema(description = "스티커 순서", example = "1")

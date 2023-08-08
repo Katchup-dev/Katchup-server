@@ -7,7 +7,7 @@ import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.api.member.service.MemberService;
-import site.katchup.katchupserver.common.exception.CustomException;
+import site.katchup.katchupserver.common.exception.UnauthorizedException;
 import site.katchup.katchupserver.common.response.ErrorStatus;
 
 @Service
@@ -25,6 +25,6 @@ public class MemberServiceImpl implements MemberService {
 
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorStatus.INVALID_MEMBER));
+                .orElseThrow(() -> new UnauthorizedException(ErrorStatus.INVALID_MEMBER));
     }
 }

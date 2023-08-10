@@ -16,7 +16,6 @@ import site.katchup.katchupserver.api.folder.dto.request.FolderUpdateRequestDto;
 import site.katchup.katchupserver.api.folder.dto.response.FolderGetResponseDto;
 import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
@@ -43,7 +42,7 @@ public class FolderController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderGetResponseDto>> getAllFolder(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(SuccessStatus.READ_ALL_FOLDER_SUCCESS, folderService.getAllFolder(memberId));
+        return ApiResponseDto.success(folderService.getAllFolder(memberId));
     }
 
     @Operation(summary = "중분류 조회 API")
@@ -55,7 +54,7 @@ public class FolderController {
     @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<FolderGetResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
-        return ApiResponseDto.success(SuccessStatus.READ_BY_CATEGORY_SUCCESS, folderService.getByCategoryId(categoryId));
+        return ApiResponseDto.success(folderService.getByCategoryId(categoryId));
     }
 
     @Operation(summary = "중분류 업데이트 API")
@@ -69,7 +68,7 @@ public class FolderController {
     public ApiResponseDto updateFolderName(@PathVariable final Long folderId,
                                              @RequestBody @Valid final FolderUpdateRequestDto requestDto) {
         folderService.updateFolderName(folderId, requestDto);
-        return ApiResponseDto.success(SuccessStatus.UPDATE_FOLDER_NAME_SUCCESS);
+        return ApiResponseDto.success();
     }
 
     @Operation(summary = "중분류 생성 API")
@@ -82,7 +81,7 @@ public class FolderController {
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto createFolderName(@RequestBody @Valid final FolderCreateRequestDto requestDto) {
         folderService.createFolderName(requestDto);
-        return ApiResponseDto.success(SuccessStatus.CREATE_FOLDER_NAME_SUCCESS);
+        return ApiResponseDto.success();
     }
 
     @Operation(summary = "중분류 목록 조회 API")
@@ -94,7 +93,7 @@ public class FolderController {
     @GetMapping("/{folderId}/cards")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<CardListGetResponseDto>> getCardList(@PathVariable final Long folderId) {
-        return ApiResponseDto.success(SuccessStatus.GET_ALL_CARD_SUCCESS, cardService.getCardList(folderId));
+        return ApiResponseDto.success(cardService.getCardList(folderId));
     }
 
     @Operation(summary = "중분류 삭제 API")
@@ -107,6 +106,6 @@ public class FolderController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto deleteFolder(@PathVariable Long folderId) {
         folderService.deleteFolder(folderId);
-        return ApiResponseDto.success(SuccessStatus.DELETE_FOLDER_SUCCESS);
+        return ApiResponseDto.success();
     }
 }

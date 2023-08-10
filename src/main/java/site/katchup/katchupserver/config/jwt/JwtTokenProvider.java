@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.exception.UnauthorizedException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.security.Key;
 import java.util.Date;
@@ -116,7 +116,7 @@ public class JwtTokenProvider {
         Claims claims = getAccessTokenPayload(accessToken);
         Long memberId = Long.valueOf(String.valueOf(claims.get("memberId")));
         if (!memberRepository.existsByIdAndRefreshToken(memberId, refreshToken)) {
-            throw new UnauthorizedException(ErrorStatus.INVALID_MEMBER);
+            throw new UnauthorizedException(ErrorCode.INVALID_MEMBER);
         }
         return memberId;
     }

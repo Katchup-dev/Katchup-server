@@ -14,7 +14,6 @@ import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequest
 import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseDto;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
@@ -41,7 +40,7 @@ public class CategoryController {
                                              @RequestBody @Valid final CategoryCreateRequestDto requestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         categoryService.createCategoryName(memberId, requestDto);
-        return ApiResponseDto.success(SuccessStatus.CREATE_CATEGORY_NAME_SUCCESS);
+        return ApiResponseDto.success();
     }
 
     @Operation(summary = "대분류 조회 API")
@@ -54,7 +53,7 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(SuccessStatus.READ_ALL_CATEGORY_SUCCESS, categoryService.getAllCategory(memberId));
+        return ApiResponseDto.success(categoryService.getAllCategory(memberId));
     }
 
     @Operation(summary = "대분류 이름 수정 API")
@@ -69,7 +68,7 @@ public class CategoryController {
                                              @RequestBody @Valid final CategoryUpdateRequestDto requestDto) {
         Long memberId = MemberUtil.getMemberId(principal);
         categoryService.updateCategoryName(memberId, categoryId, requestDto);
-        return ApiResponseDto.success(SuccessStatus.UPDATE_CATEGORY_NAME_SUCCESS);
+        return ApiResponseDto.success();
     }
 
     @Operation(summary = "대분류 삭제 API")
@@ -82,6 +81,6 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
-        return ApiResponseDto.success(SuccessStatus.DELETE_CATEGORY_SUCCESS);
+        return ApiResponseDto.success();
     }
 }

@@ -1,12 +1,12 @@
 package site.katchup.katchupserver.common.exception;
 
 import org.springframework.http.HttpStatus;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 public class BadRequestException extends BaseException {
 
-    public BadRequestException(ErrorStatus errorStatus) {
-        super(HttpStatus.BAD_REQUEST, errorStatus.getMessage());
+    public BadRequestException(ErrorCode errorStatus) {
+        super(HttpStatus.BAD_REQUEST, errorStatus.getCode());
     }
 
     public BadRequestException(String message) {

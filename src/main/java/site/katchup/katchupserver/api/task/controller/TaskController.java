@@ -13,7 +13,6 @@ import site.katchup.katchupserver.api.task.dto.request.TaskCreateRequestDto;
 import site.katchup.katchupserver.api.task.dto.response.TaskGetResponseDto;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
@@ -37,7 +36,7 @@ public class TaskController {
     )
     public ApiResponseDto<List<TaskGetResponseDto>> getAllTask(Principal principal) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(SuccessStatus.GET_ALL_TASK_SUCCESS, taskService.getAllTask(memberId));
+        return ApiResponseDto.success(taskService.getAllTask(memberId));
     }
 
     @Operation(summary = "소분류 생성 API")
@@ -51,6 +50,6 @@ public class TaskController {
     )
     public ApiResponseDto createTask(@Valid @RequestBody TaskCreateRequestDto requestDto) {
         taskService.createTask(requestDto);
-        return ApiResponseDto.success(SuccessStatus.CREATE_TASK_SUCCESS);
+        return ApiResponseDto.success();
     }
 }

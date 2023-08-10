@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
@@ -34,6 +33,6 @@ public class MemberController {
 
         MemberProfileGetResponseDto responseDto = memberService.getMemberProfile(memberId);
 
-        return ApiResponseDto.success(SuccessStatus.GET_MEMBER_SUCCESS, responseDto);
+        return ApiResponseDto.success(responseDto);
     }
 }

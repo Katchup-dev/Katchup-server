@@ -15,13 +15,13 @@ import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.exception.BadRequestException;
 import site.katchup.katchupserver.common.exception.NotFoundException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static site.katchup.katchupserver.common.response.ErrorStatus.NOT_FOUND_CATEGORY;
-import static site.katchup.katchupserver.common.response.ErrorStatus.NOT_FOUND_FOLDER;
+import static site.katchup.katchupserver.common.response.ErrorCode.NOT_FOUND_CATEGORY;
+import static site.katchup.katchupserver.common.response.ErrorCode.NOT_FOUND_FOLDER;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class FolderServiceImpl implements FolderService {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLDER));
 
         if (checkDuplicateFolderName(findFolder.getCategory().getId(), requestDto.getName())) {
-            throw new BadRequestException(ErrorStatus.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
         }
 
         findFolder.updateFolderName(requestDto.getName());
@@ -66,7 +66,7 @@ public class FolderServiceImpl implements FolderService {
         Category category = categoryRepository.findById(requestDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_CATEGORY));
         if (checkDuplicateFolderName(requestDto.getCategoryId(), requestDto.getName())) {
-            throw new BadRequestException(ErrorStatus.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
         }
 
         folderRepository.save(Folder.builder()

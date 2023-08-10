@@ -1,15 +1,15 @@
 package site.katchup.katchupserver.common.exception;
 
 import org.springframework.http.HttpStatus;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 public class UnauthorizedException extends BaseException {
 
-    public UnauthorizedException(ErrorStatus errorStatus) {
-        super(HttpStatus.UNAUTHORIZED, errorStatus.getMessage());
+    public UnauthorizedException(ErrorCode errorStatus) {
+        super(HttpStatus.UNAUTHORIZED, errorStatus.getCode());
     }
 
-    public UnauthorizedException(String message) {
-        super(HttpStatus.UNAUTHORIZED, message);
+    public UnauthorizedException(String code) {
+        super(HttpStatus.UNAUTHORIZED, code);
     }
 }

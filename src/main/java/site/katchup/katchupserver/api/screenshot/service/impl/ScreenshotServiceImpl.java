@@ -13,7 +13,7 @@ import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotValidator;
 import site.katchup.katchupserver.common.exception.InternalServerException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
                     .build();
 
         } catch (Exception e) {
-            throw new InternalServerException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
+            throw new InternalServerException(ErrorCode.IMAGE_UPLOAD_EXCEPTION);
         }
     }
 
@@ -99,7 +99,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         try {
             return file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
-            throw new InternalServerException(ErrorStatus.IMAGE_UPLOAD_EXCEPTION);
+            throw new InternalServerException(ErrorCode.IMAGE_UPLOAD_EXCEPTION);
         }
     }
 }

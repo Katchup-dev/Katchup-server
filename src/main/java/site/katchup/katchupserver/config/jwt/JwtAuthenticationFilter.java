@@ -11,7 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import site.katchup.katchupserver.common.exception.UnauthorizedException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.io.IOException;
 
@@ -31,12 +31,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
 
                 if (jwtTokenProvider.validateToken(refreshToken) == JwtExceptionType.EMPTY_JWT || jwtTokenProvider.validateToken(accessToken) == JwtExceptionType.EMPTY_JWT) {
-                    jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.BAD_REQUEST, ErrorStatus.NO_TOKEN);
+                    jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.BAD_REQUEST, ErrorCode.NO_TOKEN);
                     return;
                 } else if (jwtTokenProvider.validateToken(accessToken) == JwtExceptionType.EXPIRED_JWT_TOKEN) {
                     if (jwtTokenProvider.validateToken(refreshToken) == JwtExceptionType.EXPIRED_JWT_TOKEN) {
                         // access, refresh 둘 다 만료
-                        jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.UNAUTHORIZED, ErrorStatus.SIGNIN_REQUIRED);
+                        jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.UNAUTHORIZED, ErrorCode.SIGNIN_REQUIRED);
                         return;
                     } else if (jwtTokenProvider.validateToken(refreshToken) == JwtExceptionType.VALID_JWT_TOKEN) {
                         // 토큰 재발급
@@ -49,10 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         request.setAttribute("newAccessToken", newAccessToken);
                     }
                 } else if (jwtTokenProvider.validateToken(accessToken) == JwtExceptionType.VALID_JWT_TOKEN) {
-                    jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.UNAUTHORIZED, ErrorStatus.VALID_ACCESS_TOKEN);
+                    jwtAuthenticationEntryPoint.setResponse(response, HttpStatus.UNAUTHORIZED, ErrorCode.VALID_ACCESS_TOKEN);
                     return;
                 } else {
-                    throw new UnauthorizedException(ErrorStatus.UNAUTHORIZED_TOKEN);
+                    throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN);
                 }
             }
             else {
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            throw new UnauthorizedException(ErrorStatus.UNAUTHORIZED_TOKEN);
+            throw new UnauthorizedException(ErrorCode.UNAUTHORIZED_TOKEN);
         }
 
         chain.doFilter(request, response);

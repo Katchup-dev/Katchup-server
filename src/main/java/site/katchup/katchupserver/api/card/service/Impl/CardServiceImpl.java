@@ -30,7 +30,7 @@ import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
 import site.katchup.katchupserver.common.exception.BadRequestException;
 import site.katchup.katchupserver.common.exception.NotFoundException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.io.IOException;
@@ -105,7 +105,6 @@ public class CardServiceImpl implements CardService {
 
         cardRepository.save(card);
 
-
         try {
             for (MultipartFile file : fileList) {
                 String fileName = UUID.randomUUID().toString() + ".pdf";
@@ -122,7 +121,7 @@ public class CardServiceImpl implements CardService {
                         .build());
             }
         } catch (IOException e) {
-            throw new BadRequestException(ErrorStatus.FILE_UPLOAD_ERROR);
+            throw new BadRequestException(ErrorCode.FILE_UPLOAD_ERROR);
         }
     }
 
@@ -155,7 +154,7 @@ public class CardServiceImpl implements CardService {
             return placementOrder;
             // task 위치에서 1번째 카드 생성
         } else {
-            // task가 갖고 있는 카드 중에서 마지막 카드의바로 아래 생성
+            // task가 갖고 있는 카드 중에서 마지막 카드의 바로 아래 생성
             Folder folder = getFolderById(task.getFolder().getId());
             List<Card> cardList = task.getCards().stream().collect(Collectors.toList());
             Card maxPlacmentOrderCard = cardList.stream().max(Comparator.comparing(Card::getPlacementOrder)).get();
@@ -174,7 +173,7 @@ public class CardServiceImpl implements CardService {
 
     private void validateFileSize(MultipartFile file) {
         if (file.getSize() >= MAX_FILE_SIZE) {
-            throw new BadRequestException(ErrorStatus.FILE_SIZE_EXCEED);
+            throw new BadRequestException(ErrorCode.FILE_SIZE_EXCEED);
         }
     }
 
@@ -198,34 +197,34 @@ public class CardServiceImpl implements CardService {
 
     private Card getCardById(Long cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(
-                () -> new NotFoundException(ErrorStatus.NOT_FOUND_CARD)
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_CARD)
         );
 
         if (card.isDeleted()) {
-            throw new NotFoundException(ErrorStatus.DELETED_CARD);
+            throw new NotFoundException(ErrorCode.DELETED_CARD);
         }
         return card;
     }
 
     private Folder getFolderById(Long folderId) {
         return folderRepository.findById(folderId).orElseThrow(
-                () -> new NotFoundException(ErrorStatus.NOT_FOUND_FOLDER));
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_FOLDER));
     }
 
     private Category getCategoryById(Long categoryId) {
         return categoryRepository.findById(categoryId).orElseThrow(
-                () -> new NotFoundException(ErrorStatus.NOT_FOUND_CATEGORY));
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_CATEGORY));
     }
 
     private void validatePdf(MultipartFile file) {
         if (!file.getContentType().equals(PDF_TYPE)) {
-            throw new BadRequestException(ErrorStatus.NOT_PDF_FILE_TYPE);
+            throw new BadRequestException(ErrorCode.NOT_PDF_FILE_TYPE);
         }
     }
 
     private Task getTaskById(Long taskId) {
         return taskRepository.findById(taskId).orElseThrow(
-                () -> new NotFoundException(ErrorStatus.INVALID_TASK));
+                () -> new NotFoundException(ErrorCode.NOT_FOUND_TASK));
     }
 
 

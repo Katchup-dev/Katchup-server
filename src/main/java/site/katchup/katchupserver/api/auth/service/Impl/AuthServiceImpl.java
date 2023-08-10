@@ -13,7 +13,7 @@ import site.katchup.katchupserver.api.auth.service.GoogleAuthService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.exception.UnauthorizedException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.config.jwt.JwtTokenProvider;
 import site.katchup.katchupserver.config.jwt.UserAuthentication;
 
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 
     private Member findMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UnauthorizedException(ErrorStatus.INVALID_MEMBER));
+                .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_MEMBER));
     }
 
     private boolean isMemberByEmail(String email) {

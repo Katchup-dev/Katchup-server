@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class CardController {
             @RequestPart List<MultipartFile> fileList,
             CardCreateRequestDto cardCreateRequestDto ) {
         cardService.createCard(fileList, cardCreateRequestDto);
-        return ApiResponseDto.success(SuccessStatus.CREATE_CARD_SUCCESS);
+        return ApiResponseDto.success();
     }
 
     @Operation(summary = "업무 카드 조회 API")
@@ -51,7 +49,7 @@ public class CardController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             })
     public ApiResponseDto<CardGetResponseDto> getCard(@PathVariable Long cardId) {
-        return ApiResponseDto.success(SuccessStatus.GET_CARD_SUCCESS, cardService.getCard(cardId));
+        return ApiResponseDto.success(cardService.getCard(cardId));
     }
 
     @Operation(summary = "업무 카드 삭제 API")
@@ -64,6 +62,6 @@ public class CardController {
             })
     public ApiResponseDto deleteCards(@RequestBody final CardDeleteRequestDto cardDeleteRequestDto) {
         cardService.deleteCardList(cardDeleteRequestDto);
-        return ApiResponseDto.success(SuccessStatus.DELETE_CARD_LIST_SUCCESS);
+        return ApiResponseDto.success();
     }
 }

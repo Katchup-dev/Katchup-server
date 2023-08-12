@@ -9,19 +9,22 @@ import lombok.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public class ApiResponseDto<T> {
+
+    private static final String SUCCESS_CODE = "SSS";
+
     private final String status;
     private T data;
 
     public static ApiResponseDto success(Object data) {
         return ApiResponseDto.builder()
-                .status("SSS")
+                .status(SUCCESS_CODE)
                 .data(data)
                 .build();
     }
 
     public static ApiResponseDto success() {
         return ApiResponseDto.builder()
-                .status("SSS")
+                .status(SUCCESS_CODE)
                 .build();
     }
 

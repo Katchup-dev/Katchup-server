@@ -14,14 +14,10 @@ import site.katchup.katchupserver.api.folder.repository.FolderRepository;
 import site.katchup.katchupserver.api.folder.service.FolderService;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.exception.BadRequestException;
-import site.katchup.katchupserver.common.exception.NotFoundException;
 import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static site.katchup.katchupserver.common.response.ErrorCode.NOT_FOUND_CATEGORY;
-import static site.katchup.katchupserver.common.response.ErrorCode.NOT_FOUND_FOLDER;
 
 @Service
 @RequiredArgsConstructor
@@ -50,12 +46,9 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public void updateFolderName(Long folderId, FolderUpdateRequestDto requestDto) {
-        Folder findFolder = folderRepository.findById(folderId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLDER));
+        Folder findFolder = folderRepository.findByIdOrThrow(folderId);
 
-        if (checkDuplicateFolderName(findFolder.getCategory().getId(), requestDto.getName())) {
-            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
-        }
+        checkDuplicateFolderName(findFolder.getCategory().getId(), requestDto.getName());
 
         findFolder.updateFolderName(requestDto.getName());
     }
@@ -63,25 +56,24 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional
     public void createFolderName(FolderCreateRequestDto requestDto) {
-        Category category = categoryRepository.findById(requestDto.getCategoryId())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_CATEGORY));
-        if (checkDuplicateFolderName(requestDto.getCategoryId(), requestDto.getName())) {
-            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
-        }
+        Category findCategory = categoryRepository.findByIdOrThrow(requestDto.getCategoryId());
+
+        checkDuplicateFolderName(findCategory.getId(), requestDto.getName());
 
         folderRepository.save(Folder.builder()
                 .name(requestDto.getName())
-                .category(category)
+                .category(findCategory)
                 .isDeleted(false)
                 .build());
     }
 
-    private boolean checkDuplicateFolderName(Long categoryId, String name) {
-        return folderRepository.existsByCategoryIdAndName(categoryId, name);
+    private void checkDuplicateFolderName(Long categoryId, String name) {
+        if (folderRepository.existsByCategoryIdAndName(categoryId, name))
+            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
     }
 
     public void deleteFolder(Long folderId) {
-        Folder findFolder = getFolderById(folderId);
+        Folder findFolder = folderRepository.findByIdOrThrow(folderId);
 
         findFolder.deleted();
         findFolder.getTasks().forEach(this::deleteTaskAndCard);
@@ -90,10 +82,5 @@ public class FolderServiceImpl implements FolderService {
     private void deleteTaskAndCard(Task task) {
         task.deleted();
         task.getCards().stream().forEach(Card::deletedCard);
-    }
-
-    private Folder getFolderById(Long folderId) {
-        return folderRepository.findById(folderId)
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_FOLDER));
     }
 }

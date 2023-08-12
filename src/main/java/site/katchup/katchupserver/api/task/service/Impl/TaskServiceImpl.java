@@ -39,8 +39,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void createTask(TaskCreateRequestDto requestDto) {
-        Folder folder = folderRepository.findById(requestDto.getFolderId())
-                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_FOLDER));
+        Folder folder = folderRepository.findByIdOrThrow(requestDto.getFolderId());
 
         Task task = new Task(requestDto.getName(), folder);
 

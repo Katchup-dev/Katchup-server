@@ -9,7 +9,4 @@ public class UnauthorizedException extends BaseException {
         super(HttpStatus.UNAUTHORIZED, errorStatus.getCode());
     }
 
-    public UnauthorizedException(String code) {
-        super(HttpStatus.UNAUTHORIZED, code);
-    }
 }

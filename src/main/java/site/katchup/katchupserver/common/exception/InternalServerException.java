@@ -9,8 +9,4 @@ public class InternalServerException extends BaseException {
         super(HttpStatus.INTERNAL_SERVER_ERROR, errorStatus.getCode());
     }
 
-    public InternalServerException(String message) {
-        super(HttpStatus.INTERNAL_SERVER_ERROR, message);
-    }
-
 }

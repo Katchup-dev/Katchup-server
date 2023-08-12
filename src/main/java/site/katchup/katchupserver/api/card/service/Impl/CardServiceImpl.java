@@ -29,7 +29,6 @@ import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
 import site.katchup.katchupserver.common.exception.BadRequestException;
-import site.katchup.katchupserver.common.exception.NotFoundException;
 import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.common.util.S3Util;
 
@@ -94,7 +93,7 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public void createCard(List<MultipartFile> fileList, CardCreateRequestDto requestDto) {
 
-        Task task = getTaskById(requestDto.getTaskId());
+        Task task = taskRepository.findByIdOrThrow(requestDto.getTaskId());
 
         Card card = Card.builder()
                 .content(requestDto.getContent())
@@ -127,9 +126,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardGetResponseDto getCard(Long cardId) {
-        Card card = getCardById(cardId);
-        Folder folder = getFolderById(card.getTask().getFolder().getId());
-        Category category = getCategoryById(folder.getCategory().getId());
+        Card card = cardRepository.getCardByIdOrThrow(cardId);
+        Folder folder = folderRepository.findByIdOrThrow(card.getTask().getFolder().getId());
+        Category category = categoryRepository.findByIdOrThrow(folder.getCategory().getId());
 
         List<KeywordGetResponseDto> keywordResponseDtoList = getKeywordDtoList(cardId);
         List<FileGetResponseDto> fileGetResponseDTOList = getFileDtoList(cardId);
@@ -140,7 +139,7 @@ public class CardServiceImpl implements CardService {
 
     private Long getPlacementOrder(Task task) {
         if (task.getCards().size() == 0) {
-            Folder folder = getFolderById(task.getFolder().getId());
+            Folder folder = folderRepository.findByIdOrThrow(task.getFolder().getId());
             List<Task> taskList = folder.getTasks().stream().sorted(Comparator.comparing(Task::getName)).collect(Collectors.toList());
             Long placementOrder = 0L;
 
@@ -155,7 +154,7 @@ public class CardServiceImpl implements CardService {
             // task 위치에서 1번째 카드 생성
         } else {
             // task가 갖고 있는 카드 중에서 마지막 카드의 바로 아래 생성
-            Folder folder = getFolderById(task.getFolder().getId());
+            Folder folder = folderRepository.findByIdOrThrow(task.getFolder().getId());
             List<Card> cardList = task.getCards().stream().collect(Collectors.toList());
             Card maxPlacmentOrderCard = cardList.stream().max(Comparator.comparing(Card::getPlacementOrder)).get();
             Long maxPlacementOrder = maxPlacmentOrderCard.getPlacementOrder();
@@ -192,28 +191,8 @@ public class CardServiceImpl implements CardService {
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return fileRepository.findAllByCardId(cardId).stream()
-                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize())).collect(Collectors.toList());
-    }
-
-    private Card getCardById(Long cardId) {
-        Card card = cardRepository.findById(cardId).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_CARD)
-        );
-
-        if (card.isDeleted()) {
-            throw new NotFoundException(ErrorCode.DELETED_CARD);
-        }
-        return card;
-    }
-
-    private Folder getFolderById(Long folderId) {
-        return folderRepository.findById(folderId).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_FOLDER));
-    }
-
-    private Category getCategoryById(Long categoryId) {
-        return categoryRepository.findById(categoryId).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_CATEGORY));
+                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize()))
+                .collect(Collectors.toList());
     }
 
     private void validatePdf(MultipartFile file) {
@@ -221,12 +200,6 @@ public class CardServiceImpl implements CardService {
             throw new BadRequestException(ErrorCode.NOT_PDF_FILE_TYPE);
         }
     }
-
-    private Task getTaskById(Long taskId) {
-        return taskRepository.findById(taskId).orElseThrow(
-                () -> new NotFoundException(ErrorCode.NOT_FOUND_TASK));
-    }
-
 
     private InputStream getInputStream(MultipartFile file) throws IOException {
         return file.getInputStream();

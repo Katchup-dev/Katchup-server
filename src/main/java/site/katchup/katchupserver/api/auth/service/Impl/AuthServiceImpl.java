@@ -12,8 +12,6 @@ import site.katchup.katchupserver.api.auth.service.AuthService;
 import site.katchup.katchupserver.api.auth.service.GoogleAuthService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
-import site.katchup.katchupserver.common.exception.UnauthorizedException;
-import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.config.jwt.JwtTokenProvider;
 import site.katchup.katchupserver.config.jwt.UserAuthentication;
 
@@ -48,10 +46,10 @@ public class AuthServiceImpl implements AuthService {
 
             memberRepository.save(member);
         }
-        else findMemberByEmail(email).updateMemberStatus(false, refreshToken);
+        else memberRepository.findByEmailOrThrow(email).updateMemberStatus(false, refreshToken);
 
         // 등록된 유저 찾기
-        Member signedMember = findMemberByEmail(email);
+        Member signedMember = memberRepository.findByEmailOrThrow(email);
 
         Authentication authentication = new UserAuthentication(signedMember.getId(), null, null);
 
@@ -73,11 +71,6 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-    }
-
-    private Member findMemberByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_MEMBER));
     }
 
     private boolean isMemberByEmail(String email) {

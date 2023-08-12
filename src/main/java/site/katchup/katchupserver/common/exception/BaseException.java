@@ -11,11 +11,6 @@ public class BaseException extends RuntimeException {
     HttpStatus statusCode;
     String code;
 
-    public BaseException(HttpStatus statusCode) {
-        super();
-        this.statusCode = statusCode;
-    }
-
     public BaseException(HttpStatus statusCode, String code) {
         super(code);
         this.statusCode = statusCode;

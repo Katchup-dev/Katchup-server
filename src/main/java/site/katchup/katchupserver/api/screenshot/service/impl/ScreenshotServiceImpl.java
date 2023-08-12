@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
@@ -36,7 +37,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     private final ScreenshotRepository screenshotRepository;
 
-    private final CardProvider cardProvider;
+    private final CardRepository cardRepository;
 
     @Override
     @Transactional
@@ -48,11 +49,11 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
         try {
             String uploadImageUrl = s3Util.upload(getInputStream(file), uploadFileName, getObjectMetadata(file));
-            Card card = cardProvider.getCardById(cardId);
+            Card card = cardRepository.findByIdOrThrow(cardId);
             Screenshot screenshot =  Screenshot.builder()
                     .id(UUID.fromString(imageId))
                     .url(uploadImageUrl)
-                    .card(cardProvider.getCardById(cardId))
+                    .card(card)
                     .build();
 
             screenshotRepository.save(screenshot);

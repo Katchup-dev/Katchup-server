@@ -1,41 +1,36 @@
 package site.katchup.katchupserver.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import site.katchup.katchupserver.common.response.ErrorStatus;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Builder
 public class ApiResponseDto<T> {
-    private final int status;
-    private final boolean success;
-    private final String message;
+
+    private static final String SUCCESS_CODE = "SSS";
+
+    private final String status;
     private T data;
 
-    public static ApiResponseDto success(SuccessStatus status, Object data) {
+    public static ApiResponseDto success(Object data) {
         return ApiResponseDto.builder()
-                .status(status.getHttpStatus().value())
-                .success(true)
-                .message(status.getMessage())
+                .status(SUCCESS_CODE)
                 .data(data)
                 .build();
     }
 
-    public static ApiResponseDto success(SuccessStatus successStatus) {
+    public static ApiResponseDto success() {
         return ApiResponseDto.builder()
-                .status(successStatus.getHttpStatus().value())
-                .success(true)
-                .message(successStatus.getMessage())
+                .status(SUCCESS_CODE)
                 .build();
     }
 
-    public static ApiResponseDto error(int status, String message) {
+    public static ApiResponseDto error(String errorCode) {
         return ApiResponseDto.builder()
-                .status(status)
-                .success(false)
-                .message(message)
+                .status(errorCode)
                 .build();
     }
 }

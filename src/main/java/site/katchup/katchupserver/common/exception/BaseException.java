@@ -4,22 +4,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
-import site.katchup.katchupserver.common.response.ErrorStatus;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaseException extends RuntimeException {
     HttpStatus statusCode;
-    String responseMessage;
+    String code;
 
-    public BaseException(HttpStatus statusCode) {
-        super();
+    public BaseException(HttpStatus statusCode, String code) {
+        super(code);
         this.statusCode = statusCode;
-    }
-
-    public BaseException(HttpStatus statusCode, String responseMessage) {
-        super(responseMessage);
-        this.statusCode = statusCode;
-        this.responseMessage = responseMessage;
+        this.code = code;
     }
 }

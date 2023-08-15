@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.io.IOException;
 
@@ -19,15 +19,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        setResponse(response, HttpStatus.UNAUTHORIZED, ErrorStatus.UNAUTHORIZED_TOKEN);
+        setResponse(response, HttpStatus.UNAUTHORIZED, ErrorCode.UNAUTHORIZED_TOKEN);
     }
 
 
-    public void setResponse(HttpServletResponse response, HttpStatus statusCode, ErrorStatus status) throws IOException {
+    public void setResponse(HttpServletResponse response, HttpStatus statusCode, ErrorCode status) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-        ApiResponseDto apiResponse = ApiResponseDto.error(statusCode.value(), status.getMessage());
+        ApiResponseDto apiResponse = ApiResponseDto.error(status.getCode());
         response.getWriter().println(mapper.writeValueAsString(apiResponse));
     }
 }

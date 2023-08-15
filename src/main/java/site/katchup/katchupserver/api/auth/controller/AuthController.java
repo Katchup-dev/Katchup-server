@@ -14,7 +14,6 @@ import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
 import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
 import site.katchup.katchupserver.api.auth.service.AuthService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 import site.katchup.katchupserver.config.jwt.JwtTokenProvider;
 
 @RestController
@@ -36,13 +35,7 @@ public class AuthController {
 
         AuthLoginResponseDto responseDto = authService.socialLogin(authRequestDto);
 
-        // 로그인
-        if (!responseDto.isNewUser()) {
-            return ApiResponseDto.success(SuccessStatus.SIGNIN_SUCCESS, responseDto);
-        }
-
-        // 회원가입
-        return ApiResponseDto.success(SuccessStatus.SIGNUP_SUCCESS, responseDto);
+        return ApiResponseDto.success(responseDto);
     }
 
     @Operation(summary = "토큰 재발급 API")
@@ -57,6 +50,6 @@ public class AuthController {
         String accessToken = (String) request.getAttribute("newAccessToken");
         String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
 
-        return ApiResponseDto.success(SuccessStatus.GET_NEW_TOKEN_SUCCESS, authService.getNewToken(accessToken, refreshToken));
+        return ApiResponseDto.success(authService.getNewToken(accessToken, refreshToken));
     }
 }

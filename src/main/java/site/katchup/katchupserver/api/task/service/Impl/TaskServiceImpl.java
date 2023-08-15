@@ -2,6 +2,7 @@ package site.katchup.katchupserver.api.task.service.Impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.folder.repository.FolderRepository;
@@ -11,7 +12,7 @@ import site.katchup.katchupserver.api.task.dto.response.TaskGetResponseDto;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.exception.NotFoundException;
-import site.katchup.katchupserver.common.response.ErrorStatus;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
 
     @Override
+    @Transactional
     public List<TaskGetResponseDto> getAllTask(Long memberId) {
 
         return categoryRepository.findByMemberId(memberId).stream()
@@ -35,9 +37,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void createTask(TaskCreateRequestDto requestDto) {
-        Folder folder = folderRepository.findById(requestDto.getFolderId())
-                .orElseThrow(() -> new NotFoundException(ErrorStatus.NOT_FOUND_FOLDER));
+        Folder folder = folderRepository.findByIdOrThrow(requestDto.getFolderId());
 
         Task task = new Task(requestDto.getName(), folder);
 

@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-import site.katchup.katchupserver.common.response.SuccessStatus;
 
 import java.security.Principal;
 
@@ -40,7 +39,7 @@ public class ScreenshotController {
             @PathVariable Long cardId,
             @RequestPart MultipartFile file
     ) {
-        return success(SuccessStatus.UPLOAD_SCREENSHOT_SUCCESS, screenshotService.uploadScreenshot(file, cardId));
+        return success(screenshotService.uploadScreenshot(file, cardId));
     }
 
     @Operation(summary = "스크린샷 삭제 API")
@@ -55,7 +54,7 @@ public class ScreenshotController {
             Principal principal, @PathVariable Long cardId, @PathVariable String screenshotId
     ) {
         screenshotService.delete(cardId, screenshotId);
-        return success(SuccessStatus.DELETE_SCREENSHOT_SUCCESS);
+        return success();
     }
 
 }

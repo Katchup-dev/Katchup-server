@@ -126,7 +126,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardGetResponseDto getCard(Long cardId) {
-        Card card = cardRepository.getCardByIdOrThrow(cardId);
+        Card card = cardRepository.findByIdOrThrow(cardId);
         Folder folder = folderRepository.findByIdOrThrow(card.getTask().getFolder().getId());
         Category category = categoryRepository.findByIdOrThrow(folder.getCategory().getId());
 

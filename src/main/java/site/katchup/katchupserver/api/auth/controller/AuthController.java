@@ -35,12 +35,6 @@ public class AuthController {
 
         AuthLoginResponseDto responseDto = authService.socialLogin(authRequestDto);
 
-        // 로그인
-        if (!responseDto.isNewUser()) {
-            return ApiResponseDto.success(responseDto);
-        }
-
-        // 회원가입
         return ApiResponseDto.success(responseDto);
     }
 

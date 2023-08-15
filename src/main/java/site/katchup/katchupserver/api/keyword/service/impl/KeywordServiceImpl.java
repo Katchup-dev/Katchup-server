@@ -2,6 +2,7 @@ package site.katchup.katchupserver.api.keyword.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.keyword.domain.Keyword;
 import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
@@ -19,14 +20,14 @@ import java.util.stream.Collectors;
 public class KeywordServiceImpl implements KeywordService {
     private final CardKeywordRepository taskKeywordRepository;
     private final KeywordRepository keywordRepository;
-    private final CardProvider cardProvider;
+    private final CardRepository cardRepository;
 
     @Override
     public List<KeywordGetResponseDto> getAllKeyword(Long cardId) {
 
         return taskKeywordRepository.findByCardId(cardId).stream()
                 .flatMap(taskKeyword -> keywordRepository.findById(taskKeyword.getKeyword().getId()).stream())
-                .map(keyword -> KeywordGetResponseDto.of(keyword))
+                .map(KeywordGetResponseDto::of)
                 .collect(Collectors.toList());
     }
 
@@ -40,7 +41,7 @@ public class KeywordServiceImpl implements KeywordService {
         keywordRepository.save(keyword);
 
         CardKeyword taskKeyword = CardKeyword.builder()
-                .card(cardProvider.getCardById(cardId))
+                .card(cardRepository.findByIdOrThrow(cardId))
                 .keyword(keyword)
                 .build();
 

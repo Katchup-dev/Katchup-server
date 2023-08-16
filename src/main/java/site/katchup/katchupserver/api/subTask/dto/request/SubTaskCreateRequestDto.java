@@ -13,7 +13,7 @@ import lombok.Getter;
 public class SubTaskCreateRequestDto {
     @Schema(description = "세부 업무가 속한 업무 고유 id", example = "1")
     @NotNull
-    private Long folderId;
+    private Long taskId;
     @Schema(description = "세부 업무 이름", example = "Katchup Design")
     @NotBlank
     @Size(min=1, max=20)

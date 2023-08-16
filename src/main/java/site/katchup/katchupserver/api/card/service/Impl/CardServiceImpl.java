@@ -177,7 +177,8 @@ public class CardServiceImpl implements CardService {
     private List<KeywordGetResponseDto> getKeywordDtoList(Long cardId) {
         return cardKeywordRepository.findByCardId(cardId)
                 .stream()
-                .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword().getId(), cardKeyword.getKeyword().getName()))
+                .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword().getId(),
+                        cardKeyword.getKeyword().getName(), cardKeyword.getKeyword().getColor()))
                 .collect(Collectors.toList());
     }
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {

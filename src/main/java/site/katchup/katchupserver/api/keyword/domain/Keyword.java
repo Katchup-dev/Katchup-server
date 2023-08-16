@@ -19,8 +19,12 @@ public class Keyword {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String color;
+
     @Builder
-    public Keyword(String name) {
+    public Keyword(String name, String color) {
         this.name = name;
+        this.color = color;
     }
 }

@@ -3,7 +3,6 @@ package site.katchup.katchupserver.api.subTask.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.subTask.dto.response.SubTaskGetResponseDto;
 import site.katchup.katchupserver.api.subTask.repository.SubTaskRepository;
@@ -34,7 +33,7 @@ public class SubTaskServiceImpl implements SubTaskService {
     @Override
     @Transactional
     public void createSubTask(SubTaskCreateRequestDto requestDto) {
-        Task task = taskRepository.findByIdOrThrow(requestDto.getFolderId());
+        Task task = taskRepository.findByIdOrThrow(requestDto.getTaskId());
 
         SubTask subTask = new SubTask(requestDto.getName(), task);
 

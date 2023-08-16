@@ -16,4 +16,8 @@ public class KeywordCreateRequestDto {
     @Schema(description = "키워드 이름", example = "Katchup Design")
     @NotBlank
     private String name;
+    @Schema(description = "키워드 색깔", example = "#DC143C")
+    @NotBlank
+    private String color;
+
 }

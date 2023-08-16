@@ -10,14 +10,13 @@ import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
-    List<Card> findByTaskId(Long taskId);
 
     default Card findByIdOrThrow(Long cardId) {
         Card card = findById(cardId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_CARD)
         );
 
-        if (card.isDeleted()) {
+        if (card.getIsDeleted()) {
             throw new NotFoundException(ErrorCode.DELETED_CARD);
         }
         return card;

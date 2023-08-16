@@ -23,17 +23,17 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/categories")
-@Tag(name = "[Category] 대분류 관련 API (V1)")
+@Tag(name = "[Category] 카테고리 관련 API (V1)")
 public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @Operation(summary = "대분류 생성 API")
+    @Operation(summary = "카테고리 생성 API")
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "대분류 생성 성공"),
-            @ApiResponse(responseCode = "400", description = "대분류 생성 실패", content = @Content),
+            @ApiResponse(responseCode = "201", description = "카테고리 생성 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 생성 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     public ApiResponseDto createCategoryName(Principal principal,
@@ -43,10 +43,10 @@ public class CategoryController {
         return ApiResponseDto.success();
     }
 
-    @Operation(summary = "대분류 조회 API")
+    @Operation(summary = "카테고리 조회 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "대분류 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "대분류 조회 실패", content = @Content),
+            @ApiResponse(responseCode = "200", description = "카테고리 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 조회 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @GetMapping()
@@ -56,12 +56,12 @@ public class CategoryController {
         return ApiResponseDto.success(categoryService.getAllCategory(memberId));
     }
 
-    @Operation(summary = "대분류 이름 수정 API")
+    @Operation(summary = "카테고리 이름 수정 API")
     @PatchMapping("/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "대분류 이름 수정 성공"),
-            @ApiResponse(responseCode = "400", description = "대분류 이름 수정 실패", content = @Content),
+            @ApiResponse(responseCode = "200", description = "카테고리 이름 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 이름 수정 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     public ApiResponseDto updateCategoryName(Principal principal, @PathVariable final Long categoryId,
@@ -71,10 +71,10 @@ public class CategoryController {
         return ApiResponseDto.success();
     }
 
-    @Operation(summary = "대분류 삭제 API")
+    @Operation(summary = "카테고리 삭제 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "대분류 삭제 성공"),
-            @ApiResponse(responseCode = "400", description = "대분류 삭제 실패", content = @Content),
+            @ApiResponse(responseCode = "200", description = "카테고리 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 삭제 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @DeleteMapping("/{categoryId}")

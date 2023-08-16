@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.folder.domain.Folder;
+import site.katchup.katchupserver.api.category.domain.Category;
+import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -29,27 +29,38 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "folder_id")
-    private Folder folder;
-
+    @Column(nullable = false)
     private boolean isDeleted;
 
+    @Column
     private LocalDateTime deletedAt;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @OneToMany(mappedBy = "task", cascade = ALL)
-    private List<Card> cards = new ArrayList<>();
+    private List<SubTask> subTasks = new ArrayList<>();
 
     @Builder
-    public Task(String name, Folder folder) {
+    public Task(String name, boolean isDeleted, LocalDateTime deletedAt, Category category) {
         this.name = name;
-        this.folder = folder;
-        this.folder.addTask(this);
+        this.isDeleted = isDeleted;
+        this.deletedAt = deletedAt;
+        this.category = category;
+        this.category.addTask(this);
     }
 
     public void deleted() {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
     }
-    public void addCard(Card card) { cards.add(card); }
+
+    public void addSubTask(SubTask task) {
+        subTasks.add(task);
+    }
+
+    public void updateTaskName(String taskName) {
+        this.name = taskName;
+    }
 }

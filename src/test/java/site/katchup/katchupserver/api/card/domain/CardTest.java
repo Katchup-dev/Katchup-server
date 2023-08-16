@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import site.katchup.katchupserver.api.category.domain.Category;
-import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
+import site.katchup.katchupserver.api.subTask.domain.SubTask;
+import site.katchup.katchupserver.api.subTask.repository.SubTaskRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
-import site.katchup.katchupserver.api.task.repository.TaskRepository;
 
 @DataJpaTest
 public class CardTest {
@@ -22,24 +22,22 @@ public class CardTest {
     private CardRepository cardRepository;
 
     @Autowired
-    private TaskRepository taskRepository;
+    private SubTaskRepository subTaskRepository;
 
     @DisplayName("업무 카드 저장 테스트")
     @Test
     void successSaveCard() {
         // given
         Category category = Category.builder().name("Test Category").build();
-        Folder folder = Folder.builder().category(category).name("Test Folder").build();
-        Task task = Task.builder().folder(folder).name("Test Task").build();
-        taskRepository.save(task);
+        Task task = Task.builder().category(category).name("Test Task").build();
+        SubTask subTask = SubTask.builder().task(task).name("Test SubTask").build();
+        subTaskRepository.save(subTask);
 
         Card card = Card.builder()
                 .placementOrder(1L)
                 .content("Test Content")
                 .note("Test Note")
-                .isDeleted(false)
-                .deletedAt(LocalDateTime.now())
-                .task(task)
+                .subTask(subTask)
                 .build();
 
         // when
@@ -50,7 +48,7 @@ public class CardTest {
         assertThat(savedCard.getPlacementOrder()).isEqualTo(1L);
         assertThat(savedCard.getContent()).isEqualTo("Test Content");
         assertThat(savedCard.getNote()).isEqualTo("Test Note");
-        assertThat(savedCard.isDeleted()).isFalse();
-        assertThat(savedCard.getTask().getName()).isEqualTo("Test Task");
+        assertThat(savedCard.getIsDeleted()).isFalse();
+        assertThat(savedCard.getSubTask().getName()).isEqualTo("Test SubTask");
     }
 }

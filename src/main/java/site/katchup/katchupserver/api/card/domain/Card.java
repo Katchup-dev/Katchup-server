@@ -61,6 +61,7 @@ public class Card extends BaseEntity {
         this.isDeleted = false;
         this.note = note;
         this.subTask = subTask;
+        this.subTask.addCard(this);
     }
 
     public void addScreenshot(Screenshot screenshot) {

@@ -22,9 +22,13 @@ public class Keyword {
     @Column(nullable = false)
     private String color;
 
+    @Column(nullable = false)
+    private Long taskId;
+
     @Builder
-    public Keyword(String name, String color) {
+    public Keyword(String name, String color, Long taskId) {
         this.name = name;
         this.color = color;
+        this.taskId = taskId;
     }
 }

@@ -35,6 +35,7 @@ public enum ErrorCode {
     NOT_FOUND_SUB_TASK("ST-303"),
     NOT_FOUND_CARD("CD-304"),
     DELETED_CARD("CD-305"),
+    NOT_FOUND_KEYWORD("KW-306"),
 
 
     /**

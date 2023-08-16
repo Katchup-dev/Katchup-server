@@ -44,10 +44,10 @@ public class KeywordController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    @PostMapping("/{cardId}/keywords")
+    @PostMapping("/keywords")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponseDto createKeyword(@PathVariable Long cardId, @Valid @RequestBody KeywordCreateRequestDto requestDto) {
-        keywordService.createKeyword(cardId, requestDto);
+    public ApiResponseDto createKeyword(@Valid @RequestBody KeywordCreateRequestDto requestDto) {
+        keywordService.createKeyword(requestDto);
         return ApiResponseDto.success();
     }
 }

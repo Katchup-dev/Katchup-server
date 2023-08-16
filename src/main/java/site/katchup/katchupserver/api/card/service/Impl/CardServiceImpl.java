@@ -17,8 +17,10 @@ import site.katchup.katchupserver.api.card.repository.FileRepository;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
+import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
+import site.katchup.katchupserver.api.keyword.repository.KeywordRepository;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
@@ -50,6 +52,7 @@ public class CardServiceImpl implements CardService {
     private final TaskRepository taskRepository;
     private final FileRepository fileRepository;
     private final ScreenshotRepository screenshotRepository;
+    private final KeywordRepository keywordRepository;
     private final S3Util s3Util;
 
     private static final String FILE_FOLDER_NAME = "files/";
@@ -100,7 +103,14 @@ public class CardServiceImpl implements CardService {
                 .subTask(subTask)
                 .build();
 
-        cardRepository.save(card);
+        Card savedCard = cardRepository.save(card);
+
+        for (Long keywordId : requestDto.getKeywordIdList()) {
+            CardKeyword.builder()
+                    .card(savedCard)
+                    .keyword(keywordRepository.findByIdOrThrow(keywordId))
+                    .build();
+        }
 
         try {
             for (MultipartFile file : fileList) {

@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
-import site.katchup.katchupserver.api.common.CardProvider;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
@@ -70,7 +69,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     @Override
     @Transactional
-    public void delete(Long cardId, String screenshotId) {
+    public void deleteScreenshot(Long cardId, String screenshotId) {
         screenshotRepository.deleteById(UUID.fromString(screenshotId));
     }
 

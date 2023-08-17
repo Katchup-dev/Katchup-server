@@ -12,9 +12,9 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
-@Schema(description = "대분류 생성 요청 DTO")
+@Schema(description = "카테고리 생성 요청 DTO")
 public class CategoryCreateRequestDto {
-    @Schema(description = "대분류 이름", example = "Katchup Design")
+    @Schema(description = "카테고리 이름", example = "Katchup Design")
     @Pattern(regexp = "^[a-zA-Z0-9가-힣_\s]*$", message = "KC-103")
     @NotBlank(message = "CG-108")
     private String name;

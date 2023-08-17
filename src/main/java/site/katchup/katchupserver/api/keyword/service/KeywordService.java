@@ -6,7 +6,8 @@ import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto
 import java.util.List;
 
 public interface KeywordService {
+
     List<KeywordGetResponseDto> getAllKeyword(Long cardId);
-    void createKeyword(Long cardId, KeywordCreateRequestDto requestDto);
+    void createKeyword(KeywordCreateRequestDto requestDto);
 
 }

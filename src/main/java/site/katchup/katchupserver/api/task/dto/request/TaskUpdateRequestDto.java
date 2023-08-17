@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.folder.dto.request;
+package site.katchup.katchupserver.api.task.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,8 +11,8 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
-public class FolderUpdateRequestDto {
+public class TaskUpdateRequestDto {
     @Pattern(regexp = "^[a-zA-Z0-9가-힣_\s]*$", message = "KC-103")
-    @NotBlank(message = "FD-109")
+    @NotBlank(message = "TK-109")
     private String name;
 }

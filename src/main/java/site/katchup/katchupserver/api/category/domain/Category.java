@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.member.domain.Member;
+import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -36,18 +36,21 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "category", cascade = ALL)
-    private List<Folder> folders = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
     @Builder
     public Category(String name, boolean isShared, Member member) {
         this.name = name;
         this.isShared = isShared;
         this.member = member;
+        this.isDeleted = false;
     }
 
     public void deleted() {
@@ -55,8 +58,8 @@ public class Category extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void addFolder(Folder folder) {
-        folders.add(folder);
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     public void updateCategoryName(String newName) {

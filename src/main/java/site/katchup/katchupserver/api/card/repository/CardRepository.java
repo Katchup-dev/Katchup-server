@@ -10,7 +10,6 @@ import java.util.List;
 
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
-    List<Card> findByTaskId(Long taskId);
 
     default Card findByIdOrThrow(Long cardId) {
         Card card = findById(cardId).orElseThrow(

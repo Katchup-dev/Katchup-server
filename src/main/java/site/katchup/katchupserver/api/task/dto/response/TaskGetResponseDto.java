@@ -10,12 +10,11 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @NoArgsConstructor(access = PRIVATE)
 @AllArgsConstructor
-@Schema(description = "소분류 응답 DTO")
+@Schema(description = "업무 응답 DTO")
 public class TaskGetResponseDto {
-
-    @Schema(description = "소분류 id", example = "1")
+    @Schema(description = "업무 고유 id", example = "1")
     private Long taskId;
-    @Schema(description = "소분류 이름", example = "Katchup Design")
+    @Schema(description = "업무 이름", example = "Katchup Design")
     private String name;
 
     public static TaskGetResponseDto of(Long taskId, String name) {

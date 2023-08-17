@@ -9,16 +9,16 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 @Getter
 public class CardCreateRequestDto {
-    @NotBlank(message = "대분류는 필수 값입니다.")
+    @NotBlank(message = "CD-110")
     private Long categoryId;
-    @NotBlank(message = "중분류는 필수 값입니다.")
-    private Long folderId;
-    @NotBlank(message = "소분류는 필수 값입니다.")
+    @NotBlank(message = "CD-111")
     private Long taskId;
-    @NotBlank(message = "키워드는 필수 값입니다.")
+    @NotBlank(message = "CD-112")
+    private Long subTaskId;
+    @NotBlank(message = "CD-113")
     private List<Long> keywordIdList;
     private String note;
-    @NotBlank(message = "내용은 필수 값입니다.")
+    @NotBlank(message = "CD-114")
     private String content;
 
 }

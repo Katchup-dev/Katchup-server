@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.category.domain.Category;
-import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
+import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.task.domain.Task;
 
 import java.util.UUID;
@@ -24,9 +24,9 @@ class ScreenshotTest {
     public void successSaveScreenshot() {
         // Given
         Category category = Category.builder().name("Test Category").build();
-        Folder folder = Folder.builder().category(category).name("Test Folder").build();
-        Task task = Task.builder().folder(folder).name("Test Task").build();
-        Card card = Card.builder().placementOrder(1L).isDeleted(false).task(task).build();
+        Task task = Task.builder().category(category).name("Test Task").build();
+        SubTask subTask = SubTask.builder().task(task).name("Test SubTask").build();
+        Card card = Card.builder().placementOrder(1L).subTask(subTask).build();
 
         UUID uuid = UUID.randomUUID();
 

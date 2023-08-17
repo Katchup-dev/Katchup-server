@@ -1,13 +1,12 @@
 package site.katchup.katchupserver.api.card.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.link.domain.Link;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
-import site.katchup.katchupserver.api.task.domain.Task;
+import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -36,15 +35,15 @@ public class Card extends BaseEntity {
     @Column(length = 200)
     private String note;
 
-    @Column(name = "is_deleted", nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "task_id")
-    private Task task;
+    @JoinColumn(name = "sub_task_id")
+    private SubTask subTask;
 
     @OneToMany(mappedBy = "card", cascade = ALL)
     private List<Screenshot> screenshots = new ArrayList<>();
@@ -56,22 +55,13 @@ public class Card extends BaseEntity {
     private List<Link> links = new ArrayList<>();
 
     @Builder
-    public Card(Long placementOrder, String content, String note, Task task) {
+    public Card(Long placementOrder, String content, String note, SubTask subTask) {
         this.placementOrder = placementOrder;
         this.content = content;
+        this.isDeleted = false;
         this.note = note;
-        this.task = task;
-    }
-
-    @Builder
-    public Card(Long placementOrder, String content, String note, boolean isDeleted, LocalDateTime deletedAt, Task task) {
-        this.placementOrder = placementOrder;
-        this.content = content;
-        this.note = note;
-        this.isDeleted = isDeleted;
-        this.deletedAt = deletedAt;
-        this.task = task;
-        this.task.addCard(this);
+        this.subTask = subTask;
+        this.subTask.addCard(this);
     }
 
     public void addScreenshot(Screenshot screenshot) {

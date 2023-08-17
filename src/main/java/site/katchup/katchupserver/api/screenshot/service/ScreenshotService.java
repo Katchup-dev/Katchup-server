@@ -6,7 +6,6 @@ import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadRe
 public interface ScreenshotService {
 
     ScreenshotUploadResponseDto uploadScreenshot(MultipartFile file, Long cardId);
-
-    public void delete(Long cardId, String screenshotId);
+    void deleteScreenshot(Long cardId, String screenshotId);
 
 }

@@ -1,10 +1,10 @@
-package site.katchup.katchupserver.api.folder.domain;
+package site.katchup.katchupserver.api.subTask.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import site.katchup.katchupserver.api.category.domain.Category;
+import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Folder extends BaseEntity {
+public class SubTask extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -29,38 +29,30 @@ public class Folder extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
+
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @Column
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @OneToMany(mappedBy = "folder", cascade = ALL)
-    private List<Task> tasks = new ArrayList<>();
+    @OneToMany(mappedBy = "subTask", cascade = ALL)
+    private List<Card> cards = new ArrayList<>();
 
     @Builder
-    public Folder(String name, boolean isDeleted, LocalDateTime deletedAt, Category category) {
+    public SubTask(String name, Task task) {
         this.name = name;
-        this.isDeleted = isDeleted;
-        this.deletedAt = deletedAt;
-        this.category = category;
-        this.category.addFolder(this);
+        this.task = task;
+        this.task.addSubTask(this);
+        this.isDeleted = false;
     }
 
     public void deleted() {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
     }
-
-    public void addTask(Task task) {
-        tasks.add(task);
-    }
-
-    public void updateFolderName(String folderName) {
-        this.name = folderName;
-    }
+    public void addCard(Card card) { cards.add(card); }
 }

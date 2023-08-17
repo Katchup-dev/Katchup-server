@@ -13,8 +13,8 @@ import java.util.List;
 public class CardGetResponseDto {
     private Long cardId;
     private String category;
-    private String folder;
     private String task;
+    private String subTask;
     private List<KeywordGetResponseDto> keywordList;
     private List<ScreenshotGetResponseDto> screenshotList;
     private List<FileGetResponseDto> fileList;

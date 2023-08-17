@@ -10,10 +10,10 @@ import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseD
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 
-import site.katchup.katchupserver.api.folder.domain.Folder;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
-import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.subTask.domain.SubTask;
+import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.exception.BadRequestException;
 import site.katchup.katchupserver.common.response.ErrorCode;
 
@@ -42,9 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CategoryGetResponseDto> getAllCategory(Long memberId) {
-        return categoryRepository.findByMemberId(memberId).stream()
+        return categoryRepository.findAllByMemberId(memberId).stream()
                 .map(category -> CategoryGetResponseDto.of(category.getId(), category.getName(), category.isShared()))
                 .collect(Collectors.toList());
     }
@@ -64,19 +64,19 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Long categoryId) {
         Category findCategory = categoryRepository.findByIdOrThrow(categoryId);
         findCategory.deleted();
-        findCategory.getFolders().forEach(this::deleteFolderAndTaskAndCard);
+        findCategory.getTasks().forEach(this::deleteTaskAndSubTaskAndCard);
     }
 
     private void checkDuplicateCategoryName(Long memberId, String name) {
         if (categoryRepository.existsByMemberIdAndName(memberId, name))
-            throw new BadRequestException(ErrorCode.DUPLICATE_FOLDER_NAME);
+            throw new BadRequestException(ErrorCode.DUPLICATE_TASK_NAME);
     }
 
-    private void deleteFolderAndTaskAndCard(Folder folder) {
-        folder.deleted();
-        folder.getTasks().forEach(Task::deleted);
-        folder.getTasks().stream()
-                .flatMap(task -> task.getCards().stream())
+    private void deleteTaskAndSubTaskAndCard(Task task) {
+        task.deleted();
+        task.getSubTasks().forEach(SubTask::deleted);
+        task.getSubTasks().stream()
+                .flatMap(subTask -> subTask.getCards().stream())
                 .forEach(Card::deletedCard);
     }
 }

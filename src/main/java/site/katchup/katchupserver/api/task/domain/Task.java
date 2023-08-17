@@ -36,7 +36,7 @@ public class Task extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "task", cascade = ALL)

@@ -11,9 +11,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
+import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.subTask.repository.SubTaskRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
+import site.katchup.katchupserver.api.task.repository.TaskRepository;
 
 @DataJpaTest
 public class CardTest {
@@ -24,12 +26,20 @@ public class CardTest {
     @Autowired
     private SubTaskRepository subTaskRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
+
     @DisplayName("업무 카드 저장 테스트")
     @Test
     void successSaveCard() {
         // given
         Category category = Category.builder().name("Test Category").build();
+        categoryRepository.save(category);
         Task task = Task.builder().category(category).name("Test Task").build();
+        taskRepository.save(task);
         SubTask subTask = SubTask.builder().task(task).name("Test SubTask").build();
         subTaskRepository.save(subTask);
 

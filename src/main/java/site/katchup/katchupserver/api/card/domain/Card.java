@@ -35,8 +35,8 @@ public class Card extends BaseEntity {
     @Column(length = 200)
     private String note;
 
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

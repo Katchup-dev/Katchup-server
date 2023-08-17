@@ -9,7 +9,7 @@ import site.katchup.katchupserver.common.response.ErrorCode;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findByMemberId(Long memberId);
+    List<Category> findAllByMemberId(Long memberId);
 
     boolean existsByMemberIdAndName(Long memberId, String name);
 

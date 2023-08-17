@@ -30,11 +30,13 @@ public class SubTask extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "subTask", cascade = ALL)
@@ -45,6 +47,7 @@ public class SubTask extends BaseEntity {
         this.name = name;
         this.task = task;
         this.task.addSubTask(this);
+        this.isDeleted = false;
     }
 
     public void deleted() {

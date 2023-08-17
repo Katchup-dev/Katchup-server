@@ -27,16 +27,16 @@ public class TaskServiceImpl implements TaskService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TaskGetResponseDto> getAllTask(Long memberId) {
-        return categoryRepository.findByMemberId(memberId).stream()
+        return categoryRepository.findAllByMemberId(memberId).stream()
                 .flatMap(category -> taskRepository.findByCategoryId(category.getId()).stream())
                 .map(task -> TaskGetResponseDto.of(task.getId(), task.getName()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<TaskGetResponseDto> getByCategoryId(Long categoryId) {
         return taskRepository.findByCategoryId(categoryId).stream()
                 .map(task -> TaskGetResponseDto.of(task.getId(), task.getName()))
@@ -63,20 +63,21 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(Task.builder()
                 .name(requestDto.getName())
                 .category(findCategory)
-                .isDeleted(false)
                 .build());
     }
 
-    private void checkDuplicateTaskName(Long categoryId, String name) {
-        if (taskRepository.existsByCategoryIdAndName(categoryId, name))
-            throw new BadRequestException(ErrorCode.DUPLICATE_TASK_NAME);
-    }
-
+    @Override
+    @Transactional
     public void deleteTask(Long taskId) {
         Task findTask = taskRepository.findByIdOrThrow(taskId);
 
         findTask.deleted();
         findTask.getSubTasks().forEach(this::deleteSubTaskAndCard);
+    }
+
+    private void checkDuplicateTaskName(Long categoryId, String name) {
+        if (taskRepository.existsByCategoryIdAndName(categoryId, name))
+            throw new BadRequestException(ErrorCode.DUPLICATE_TASK_NAME);
     }
 
     private void deleteSubTaskAndCard(SubTask subTask) {

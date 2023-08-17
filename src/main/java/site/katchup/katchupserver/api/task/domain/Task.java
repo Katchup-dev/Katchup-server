@@ -29,10 +29,10 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
-    @Column
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @ManyToOne(fetch = LAZY)
@@ -43,12 +43,11 @@ public class Task extends BaseEntity {
     private List<SubTask> subTasks = new ArrayList<>();
 
     @Builder
-    public Task(String name, boolean isDeleted, LocalDateTime deletedAt, Category category) {
+    public Task(String name, Category category) {
         this.name = name;
-        this.isDeleted = isDeleted;
-        this.deletedAt = deletedAt;
         this.category = category;
         this.category.addTask(this);
+        this.isDeleted = false;
     }
 
     public void deleted() {

@@ -16,7 +16,7 @@ public interface CardRepository extends JpaRepository<Card, Long> {
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_CARD)
         );
 
-        if (card.getIsDeleted()) {
+        if (card.isDeleted()) {
             throw new NotFoundException(ErrorCode.DELETED_CARD);
         }
         return card;

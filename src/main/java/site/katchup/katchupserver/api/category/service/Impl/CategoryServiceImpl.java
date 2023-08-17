@@ -42,9 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CategoryGetResponseDto> getAllCategory(Long memberId) {
-        return categoryRepository.findByMemberId(memberId).stream()
+        return categoryRepository.findAllByMemberId(memberId).stream()
                 .map(category -> CategoryGetResponseDto.of(category.getId(), category.getName(), category.isShared()))
                 .collect(Collectors.toList());
     }

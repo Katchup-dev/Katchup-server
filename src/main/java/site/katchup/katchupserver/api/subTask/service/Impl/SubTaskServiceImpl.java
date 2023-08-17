@@ -22,10 +22,10 @@ public class SubTaskServiceImpl implements SubTaskService {
     private final SubTaskRepository subTaskRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<SubTaskGetResponseDto> getAllSubTask(Long taskId) {
 
-        return subTaskRepository.findByTaskId(taskId).stream()
+        return subTaskRepository.findAllByTaskId(taskId).stream()
                 .map(subTask -> SubTaskGetResponseDto.of(subTask.getId(), subTask.getName()))
                 .collect(Collectors.toList());
     }

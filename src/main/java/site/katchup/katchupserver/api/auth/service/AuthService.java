@@ -5,6 +5,8 @@ import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
 import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
 
 public interface AuthService {
+
     AuthLoginResponseDto socialLogin(AuthRequestDto authRequestDto);
     AuthTokenGetResponseDto getNewToken(String accessToken, String refreshToken);
+
 }

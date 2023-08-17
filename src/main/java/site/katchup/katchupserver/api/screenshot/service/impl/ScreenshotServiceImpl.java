@@ -69,7 +69,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     @Override
     @Transactional
-    public void delete(Long cardId, String screenshotId) {
+    public void deleteScreenshot(Long cardId, String screenshotId) {
         screenshotRepository.deleteById(UUID.fromString(screenshotId));
     }
 

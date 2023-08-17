@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface SubTaskRepository extends JpaRepository<SubTask, Long> {
-    List<SubTask> findByTaskId(Long taskId);
+    List<SubTask> findAllByTaskId(Long taskId);
 
     default SubTask findByIdOrThrow(Long subTaskId) {
         return findById(subTaskId).orElseThrow(

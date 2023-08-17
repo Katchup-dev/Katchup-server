@@ -53,7 +53,7 @@ public class ScreenshotController {
     public ApiResponseDto deleteScreenshot(
             Principal principal, @PathVariable Long cardId, @PathVariable String screenshotId
     ) {
-        screenshotService.delete(cardId, screenshotId);
+        screenshotService.deleteScreenshot(cardId, screenshotId);
         return success();
     }
 

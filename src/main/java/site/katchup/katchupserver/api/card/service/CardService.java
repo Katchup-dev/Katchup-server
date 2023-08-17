@@ -14,10 +14,7 @@ public interface CardService {
 
     List<CardListGetResponseDto> getCardList(Long folderId);
     CardGetResponseDto getCard(Long cardId);
-
     void deleteCardList(CardDeleteRequestDto cardDeleteRequestDto);
-
     void createCard(List<MultipartFile> fileList, CardCreateRequestDto cardCreateRequestDto);
-
 
 }

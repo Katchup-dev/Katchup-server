@@ -18,11 +18,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class KeywordServiceImpl implements KeywordService {
-    private final CardKeywordRepository cardKeywordRepository;
     private final KeywordRepository keywordRepository;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<KeywordGetResponseDto> getAllKeyword(Long taskId) {
         return keywordRepository.findAllByTaskId(taskId).stream()
                 .map(KeywordGetResponseDto::of)

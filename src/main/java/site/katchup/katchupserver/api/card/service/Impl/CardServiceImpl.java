@@ -61,16 +61,16 @@ public class CardServiceImpl implements CardService {
     private static final long MB = 1024 * 1024;
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CardListGetResponseDto> getCardList(Long taskId) {
-        return subTaskRepository.findByTaskId(taskId).stream()
+        return subTaskRepository.findAllByTaskId(taskId).stream()
                 .flatMap(subTask -> subTask.getCards().stream())
                 .collect(Collectors.groupingBy(Card::getSubTask))  // subTaskId 그룹화
                 .values().stream()
                 .flatMap(cards -> cards.stream().sorted(Comparator.comparing(Card::getPlacementOrder)))  // 그룹 내에서 placementOrder 값으로 정렬
-                .filter(card -> !card.getIsDeleted())  // isDeleted가 false인 card 필터링
+                .filter(card -> !card.isDeleted())  // isDeleted가 false인 card 필터링
                 .map(card -> {
-                    List<KeywordGetResponseDto> keywords = cardKeywordRepository.findByCardId(card.getId()).stream()
+                    List<KeywordGetResponseDto> keywords = cardKeywordRepository.findAllByCardId(card.getId()).stream()
                             .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword()))
                             .collect(Collectors.toList());
                     SubTask relatedSubTask = card.getSubTask();  // Card와 연관된 SubTask 가져오기
@@ -133,6 +133,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CardGetResponseDto getCard(Long cardId) {
         Card card = cardRepository.findByIdOrThrow(cardId);
         Task task = taskRepository.findByIdOrThrow(card.getSubTask().getTask().getId());
@@ -185,8 +186,7 @@ public class CardServiceImpl implements CardService {
     }
 
     private List<KeywordGetResponseDto> getKeywordDtoList(Long cardId) {
-        return cardKeywordRepository.findByCardId(cardId)
-                .stream()
+        return cardKeywordRepository.findAllByCardId(cardId).stream()
                 .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword().getId(),
                         cardKeyword.getKeyword().getName(), cardKeyword.getKeyword().getColor()))
                 .collect(Collectors.toList());

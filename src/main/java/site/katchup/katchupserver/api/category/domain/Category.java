@@ -36,8 +36,10 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
+    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "category", cascade = ALL)
@@ -48,6 +50,7 @@ public class Category extends BaseEntity {
         this.name = name;
         this.isShared = isShared;
         this.member = member;
+        this.isDeleted = false;
     }
 
     public void deleted() {

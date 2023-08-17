@@ -48,7 +48,7 @@ public class CardTest {
         assertThat(savedCard.getPlacementOrder()).isEqualTo(1L);
         assertThat(savedCard.getContent()).isEqualTo("Test Content");
         assertThat(savedCard.getNote()).isEqualTo("Test Note");
-        assertThat(savedCard.getIsDeleted()).isFalse();
+        assertThat(savedCard.isDeleted()).isFalse();
         assertThat(savedCard.getSubTask().getName()).isEqualTo("Test SubTask");
     }
 }

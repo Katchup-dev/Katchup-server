@@ -10,11 +10,11 @@ import site.katchup.katchupserver.api.member.service.MemberService;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public MemberProfileGetResponseDto getMemberProfile(Long memberId) {
         Member member = memberRepository.findByIdOrThrow(memberId);
 

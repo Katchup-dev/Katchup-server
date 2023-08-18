@@ -20,6 +20,7 @@ public class AwsS3Config {
     @Value("${cloud.aws.credentials.secretKey}")
     private String secretKey;
 
+    @Bean
     public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
@@ -29,4 +30,5 @@ public class AwsS3Config {
             .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
             .build();
     }
+
 }

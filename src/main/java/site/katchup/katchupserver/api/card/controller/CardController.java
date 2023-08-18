@@ -5,17 +5,15 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,9 +31,8 @@ public class CardController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto createCard(
-            @RequestPart List<MultipartFile> fileList,
-            CardCreateRequestDto cardCreateRequestDto ) {
-        cardService.createCard(fileList, cardCreateRequestDto);
+            @Valid @RequestBody CardCreateRequestDto cardCreateRequestDto ) {
+        cardService.createCard(cardCreateRequestDto);
         return ApiResponseDto.success();
     }
 

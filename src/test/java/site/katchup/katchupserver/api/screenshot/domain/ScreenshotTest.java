@@ -32,8 +32,6 @@ class ScreenshotTest {
 
         Screenshot screenshot = Screenshot.builder()
                 .id(uuid)
-                .url("https://example.com/katchup_screenshot.png")
-                .card(card)
                 .build();
 
         // When
@@ -43,7 +41,5 @@ class ScreenshotTest {
         Assertions.assertNotNull(savedScreenshot.getId());
         Assertions.assertEquals(savedScreenshot.getId(), uuid);
         Assertions.assertEquals(savedScreenshot.getStickerOrder(), 0);
-        Assertions.assertEquals(savedScreenshot.getUrl(), screenshot.getUrl());
-        Assertions.assertEquals(savedScreenshot.getCard().getId(), screenshot.getCard().getId());
     }
 }

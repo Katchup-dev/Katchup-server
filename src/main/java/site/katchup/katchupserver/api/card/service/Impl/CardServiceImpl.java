@@ -1,19 +1,15 @@
 package site.katchup.katchupserver.api.card.service.Impl;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.card.domain.File;
 import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.dto.response.CardListGetResponseDto;
 import site.katchup.katchupserver.api.card.dto.response.FileGetResponseDto;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
-import site.katchup.katchupserver.api.card.repository.FileRepository;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
@@ -21,6 +17,8 @@ import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
 import site.katchup.katchupserver.api.keyword.repository.KeywordRepository;
+import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
@@ -29,19 +27,14 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
-import site.katchup.katchupserver.common.exception.BadRequestException;
-import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.common.util.S3Util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CardServiceImpl implements CardService {
 
     private final SubTaskRepository subTaskRepository;
@@ -50,18 +43,11 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
     private final CategoryRepository categoryRepository;
     private final TaskRepository taskRepository;
-    private final FileRepository fileRepository;
     private final ScreenshotRepository screenshotRepository;
     private final KeywordRepository keywordRepository;
     private final S3Util s3Util;
 
-    private static final String FILE_FOLDER_NAME = "files/";
-    private static final String PDF_TYPE = "application/pdf";
-    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024;
-    private static final long MB = 1024 * 1024;
-
     @Override
-    @Transactional(readOnly = true)
     public List<CardListGetResponseDto> getCardList(Long taskId) {
         return subTaskRepository.findAllByTaskId(taskId).stream()
                 .flatMap(subTask -> subTask.getCards().stream())
@@ -92,9 +78,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public void createCard(List<MultipartFile> fileList, CardCreateRequestDto requestDto) {
+    public void createCard(CardCreateRequestDto requestDto) {
 
-        SubTask subTask = subTaskRepository.findByIdOrThrow(requestDto.getTaskId());
+        SubTask subTask = subTaskRepository.findByIdOrThrow(requestDto.getSubTaskId());
 
         Card card = Card.builder()
                 .content(requestDto.getContent())
@@ -106,34 +92,21 @@ public class CardServiceImpl implements CardService {
         Card savedCard = cardRepository.save(card);
 
         for (Long keywordId : requestDto.getKeywordIdList()) {
-            CardKeyword.builder()
+            CardKeyword cardKeyword = CardKeyword.builder()
                     .card(savedCard)
                     .keyword(keywordRepository.findByIdOrThrow(keywordId))
                     .build();
+            cardKeywordRepository.save(cardKeyword);
         }
 
-        try {
-            for (MultipartFile file : fileList) {
-                String fileName = UUID.randomUUID().toString() + ".pdf";
-                validatePdf(file);
-                validateFileSize(file);
-                String uploadPath = FILE_FOLDER_NAME + getFoldername() + fileName;
-                String fileUrl = s3Util.upload(getInputStream(file), uploadPath, getObjectMetadata(file));
-                DecimalFormat decimalFormat = new DecimalFormat("#.##");
-                fileRepository.save(File.builder()
-                        .card(card)
-                        .name(file.getOriginalFilename())
-                        .url(fileUrl)
-                        .size( Double.parseDouble(decimalFormat.format((double) file.getSize() / MB)))
-                        .build());
-            }
-        } catch (IOException e) {
-            throw new BadRequestException(ErrorCode.FILE_UPLOAD_ERROR);
+        for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
+            Screenshot findScreenshot = screenshotRepository.findByIdOrThrow(screenshotInfo.getScreenshotUUID());
+            findScreenshot.updateScreenshotUrl(screenshotInfo.getScreenshotUrl());
+            findScreenshot.updateCard(savedCard);
         }
     }
 
     @Override
-    @Transactional(readOnly = true)
     public CardGetResponseDto getCard(Long cardId) {
         Card card = cardRepository.findByIdOrThrow(cardId);
         Task task = taskRepository.findByIdOrThrow(card.getSubTask().getTask().getId());
@@ -172,19 +145,6 @@ public class CardServiceImpl implements CardService {
         }
     }
 
-    private ObjectMetadata getObjectMetadata(MultipartFile file) {
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
-        return objectMetadata;
-    }
-
-    private void validateFileSize(MultipartFile file) {
-        if (file.getSize() >= MAX_FILE_SIZE) {
-            throw new BadRequestException(ErrorCode.FILE_SIZE_EXCEED);
-        }
-    }
-
     private List<KeywordGetResponseDto> getKeywordDtoList(Long cardId) {
         return cardKeywordRepository.findAllByCardId(cardId).stream()
                 .map(cardKeyword -> KeywordGetResponseDto.of(cardKeyword.getKeyword().getId(),
@@ -192,31 +152,15 @@ public class CardServiceImpl implements CardService {
                 .collect(Collectors.toList());
     }
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
-        return screenshotRepository.findAllByCardId(cardId).stream()
+        return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
                         .of(screenshot.getId(), screenshot.getStickerOrder(), screenshot.getUrl())
                 ).collect(Collectors.toList());
     }
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
-        return fileRepository.findAllByCardId(cardId).stream()
+        return cardRepository.findByIdOrThrow(cardId).getFiles().stream()
                 .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize()))
                 .collect(Collectors.toList());
-    }
-
-    private void validatePdf(MultipartFile file) {
-        if (!file.getContentType().equals(PDF_TYPE)) {
-            throw new BadRequestException(ErrorCode.NOT_PDF_FILE_TYPE);
-        }
-    }
-
-    private InputStream getInputStream(MultipartFile file) throws IOException {
-        return file.getInputStream();
-    }
-
-    private String getFoldername() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        return sdf.format(date).replace("-", "/") + "/";
     }
 }

@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.common.domain.BaseEntity;
+
+import java.nio.ByteBuffer;
+
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -25,6 +28,9 @@ public class Member extends BaseEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "user_UUID", nullable = false)
+    private String userUUID;
+
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted;
 
@@ -42,11 +48,19 @@ public class Member extends BaseEntity {
         this.isDeleted = isDeleted;
         this.isNewUser = isNewUser;
         this.refreshToken = refreshToken;
+        updateUserUUID();
     }
 
     public void updateMemberStatus(boolean isNewUser, String refreshToken) {
         this.isNewUser = isNewUser;
         this.refreshToken = refreshToken;
+    }
+
+    // 10자리의 katchup 유저 코드 생성
+    private void updateUserUUID() {
+        String uuid = java.util.UUID.randomUUID().toString();
+        int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
+        this.userUUID = Integer.toString(l,9);
     }
 }
 

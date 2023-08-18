@@ -1,26 +1,18 @@
 package site.katchup.katchupserver.api.screenshot.service.impl;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import site.katchup.katchupserver.api.card.domain.Card;
-import site.katchup.katchupserver.api.card.repository.CardRepository;
+import site.katchup.katchupserver.api.member.domain.Member;
+import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
-import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotGetPreSignedRequestDto;
+import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
-import site.katchup.katchupserver.api.screenshot.service.ScreenshotValidator;
-import site.katchup.katchupserver.common.exception.InternalServerException;
-import site.katchup.katchupserver.common.response.ErrorCode;
 import site.katchup.katchupserver.common.util.S3Util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -31,40 +23,22 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private static final String SCREENSHOT_FOLDER_NAME = "screenshots";
 
     private final S3Util s3Util;
-
-    private final ScreenshotValidator screenshotValidator;
-
     private final ScreenshotRepository screenshotRepository;
-
-    private final CardRepository cardRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
-    public ScreenshotUploadResponseDto uploadScreenshot(MultipartFile file, Long cardId) {
-        screenshotValidator.validate(file);
-        final String imageId = getUUIDFileName();
-        String uploadFilePath = SCREENSHOT_FOLDER_NAME + "/" + getFoldername();
-        String uploadFileName = uploadFilePath + "/" + imageId + extractExtension(file);
-
-        try {
-            String uploadImageUrl = s3Util.upload(getInputStream(file), uploadFileName, getObjectMetadata(file));
-            Card card = cardRepository.findByIdOrThrow(cardId);
-            Screenshot screenshot =  Screenshot.builder()
-                    .id(UUID.fromString(imageId))
-                    .url(uploadImageUrl)
-                    .card(card)
-                    .build();
-
-            screenshotRepository.save(screenshot);
-
-            return ScreenshotUploadResponseDto.builder()
-                    .id(screenshot.getId().toString())
-                    .screenshotUrl(screenshot.getUrl())
-                    .build();
-
-        } catch (Exception e) {
-            throw new InternalServerException(ErrorCode.IMAGE_UPLOAD_EXCEPTION);
-        }
+    public ScreenshotGetPreSignedResponseDto getScreenshotPreSignedUrl(Long memberId, ScreenshotGetPreSignedRequestDto requestDto) {
+        Member member = memberRepository.findByIdOrThrow(memberId);
+        String userUUID = member.getUserUUID();
+        String screenshotUploadPrefix = s3Util.makeUploadPrefix(userUUID, SCREENSHOT_FOLDER_NAME);
+        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, requestDto.getScreenshotName());
+        String screenshotUUID = preSignedUrlInfo.get(s3Util.KEY_FILENAME);
+        Screenshot screenshot = Screenshot.builder()
+                .id(UUID.fromString(screenshotUUID))
+                .build();
+        screenshotRepository.save(screenshot);
+        return ScreenshotGetPreSignedResponseDto.of(screenshotUUID, preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL));
     }
 
     @Override
@@ -73,33 +47,4 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         screenshotRepository.deleteById(UUID.fromString(screenshotId));
     }
 
-    
-    private String getUUIDFileName() {
-        return UUID.randomUUID().toString();
-    }
-
-    private String getFoldername() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        return sdf.format(date).replace("-", "/");
-    }
-
-    private ObjectMetadata getObjectMetadata(MultipartFile file) {
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(file.getSize());
-        objectMetadata.setContentType(file.getContentType());
-        return objectMetadata;
-    }
-
-    private InputStream getInputStream(MultipartFile file) throws IOException {
-        return file.getInputStream();
-    }
-
-    private String extractExtension(MultipartFile file) {
-        try {
-            return file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new InternalServerException(ErrorCode.IMAGE_UPLOAD_EXCEPTION);
-        }
-    }
 }

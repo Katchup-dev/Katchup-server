@@ -22,7 +22,7 @@ public class Screenshot extends BaseEntity {
     @Column(name="sticker_order", columnDefinition = "integer default 0")
     private int stickerOrder;
 
-    @Column
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne(fetch = LAZY)
@@ -30,17 +30,10 @@ public class Screenshot extends BaseEntity {
     private Card card;
 
     @Builder
-    public Screenshot(UUID id) {
+    public Screenshot(UUID id, String url, Card card) {
         this.id = id;
         this.stickerOrder = 0;
-    }
-
-    public void updateScreenshotUrl(String screenshotUrl) {
-        this.url = screenshotUrl;
-    }
-
-    public void updateCard(Card card) {
+        this.url = url;
         this.card = card;
-        this.card.addScreenshot(this);
     }
 }

@@ -100,9 +100,14 @@ public class CardServiceImpl implements CardService {
         }
 
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
-            Screenshot findScreenshot = screenshotRepository.findByIdOrThrow(screenshotInfo.getScreenshotUUID());
-            findScreenshot.updateScreenshotUrl(screenshotInfo.getScreenshotUrl());
-            findScreenshot.updateCard(savedCard);
+
+            Screenshot newScreenshot = Screenshot.builder()
+                    .id(screenshotInfo.getScreenshotUUID())
+                    .url(screenshotInfo.getScreenshotUrl())
+                    .card(savedCard)
+                    .build();
+
+            screenshotRepository.save(newScreenshot);
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.UUID;
 public class ScreenshotCreateRequestDto {
     @Schema(description = "업로드하는 스크린샷 고유 UUID", example = "ddwd-wdwd-wdwd-wdwdwdwd")
     @NotNull
-    private final UUID screenshotUUID;
+    private UUID screenshotUUID;
     @Schema(description = "스크린샷 url", example = "https://abde.s3.ap-northeast-2.amazonaws.com/1.png")
     @NotNull
     private String screenshotUrl;

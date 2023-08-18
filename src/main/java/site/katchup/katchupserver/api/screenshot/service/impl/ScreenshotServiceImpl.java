@@ -33,12 +33,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         String userUUID = member.getUserUUID();
         String screenshotUploadPrefix = s3Util.makeUploadPrefix(userUUID, SCREENSHOT_FOLDER_NAME);
         HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, requestDto.getScreenshotName());
-        String screenshotUUID = preSignedUrlInfo.get(s3Util.KEY_FILENAME);
-        Screenshot screenshot = Screenshot.builder()
-                .id(UUID.fromString(screenshotUUID))
-                .build();
-        screenshotRepository.save(screenshot);
-        return ScreenshotGetPreSignedResponseDto.of(screenshotUUID, preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL));
+        return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL));
     }
 
     @Override

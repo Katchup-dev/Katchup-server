@@ -1,37 +1,73 @@
 package site.katchup.katchupserver.common.util;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.HttpMethod;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.Headers;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import site.katchup.katchupserver.config.AwsS3Config;
+import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
-import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.UUID;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
 public class S3Util {
 
-    private final Environment env;
+    public static final String KEY_FILENAME = "fileName";
+    public static final String KEY_PRESIGNED_URL = "preSignedUrl";
 
-    private final AwsS3Config awsS3Config;
+    private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    // 파일 업로드
-    public String upload(InputStream file, String fileName, ObjectMetadata objectMetadata) {
-        awsS3Config.amazonS3Client().putObject(bucket, fileName, file, objectMetadata);
-        return awsS3Config.amazonS3Client().getUrl(bucket, fileName).toString();
+
+    public HashMap<String, String> generatePreSignedUrl(String prefix, String fileName) {
+        HashMap<String, String> result = new HashMap<>();
+        String uuidFileName = getUUIDFile();
+        result.put(KEY_FILENAME, uuidFileName);
+        String filePath = prefix + "/" + uuidFileName + fileName;
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, filePath);
+        result.put(KEY_PRESIGNED_URL, amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString());
+        return result;
     }
 
-    // 파일 삭제
-    public void delete(String fileName) {
-        String key = URLDecoder.decode(fileName.split("/")[3]);
-        awsS3Config.amazonS3Client().deleteObject(bucket, key);
+    private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName) {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucket, fileName)
+                        .withMethod(HttpMethod.PUT)
+                        .withExpiration(getPreSignedUrlExpiration());
+
+        generatePresignedUrlRequest.addRequestParameter(
+                Headers.S3_CANNED_ACL,
+                CannedAccessControlList.PublicRead.toString());
+
+        return generatePresignedUrlRequest;
     }
 
-    public String getImageUrl(String filePath) {
-        return awsS3Config.amazonS3Client().getUrl(bucket, filePath).toString();
+    private Date getPreSignedUrlExpiration() {
+        Date expiration = new Date();
+        long expTimeMillis = expiration.getTime();
+        expTimeMillis += 1000 * 60 * 2;
+        expiration.setTime(expTimeMillis);
+        return expiration;
+    }
+
+    public String makeUploadPrefix(String userUUID, String folder) {
+        return String.join("/", userUUID, folder, getDateFolder());
+    }
+
+    private String getUUIDFile() {
+        return UUID.randomUUID().toString();
+    }
+
+    private String getDateFolder() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return sdf.format(date).replace("-", "/");
     }
 }

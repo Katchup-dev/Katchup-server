@@ -1,11 +1,11 @@
 package site.katchup.katchupserver.api.screenshot.service;
 
-import org.springframework.web.multipart.MultipartFile;
-import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotUploadResponseDto;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotGetPreSignedRequestDto;
+import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSignedResponseDto;
 
 public interface ScreenshotService {
 
-    ScreenshotUploadResponseDto uploadScreenshot(MultipartFile file, Long cardId);
+    ScreenshotGetPreSignedResponseDto getScreenshotPreSignedUrl(Long memberId, ScreenshotGetPreSignedRequestDto requestDto);
     void deleteScreenshot(Long cardId, String screenshotId);
 
 }

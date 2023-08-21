@@ -1,22 +1,25 @@
 package site.katchup.katchupserver.api.card.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 
 import java.util.List;
 
 @AllArgsConstructor(staticName = "of")
 @Getter
 public class CardCreateRequestDto {
-    @NotBlank(message = "CD-110")
+    @NotNull(message = "CD-110")
     private Long categoryId;
-    @NotBlank(message = "CD-111")
+    @NotNull(message = "CD-111")
     private Long taskId;
-    @NotBlank(message = "CD-112")
+    @NotNull(message = "CD-112")
     private Long subTaskId;
-    @NotBlank(message = "CD-113")
+    @NotNull(message = "CD-113")
     private List<Long> keywordIdList;
+    private List<ScreenshotCreateRequestDto> screenshotList;
     private String note;
     @NotBlank(message = "CD-114")
     private String content;

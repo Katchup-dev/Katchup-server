@@ -32,13 +32,8 @@ public class Screenshot extends BaseEntity {
     @Builder
     public Screenshot(UUID id, String url, Card card) {
         this.id = id;
+        this.stickerOrder = 0;
         this.url = url;
         this.card = card;
-        this.stickerOrder = 0;
     }
-
-    public void updateCard(Card card) {
-        this.card = card;
-    }
-
 }

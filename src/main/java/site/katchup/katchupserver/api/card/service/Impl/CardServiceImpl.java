@@ -21,13 +21,15 @@ import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
+import site.katchup.katchupserver.api.sticker.domain.Sticker;
+import site.katchup.katchupserver.api.sticker.dto.StickerCreateRequestDto;
+import site.katchup.katchupserver.api.sticker.repository.StickerRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.subTask.repository.SubTaskRepository;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
-import site.katchup.katchupserver.common.util.S3Util;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -45,7 +47,7 @@ public class CardServiceImpl implements CardService {
     private final TaskRepository taskRepository;
     private final ScreenshotRepository screenshotRepository;
     private final KeywordRepository keywordRepository;
-    private final S3Util s3Util;
+    private final StickerRepository stickerRepository;
 
     @Override
     public List<CardListGetResponseDto> getCardList(Long taskId) {
@@ -100,7 +102,6 @@ public class CardServiceImpl implements CardService {
         }
 
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
-
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
                     .url(screenshotInfo.getScreenshotUrl())
@@ -108,6 +109,17 @@ public class CardServiceImpl implements CardService {
                     .build();
 
             screenshotRepository.save(newScreenshot);
+
+            for (StickerCreateRequestDto stickerInfo : screenshotInfo.getStickerList()) {
+
+                Sticker newSticker = Sticker.builder()
+                        .order(stickerInfo.getOrder())
+                        .x(stickerInfo.getX())
+                        .y(stickerInfo.getY())
+                        .screenshot(newScreenshot)
+                        .build();
+                stickerRepository.save(newSticker);
+            }
         }
     }
 
@@ -159,7 +171,7 @@ public class CardServiceImpl implements CardService {
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
-                        .of(screenshot.getId(), screenshot.getStickerOrder(), screenshot.getUrl())
+                        .of(screenshot.getId(), screenshot.getUrl())
                 ).collect(Collectors.toList());
     }
 

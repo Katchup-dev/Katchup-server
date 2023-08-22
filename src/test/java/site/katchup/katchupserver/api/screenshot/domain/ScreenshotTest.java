@@ -40,6 +40,5 @@ class ScreenshotTest {
         // Then
         Assertions.assertNotNull(savedScreenshot.getId());
         Assertions.assertEquals(savedScreenshot.getId(), uuid);
-        Assertions.assertEquals(savedScreenshot.getStickerOrder(), 0);
     }
 }

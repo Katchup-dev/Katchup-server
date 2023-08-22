@@ -38,7 +38,6 @@ public enum ErrorCode {
     NOT_FOUND_KEYWORD("KW-306"),
     NOT_FOUND_SCREENSHOT("SS-307"),
 
-
     /**
      * 500 SERVER_ERROR
      */
@@ -47,5 +46,4 @@ public enum ErrorCode {
     IMAGE_UPLOAD_EXCEPTION("SS-403");
     
     private final String code;
-
 }

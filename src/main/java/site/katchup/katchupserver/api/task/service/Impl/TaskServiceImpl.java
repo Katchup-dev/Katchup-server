@@ -29,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskGetResponseDto> getAllTask(Long memberId) {
-        return categoryRepository.findAllByMemberId(memberId).stream()
+        return categoryRepository.findAllByMemberIdAndNotDeleted(memberId).stream()
                 .flatMap(category -> taskRepository.findByCategoryId(category.getId()).stream())
                 .map(task -> TaskGetResponseDto.of(task.getId(), task.getName()))
                 .collect(Collectors.toList());

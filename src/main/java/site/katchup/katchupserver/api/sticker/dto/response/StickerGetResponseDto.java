@@ -1,14 +1,17 @@
-package site.katchup.katchupserver.api.sticker.dto;
+package site.katchup.katchupserver.api.sticker.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
-@AllArgsConstructor
-@Schema(description = "번호 스티커 추가 요청 DTO")
-public class StickerCreateRequestDto {
+@NoArgsConstructor(access = PRIVATE)
+@AllArgsConstructor(staticName = "of")
+@Schema(description = "번호 스티커 응답 DTO")
+public class StickerGetResponseDto {
     @Schema(description = "스티커 번호", example = "2")
     private Integer order;
 

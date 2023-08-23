@@ -22,7 +22,8 @@ import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateReq
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.sticker.domain.Sticker;
-import site.katchup.katchupserver.api.sticker.dto.StickerCreateRequestDto;
+import site.katchup.katchupserver.api.sticker.dto.request.StickerCreateRequestDto;
+import site.katchup.katchupserver.api.sticker.dto.response.StickerGetResponseDto;
 import site.katchup.katchupserver.api.sticker.repository.StickerRepository;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.subTask.repository.SubTaskRepository;
@@ -32,6 +33,7 @@ import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -119,7 +121,6 @@ public class CardServiceImpl implements CardService {
             screenshotRepository.save(newScreenshot);
 
             for (StickerCreateRequestDto stickerInfo : screenshotInfo.getStickerList()) {
-
                 Sticker newSticker = Sticker.builder()
                         .order(stickerInfo.getOrder())
                         .x(stickerInfo.getX())
@@ -179,13 +180,20 @@ public class CardServiceImpl implements CardService {
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
-                        .of(screenshot.getId(), screenshot.getUrl())
-                ).collect(Collectors.toList());
+                        .of(screenshot.getId(), screenshot.getUrl(), getStickerDtoList(screenshot.getId())))
+                                .collect(Collectors.toList());
     }
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getFiles().stream()
                 .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize()))
                 .collect(Collectors.toList());
+    }
+
+    private List<StickerGetResponseDto> getStickerDtoList(UUID screenshotId) {
+        return screenshotRepository.findByIdOrThrow(screenshotId).getSticker().stream()
+                .map(sticker -> StickerGetResponseDto
+                        .of(sticker.getOrder(), sticker.getX(), sticker.getY())
+                ).collect(Collectors.toList());
     }
 }

@@ -31,14 +31,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public void createCategoryName(Long memberId, CategoryCreateRequestDto requestDto) {
+    public Long createCategoryName(Long memberId, CategoryCreateRequestDto requestDto) {
         checkDuplicateCategoryName(memberId, requestDto.getName());
 
-        categoryRepository.save(Category.builder()
+        Category category = categoryRepository.save(Category.builder()
                 .name(requestDto.getName())
                 .member(memberRepository.findByIdOrThrow(memberId))
                 .isShared(false)
                 .build());
+
+        return category.getId();
     }
 
     @Override

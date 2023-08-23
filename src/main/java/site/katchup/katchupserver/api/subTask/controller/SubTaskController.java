@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,8 +47,9 @@ public class SubTaskController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    public ApiResponseDto createSubTask(@Valid @RequestBody SubTaskCreateRequestDto requestDto) {
-        subTaskService.createSubTask(requestDto);
+    public ApiResponseDto createSubTask(@Valid @RequestBody SubTaskCreateRequestDto requestDto, HttpServletResponse response) {
+        Long subTaskId = subTaskService.createSubTask(requestDto);
+        response.addHeader("Location", String.valueOf(subTaskId));
         return ApiResponseDto.success();
     }
 }

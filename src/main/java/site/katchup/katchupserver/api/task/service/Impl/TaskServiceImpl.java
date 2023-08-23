@@ -55,15 +55,17 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void createTaskName(TaskCreateRequestDto requestDto) {
+    public Long createTaskName(TaskCreateRequestDto requestDto) {
         Category findCategory = categoryRepository.findByIdOrThrow(requestDto.getCategoryId());
 
         checkDuplicateTaskName(findCategory.getId(), requestDto.getName());
 
-        taskRepository.save(Task.builder()
+        Task task = taskRepository.save(Task.builder()
                 .name(requestDto.getName())
                 .category(findCategory)
                 .build());
+
+        return task.getId();
     }
 
     @Override

@@ -32,11 +32,13 @@ public class SubTaskServiceImpl implements SubTaskService {
 
     @Override
     @Transactional
-    public void createSubTask(SubTaskCreateRequestDto requestDto) {
+    public Long createSubTask(SubTaskCreateRequestDto requestDto) {
         Task task = taskRepository.findByIdOrThrow(requestDto.getTaskId());
 
         SubTask subTask = new SubTask(requestDto.getName(), task);
 
         subTaskRepository.save(subTask);
+
+        return subTask.getId();
     }
 }

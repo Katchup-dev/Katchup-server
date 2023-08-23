@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,6 @@ import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.task.dto.request.TaskCreateRequestDto;
 import site.katchup.katchupserver.api.task.dto.request.TaskUpdateRequestDto;
 import site.katchup.katchupserver.api.task.dto.response.TaskGetResponseDto;
-import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.task.service.TaskService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.util.MemberUtil;
@@ -31,7 +31,6 @@ import static lombok.AccessLevel.PRIVATE;
 @Tag(name = "[Task] 업무 관련 API (V1)")
 public class TaskController {
 
-    private final TaskRepository taskRepository;
     private final CardService cardService;
     private final TaskService taskService;
 
@@ -82,8 +81,9 @@ public class TaskController {
     })
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponseDto createTaskName(@RequestBody @Valid final TaskCreateRequestDto requestDto) {
-        taskService.createTaskName(requestDto);
+    public ApiResponseDto createTaskName(@RequestBody @Valid final TaskCreateRequestDto requestDto, HttpServletResponse response) {
+        Long taskId = taskService.createTaskName(requestDto);
+        response.addHeader("Location", String.valueOf(taskId));
         return ApiResponseDto.success();
     }
 

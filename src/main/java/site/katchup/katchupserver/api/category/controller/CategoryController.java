@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,10 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     public ApiResponseDto createCategoryName(Principal principal,
-                                             @RequestBody @Valid final CategoryCreateRequestDto requestDto) {
+                                             @RequestBody @Valid final CategoryCreateRequestDto requestDto, HttpServletResponse response) {
         Long memberId = MemberUtil.getMemberId(principal);
-        categoryService.createCategoryName(memberId, requestDto);
+        Long categoryId = categoryService.createCategoryName(memberId, requestDto);
+        response.addHeader("Location", String.valueOf(categoryId));
         return ApiResponseDto.success();
     }
 

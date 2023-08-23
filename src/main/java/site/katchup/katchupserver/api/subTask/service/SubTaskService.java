@@ -8,6 +8,6 @@ import java.util.List;
 public interface SubTaskService {
 
     List<SubTaskGetResponseDto> getAllSubTask(Long taskId);
-    void createSubTask(SubTaskCreateRequestDto requestDto);
+    Long createSubTask(SubTaskCreateRequestDto requestDto);
 
 }

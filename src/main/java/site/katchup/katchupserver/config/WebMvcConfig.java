@@ -14,6 +14,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins("https://www.katchup.kr", "http://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
+                .exposedHeaders("Location")
                 .allowCredentials(true)
                 .maxAge(MAX_AGE_SECS);
     }

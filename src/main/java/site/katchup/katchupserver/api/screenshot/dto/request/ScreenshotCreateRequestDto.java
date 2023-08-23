@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import site.katchup.katchupserver.api.sticker.dto.StickerCreateRequestDto;
+import site.katchup.katchupserver.api.sticker.dto.request.StickerCreateRequestDto;
 
 import java.util.List;
 import java.util.UUID;

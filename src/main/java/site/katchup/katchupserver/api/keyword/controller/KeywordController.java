@@ -16,24 +16,24 @@ import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/cards")
+@RequestMapping("/api/v1/keywords")
 @RequiredArgsConstructor
 @Tag(name = "[Keyword] 키워드 관련 API (V1)")
 public class KeywordController {
     private final KeywordService keywordService;
 
-    @Operation(summary = "업무 카드의 모든 키워드 조회 API")
+    @Operation(summary = "업무 내의 모든 키워드 조회 API")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "카드의 모든 키워드 조회 성공"),
-                    @ApiResponse(responseCode = "400", description = "카드의 모든 키워드 조회 실패", content = @Content),
+                    @ApiResponse(responseCode = "200", description = "업무 내의 모든 키워드 조회 성공"),
+                    @ApiResponse(responseCode = "400", description = "업무 내의 모든 키워드 조회 실패", content = @Content),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    @GetMapping("/{cardId}/keywords")
+    @GetMapping("/{taskId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<KeywordGetResponseDto>> getAllKeyword(@PathVariable Long cardId) {
-        return ApiResponseDto.success(keywordService.getAllKeyword(cardId));
+    public ApiResponseDto<List<KeywordGetResponseDto>> getAllKeyword(@PathVariable Long taskId) {
+        return ApiResponseDto.success(keywordService.getAllKeyword(taskId));
     }
 
     @Operation(summary = "키워드 생성 API")
@@ -44,7 +44,7 @@ public class KeywordController {
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    @PostMapping("/keywords")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto createKeyword(@Valid @RequestBody KeywordCreateRequestDto requestDto) {
         keywordService.createKeyword(requestDto);

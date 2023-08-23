@@ -41,6 +41,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class CardServiceImpl implements CardService {
 
+    private static final String SUB_TASK_ETC_NAME = "기타";
+
     private final SubTaskRepository subTaskRepository;
     private final CardKeywordRepository cardKeywordRepository;
     private final TrashRepository trashRepository;
@@ -84,7 +86,13 @@ public class CardServiceImpl implements CardService {
     @Transactional
     public void createCard(CardCreateRequestDto requestDto) {
 
-        SubTask subTask = subTaskRepository.findByIdOrThrow(requestDto.getSubTaskId());
+        SubTask subTask;
+        if (requestDto.getSubTaskId() == 0) {
+            Task task = taskRepository.findByIdOrThrow(requestDto.getTaskId());
+            subTask = subTaskRepository.findOrCreateEtcSubTask(task, SUB_TASK_ETC_NAME);
+        } else {
+            subTask = subTaskRepository.findByIdOrThrow(requestDto.getSubTaskId());
+        }
 
         Card card = Card.builder()
                 .content(requestDto.getContent())

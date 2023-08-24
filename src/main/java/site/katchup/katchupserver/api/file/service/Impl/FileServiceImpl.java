@@ -39,8 +39,7 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional
     public String findUrl(Long memberId, FileCreateRequestDto requestDto) {
-        String fileUploadPrefix = makeUploadPrefix(memberId);
-        return s3Util.findUrlByName(fileUploadPrefix, requestDto.getFileUUID(), requestDto.getFileName(), requestDto.getFileUploadDate());
+        return s3Util.findUrlByName(createKey(memberId, requestDto));
     }
 
     @Override

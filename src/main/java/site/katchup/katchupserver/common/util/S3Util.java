@@ -42,8 +42,7 @@ public class S3Util {
         return result;
     }
 
-    public String findUrlByName(String prefix, UUID fileUUID, String fileName, String fileUploadDate) {
-        String path = prefix + "/" + fileUploadDate + "/" + fileUUID + fileName;
+    public String findUrlByName(String path) {
         return "https://" + bucket + ".s3." + location + ".amazonaws.com/" + path;
     }
 

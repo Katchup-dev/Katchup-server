@@ -36,7 +36,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, requestDto.getScreenshotName());
 
         return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME)
-                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
+                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), requestDto.getScreenshotName(), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
     }
 
     @Override

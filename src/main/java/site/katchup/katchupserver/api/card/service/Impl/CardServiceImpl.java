@@ -16,6 +16,7 @@ import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.file.repository.FileRepository;
+import site.katchup.katchupserver.api.file.service.FileService;
 import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
@@ -58,6 +59,7 @@ public class CardServiceImpl implements CardService {
     private final StickerRepository stickerRepository;
     private final FileRepository fileRepository;
     private final ScreenshotService screenshotService;
+    private final FileService fileService;
 
     @Override
     public List<CardListGetResponseDto> getCardList(Long taskId) {
@@ -140,7 +142,7 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
-                    .url(fileInfo.getFileUrl())
+                    .url(fileService.findUrl(memberId, fileInfo))
                     .name(fileInfo.getFileName())
                     .size(fileInfo.getSize())
                     .card(savedCard)

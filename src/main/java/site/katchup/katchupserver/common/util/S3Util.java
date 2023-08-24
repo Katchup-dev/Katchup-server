@@ -62,7 +62,7 @@ public class S3Util {
     private Date getPreSignedUrlExpiration() {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 60 * 2;
+        expTimeMillis += 1000 * 30;
         expiration.setTime(expTimeMillis);
         return expiration;
     }

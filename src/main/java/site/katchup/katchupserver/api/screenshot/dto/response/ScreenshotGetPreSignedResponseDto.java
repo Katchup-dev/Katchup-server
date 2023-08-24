@@ -7,7 +7,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @NoArgsConstructor(access = PRIVATE)
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @Schema(description = "스크린샷 PreSigned-Url 응답 DTO")
 public class ScreenshotGetPreSignedResponseDto {
 
@@ -17,10 +17,9 @@ public class ScreenshotGetPreSignedResponseDto {
     @Schema(description = "스크린샷 PreSigned-Url", example ="preSigned-url")
     private String screenshotPreSignedUrl;
 
+    @Schema(description = "스크린샷 이름", example = "screenshot-name")
+    private String screenshotName;
+
     @Schema(description = "스크린샷 업로드 일자", example = "2023/08/23")
     private String screenshotUploadDate;
-
-    public static ScreenshotGetPreSignedResponseDto of (String screenshotUUID, String screenshotPreSignedUrl, String screenshotUploadDate) {
-        return new ScreenshotGetPreSignedResponseDto(screenshotUUID, screenshotPreSignedUrl, screenshotUploadDate);
-    }
 }

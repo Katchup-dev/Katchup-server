@@ -72,8 +72,8 @@ public class S3Util {
         return sdf.format(date).replace("-", "/");
     }
 
-    public void deleteFile(String filePath) {
-        DeleteObjectRequest request = new DeleteObjectRequest(bucket, filePath);
+    public void deleteFile(String fileKey) {
+        DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileKey);
         amazonS3.deleteObject(request);
     }
 }

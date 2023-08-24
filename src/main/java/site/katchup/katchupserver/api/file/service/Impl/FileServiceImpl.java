@@ -41,8 +41,10 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public void deleteFile(String fileId) {
         File file = fileRepository.findByIdOrThrow(UUID.fromString(fileId));
-        String filePath = file.getUrl();
-        s3Util.deleteFile(filePath);
+
+        String fileKey = file.getUrl(); // 요 코드 url 말고 key 값 가져오는걸로 바꾸기
+
+        s3Util.deleteFile(fileKey);
 
         fileRepository.deleteById(UUID.fromString(fileId));
     }

@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    List<TaskGetResponseDto> getAllTask(Long memberId);
-    List<TaskGetResponseDto> getByCategoryId(Long categoryId);
+    List<TaskGetResponseDto> getAllByCategory(Long categoryId);
     void updateTaskName(Long taskId, TaskUpdateRequestDto taskUpdateRequestDto);
     Long createTaskName(TaskCreateRequestDto taskCreateRequestDto);
     void deleteTask(Long taskId);

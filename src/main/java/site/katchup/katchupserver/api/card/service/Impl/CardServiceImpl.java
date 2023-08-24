@@ -16,6 +16,7 @@ import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.file.repository.FileRepository;
+import site.katchup.katchupserver.api.file.service.FileService;
 import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
@@ -24,6 +25,7 @@ import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
+import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.api.sticker.domain.Sticker;
 import site.katchup.katchupserver.api.sticker.dto.request.StickerCreateRequestDto;
 import site.katchup.katchupserver.api.sticker.dto.response.StickerGetResponseDto;
@@ -56,10 +58,12 @@ public class CardServiceImpl implements CardService {
     private final KeywordRepository keywordRepository;
     private final StickerRepository stickerRepository;
     private final FileRepository fileRepository;
+    private final ScreenshotService screenshotService;
+    private final FileService fileService;
 
     @Override
     public List<CardListGetResponseDto> getCardList(Long taskId) {
-        return subTaskRepository.findAllByTaskId(taskId).stream()
+        return subTaskRepository.findAllByTaskIdAndNotDeleted(taskId).stream()
                 .flatMap(subTask -> subTask.getCards().stream())
                 .collect(Collectors.groupingBy(Card::getSubTask))  // subTaskId 그룹화
                 .values().stream()
@@ -88,7 +92,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public void createCard(CardCreateRequestDto requestDto) {
+    public void createCard(Long memberId, CardCreateRequestDto requestDto) {
 
         SubTask subTask;
         if (requestDto.getSubTaskId() == SUB_TASK_ETC_ID) {
@@ -118,7 +122,7 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
-                    .url(screenshotInfo.getScreenshotUrl())
+                    .url(screenshotService.findUrl(memberId, screenshotInfo))
                     .card(savedCard)
                     .build();
 
@@ -138,7 +142,7 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
-                    .url(fileInfo.getFileUrl())
+                    .url(fileService.findUrl(memberId, fileInfo))
                     .name(fileInfo.getFileName())
                     .size(fileInfo.getSize())
                     .card(savedCard)

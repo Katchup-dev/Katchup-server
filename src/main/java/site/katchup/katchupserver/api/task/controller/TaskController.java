@@ -34,29 +34,16 @@ public class TaskController {
     private final CardService cardService;
     private final TaskService taskService;
 
-    @Operation(summary = "업무 목록 조회 API")
+    @Operation(summary = "카테고리 내의 업무 조회 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업무 목록 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "업무 목록 조회 성공", content = @Content),
-            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
-    })
-    @GetMapping()
-    @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<TaskGetResponseDto>> getAllTask(Principal principal) {
-        Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(taskService.getAllTask(memberId));
-    }
-
-    @Operation(summary = "업무 조회 API")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "업무 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "업무 조회 실패", content = @Content),
+            @ApiResponse(responseCode = "200", description = "카테고리 내의 업무 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 내의 업무 조회 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @GetMapping("/categories/{categoryId}")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<List<TaskGetResponseDto>> getByCategoryId(@PathVariable final Long categoryId) {
-        return ApiResponseDto.success(taskService.getByCategoryId(categoryId));
+        return ApiResponseDto.success(taskService.getAllByCategory(categoryId));
     }
 
     @Operation(summary = "업무 업데이트 API")
@@ -95,7 +82,7 @@ public class TaskController {
     })
     @GetMapping("/{taskId}/cards")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<CardListGetResponseDto>> getCardList(@PathVariable final Long taskId) {
+    public ApiResponseDto<List<CardListGetResponseDto>> getCardList(@PathVariable Long taskId) {
         return ApiResponseDto.success(cardService.getCardList(taskId));
     }
 

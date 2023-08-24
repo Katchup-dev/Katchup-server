@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,8 +47,9 @@ public class KeywordController {
     )
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponseDto createKeyword(@Valid @RequestBody KeywordCreateRequestDto requestDto) {
-        keywordService.createKeyword(requestDto);
+    public ApiResponseDto createKeyword(@Valid @RequestBody KeywordCreateRequestDto requestDto, HttpServletResponse response) {
+        Long keywordId = keywordService.createKeyword(requestDto);
+        response.addHeader("Location", String.valueOf(keywordId));
         return ApiResponseDto.success();
     }
 }

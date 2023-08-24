@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.file.domain.File;
-import site.katchup.katchupserver.api.file.dto.request.FileGetPreSignedRequestDto;
+import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
 import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.file.repository.FileRepository;
 import site.katchup.katchupserver.api.file.service.FileService;
@@ -29,12 +29,23 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, FileGetPreSignedRequestDto requestDto) {
+    public FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, String fileName) {
         Member member = memberRepository.findByIdOrThrow(memberId);
         String userUUID = member.getUserUUID();
         String fileUploadPrefix = s3Util.makeUploadPrefix(userUUID, FILE_FOLDER_NAME);
-        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(fileUploadPrefix, requestDto.getFileName());
-        return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), requestDto.getFileName(), preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL));
+        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(fileUploadPrefix, fileName);
+
+        return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), fileName
+                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
+    }
+
+    @Override
+    @Transactional
+    public String findUrl(Long memberId, FileCreateRequestDto requestDto) {
+        Member member = memberRepository.findByIdOrThrow(memberId);
+        String userUUID = member.getUserUUID();
+        String fileUploadPrefix = s3Util.makeUploadPrefix(userUUID, FILE_FOLDER_NAME);
+        return s3Util.findUrlByName(fileUploadPrefix, requestDto.getFileUUID(), requestDto.getFileName(), requestDto.getFileUploadDate());
     }
 
     @Override

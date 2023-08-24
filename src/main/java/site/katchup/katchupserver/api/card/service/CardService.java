@@ -11,9 +11,9 @@ import java.util.List;
 @Transactional
 public interface CardService {
 
-    List<CardListGetResponseDto> getCardList(Long folderId);
+    List<CardListGetResponseDto> getCardList(Long taskId);
     CardGetResponseDto getCard(Long cardId);
     void deleteCardList(CardDeleteRequestDto cardDeleteRequestDto);
-    void createCard(CardCreateRequestDto cardCreateRequestDto);
+    void createCard(Long memberId, CardCreateRequestDto cardCreateRequestDto);
 
 }

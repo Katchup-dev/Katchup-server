@@ -20,9 +20,9 @@ public class FileCreateRequestDto {
     @NotNull
     private String fileName;
 
-    @Schema(description = "파일 url", example = "https://abde.s3.ap-northeast-2.amazonaws.com/1.pdf")
+    @Schema(description = "파일 업로드 일자", example = "2023/08/23")
     @NotNull
-    private String fileUrl;
+    private String fileUploadDate;
 
     @Schema(description = "파일 사이즈 (KB 단위로 저장)", example = "189277")
     @NotNull

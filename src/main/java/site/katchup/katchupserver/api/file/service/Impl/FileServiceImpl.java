@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
-import site.katchup.katchupserver.api.file.dto.request.FileGetPreSignedRequestDto;
 import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.file.service.FileService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
-import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.util.HashMap;
@@ -26,13 +24,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, FileGetPreSignedRequestDto requestDto) {
+    public FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, String fileName) {
         Member member = memberRepository.findByIdOrThrow(memberId);
         String userUUID = member.getUserUUID();
         String fileUploadPrefix = s3Util.makeUploadPrefix(userUUID, FILE_FOLDER_NAME);
-        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(fileUploadPrefix, requestDto.getFileName());
+        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(fileUploadPrefix, fileName);
 
-        return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), requestDto.getFileName()
+        return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), fileName
                 , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
     }
 

@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotGetPreSignedRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
@@ -35,10 +34,10 @@ public class ScreenshotController {
     )
     @GetMapping("/screenshots/presigned")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<ScreenshotGetPreSignedResponseDto> createPresigned(Principal principal, @RequestBody ScreenshotGetPreSignedRequestDto presignedRequestDto
+    public ApiResponseDto<ScreenshotGetPreSignedResponseDto> createPresigned(Principal principal, @RequestParam String screenshotName
     ) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(screenshotService.getPreSignedUrl(memberId, presignedRequestDto));
+        return ApiResponseDto.success(screenshotService.getPreSignedUrl(memberId, screenshotName));
     }
 
     @Operation(summary = "스크린샷 삭제 API")

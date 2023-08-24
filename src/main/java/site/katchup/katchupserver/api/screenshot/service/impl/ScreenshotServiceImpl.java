@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
-import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
-import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotGetPreSignedRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
@@ -29,14 +27,14 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     @Override
     @Transactional
-    public ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, ScreenshotGetPreSignedRequestDto requestDto) {
+    public ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, String screenshotName) {
         Member member = memberRepository.findByIdOrThrow(memberId);
         String userUUID = member.getUserUUID();
         String screenshotUploadPrefix = s3Util.makeUploadPrefix(userUUID, SCREENSHOT_FOLDER_NAME);
-        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, requestDto.getScreenshotName());
+        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, screenshotName);
 
         return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME)
-                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), requestDto.getScreenshotName(), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
+                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), screenshotName, preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
     }
 
     @Override

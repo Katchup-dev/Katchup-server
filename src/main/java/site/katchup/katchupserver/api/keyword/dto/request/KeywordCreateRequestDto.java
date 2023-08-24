@@ -2,6 +2,7 @@ package site.katchup.katchupserver.api.keyword.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Schema(description = "키워드 생성 요청 DTO")
 public class KeywordCreateRequestDto {
     @Schema(description = "해당 키워드를 추가하려는 업무 id", example = "1")
-    @NotBlank
+    @NotNull
     private Long taskId;
     @Schema(description = "키워드 이름", example = "Katchup Design")
     @NotBlank

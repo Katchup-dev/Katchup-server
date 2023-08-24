@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Schema(description = "카테고리 생성 요청 DTO")
 public class CategoryCreateRequestDto {
     @Schema(description = "카테고리 이름", example = "Katchup Design")
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣_\s]*$", message = "KC-103")
+    @Pattern(regexp = "^[\\p{L}\\p{N}\\s]+$", message = "KC-103")
     @NotBlank(message = "CG-108")
     private String name;
 }

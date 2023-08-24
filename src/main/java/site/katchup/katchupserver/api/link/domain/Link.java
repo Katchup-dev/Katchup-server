@@ -40,6 +40,5 @@ public class Link extends BaseEntity {
         this.card = card;
         this.startIndex = startIndex;
         this.endIndex = endIndex;
-        this.card.addLink(this);
     }
 }

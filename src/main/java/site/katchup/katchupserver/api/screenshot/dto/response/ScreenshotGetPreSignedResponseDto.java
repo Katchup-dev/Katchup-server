@@ -10,8 +10,10 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor
 @Schema(description = "스크린샷 PreSigned-Url 응답 DTO")
 public class ScreenshotGetPreSignedResponseDto {
+
     @Schema(description = "스크린샷 UUID", example = "screenshot-uuid")
     private String screenshotUUID;
+
     @Schema(description = "스크린샷 PreSigned-Url", example ="preSigned-url")
     private String screenshotPreSignedUrl;
 

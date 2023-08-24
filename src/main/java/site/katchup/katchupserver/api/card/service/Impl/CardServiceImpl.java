@@ -8,11 +8,14 @@ import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.dto.response.CardListGetResponseDto;
-import site.katchup.katchupserver.api.card.dto.response.FileGetResponseDto;
+import site.katchup.katchupserver.api.file.domain.File;
+import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
+import site.katchup.katchupserver.api.file.dto.response.FileGetResponseDto;
 import site.katchup.katchupserver.api.card.repository.CardRepository;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
+import site.katchup.katchupserver.api.file.repository.FileRepository;
 import site.katchup.katchupserver.api.keyword.domain.CardKeyword;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.keyword.repository.CardKeywordRepository;
@@ -33,7 +36,6 @@ import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +54,7 @@ public class CardServiceImpl implements CardService {
     private final ScreenshotRepository screenshotRepository;
     private final KeywordRepository keywordRepository;
     private final StickerRepository stickerRepository;
+    private final FileRepository fileRepository;
 
     @Override
     public List<CardListGetResponseDto> getCardList(Long taskId) {
@@ -130,6 +133,19 @@ public class CardServiceImpl implements CardService {
                 stickerRepository.save(newSticker);
             }
         }
+
+        for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
+            File newFile = File.builder()
+                    .id(fileInfo.getFileUUID())
+                    .url(fileInfo.getFileUrl())
+                    .name(fileInfo.getFileName())
+                    .size(fileInfo.getSize())
+                    .card(savedCard)
+                    .build();
+
+            fileRepository.save(newFile);
+        }
+
     }
 
     @Override

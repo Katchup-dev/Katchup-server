@@ -37,6 +37,7 @@ public enum ErrorCode {
     DELETED_CARD("CD-305"),
     NOT_FOUND_KEYWORD("KW-306"),
     NOT_FOUND_SCREENSHOT("SS-307"),
+    NOT_FOUND_FILE("FE-308"),
 
     /**
      * 500 SERVER_ERROR

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.katchup.katchupserver.api.file.domain.File;
 import site.katchup.katchupserver.api.link.domain.Link;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
@@ -62,18 +63,6 @@ public class Card extends BaseEntity {
         this.note = note;
         this.subTask = subTask;
         this.subTask.addCard(this);
-    }
-
-    public void addScreenshot(Screenshot screenshot) {
-        screenshots.add(screenshot);
-    }
-
-    public void addFile(File file) {
-        files.add(file);
-    }
-
-    public void addLink(Link link) {
-        links.add(link);
     }
 
     public void deletedCard() {

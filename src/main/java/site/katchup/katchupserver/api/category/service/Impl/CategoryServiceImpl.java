@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void checkDuplicateCategoryName(Long memberId, String name) {
         if (categoryRepository.existsByMemberIdAndName(memberId, name))
-            throw new BadRequestException(ErrorCode.DUPLICATE_TASK_NAME);
+            throw new BadRequestException(ErrorCode.DUPLICATE_CATEGORY_NAME);
     }
 
     private void deleteTaskAndSubTaskAndCard(Task task) {

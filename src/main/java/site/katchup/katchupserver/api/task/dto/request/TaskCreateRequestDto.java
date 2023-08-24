@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class TaskCreateRequestDto {
     private Long categoryId;
 
-    @Pattern(regexp = "^[a-zA-Z0-9가-힣_\s]*$", message = "KC-103")
+    @Pattern(regexp = "^[\\p{L}\\p{N}\\s]+$", message = "KC-103")
     @NotBlank(message = "TK-109")
     private String name;
 }

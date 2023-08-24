@@ -3,6 +3,7 @@ package site.katchup.katchupserver.api.card.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import site.katchup.katchupserver.api.file.dto.response.FileGetResponseDto;
 import site.katchup.katchupserver.api.keyword.dto.response.KeywordGetResponseDto;
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetResponseDto;
 

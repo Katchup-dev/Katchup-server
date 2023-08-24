@@ -1,13 +1,15 @@
-package site.katchup.katchupserver.api.card.domain;
+package site.katchup.katchupserver.api.file.domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
+import java.util.UUID;
+
 import static jakarta.persistence.FetchType.LAZY;
-import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
 @Entity
@@ -16,8 +18,7 @@ import static lombok.AccessLevel.*;
 public class File extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -26,27 +27,18 @@ public class File extends BaseEntity {
     private String url;
 
     @Column(nullable = false)
-    private Double size;
+    private int size;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
 
     @Builder
-    public File(Long id, String name, String url, Double size, Card card) {
+    public File(UUID id, String name, String url, int size, Card card) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.card = card;
         this.size = size;
-        this.card.addFile(this);
-    }
-
-    @Builder
-    public File(String name, String url, Double size, Card card) {
-        this.name = name;
-        this.url = url;
-        this.size = size;
-        this.card = card;
     }
 }

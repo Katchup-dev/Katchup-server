@@ -30,7 +30,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     @Override
     @Transactional
-    public void createKeyword(KeywordCreateRequestDto requestDto) {
+    public Long createKeyword(KeywordCreateRequestDto requestDto) {
 
         Keyword keyword = Keyword.builder()
                         .name(requestDto.getName())
@@ -38,6 +38,7 @@ public class KeywordServiceImpl implements KeywordService {
                         .taskId(requestDto.getTaskId())
                         .build();
 
-        keywordRepository.save(keyword);
+        Keyword saveKeyword = keywordRepository.save(keyword);
+        return saveKeyword.getId();
     }
 }

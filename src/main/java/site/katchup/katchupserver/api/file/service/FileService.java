@@ -6,4 +6,6 @@ import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponse
 
 public interface FileService {
     FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, FileGetPreSignedRequestDto requestDto);
+
+    void deleteFile(String fileId);
 }

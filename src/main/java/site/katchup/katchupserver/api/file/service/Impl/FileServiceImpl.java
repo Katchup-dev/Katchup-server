@@ -3,14 +3,18 @@ package site.katchup.katchupserver.api.file.service.Impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.katchup.katchupserver.api.file.domain.File;
 import site.katchup.katchupserver.api.file.dto.request.FileGetPreSignedRequestDto;
 import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponseDto;
+import site.katchup.katchupserver.api.file.repository.FileRepository;
 import site.katchup.katchupserver.api.file.service.FileService;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,6 +25,7 @@ public class FileServiceImpl implements FileService {
 
     private final S3Util s3Util;
     private final MemberRepository memberRepository;
+    private final FileRepository fileRepository;
 
     @Override
     @Transactional
@@ -32,4 +37,13 @@ public class FileServiceImpl implements FileService {
         return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), requestDto.getFileName(), preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL));
     }
 
+    @Override
+    @Transactional
+    public void deleteFile(String fileId) {
+        File file = fileRepository.findByIdOrThrow(UUID.fromString(fileId));
+        String filePath = file.getUrl();
+        s3Util.deleteFile(filePath);
+
+        fileRepository.deleteById(UUID.fromString(fileId));
+    }
 }

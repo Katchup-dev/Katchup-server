@@ -4,6 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,5 +70,10 @@ public class S3Util {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         return sdf.format(date).replace("-", "/");
+    }
+
+    public void deleteFile(String filePath) {
+        DeleteObjectRequest request = new DeleteObjectRequest(bucket, filePath);
+        amazonS3.deleteObject(request);
     }
 }

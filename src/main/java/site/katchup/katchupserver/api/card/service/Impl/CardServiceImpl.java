@@ -142,6 +142,7 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
+                    .fileKey(fileService.createKey(memberId, fileInfo))
                     .url(fileService.findUrl(memberId, fileInfo))
                     .name(fileInfo.getFileName())
                     .size(fileInfo.getSize())

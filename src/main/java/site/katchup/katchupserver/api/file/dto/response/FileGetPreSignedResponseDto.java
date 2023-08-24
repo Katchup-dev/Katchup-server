@@ -21,4 +21,7 @@ public class FileGetPreSignedResponseDto {
 
     @Schema(description = "파일 PreSigned-Url", example ="preSigned-url")
     private String filePreSignedUrl;
+
+    @Schema(description = "파일 업로드 일자", example = "2023/08/23")
+    private String fileUploadDate;
 }

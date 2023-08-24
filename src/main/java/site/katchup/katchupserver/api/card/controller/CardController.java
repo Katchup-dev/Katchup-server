@@ -14,6 +14,9 @@ import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
+import site.katchup.katchupserver.common.util.MemberUtil;
+
+import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,9 +33,10 @@ public class CardController {
             })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponseDto createCard(
+    public ApiResponseDto createCard(Principal principal,
             @Valid @RequestBody CardCreateRequestDto cardCreateRequestDto ) {
-        cardService.createCard(cardCreateRequestDto);
+        Long memberId = MemberUtil.getMemberId(principal);
+        cardService.createCard(memberId, cardCreateRequestDto);
         return ApiResponseDto.success();
     }
 

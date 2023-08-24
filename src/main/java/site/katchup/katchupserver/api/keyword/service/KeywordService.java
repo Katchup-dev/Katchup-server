@@ -8,6 +8,6 @@ import java.util.List;
 public interface KeywordService {
 
     List<KeywordGetResponseDto> getAllKeyword(Long cardId);
-    void createKeyword(KeywordCreateRequestDto requestDto);
+    Long createKeyword(KeywordCreateRequestDto requestDto);
 
 }

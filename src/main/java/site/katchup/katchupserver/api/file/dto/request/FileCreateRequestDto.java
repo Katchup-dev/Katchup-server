@@ -24,8 +24,8 @@ public class FileCreateRequestDto {
     @NotNull
     private String fileUrl;
 
-    @Schema(description = "파일 사이즈", example = "2.1")
+    @Schema(description = "파일 사이즈 (KB 단위로 저장)", example = "189277")
     @NotNull
-    private Double size;
+    private int size;
 
 }

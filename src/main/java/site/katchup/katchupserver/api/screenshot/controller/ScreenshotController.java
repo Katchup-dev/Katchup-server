@@ -33,7 +33,7 @@ public class ScreenshotController {
         @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             }
     )
-    @PostMapping("/screenshots/presigned")
+    @GetMapping("/screenshots/presigned")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<ScreenshotGetPreSignedResponseDto> createPresigned(Principal principal, @RequestBody ScreenshotGetPreSignedRequestDto presignedRequestDto
     ) {

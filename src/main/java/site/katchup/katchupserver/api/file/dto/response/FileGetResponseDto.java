@@ -1,6 +1,7 @@
 package site.katchup.katchupserver.api.file.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,6 +19,6 @@ public class FileGetResponseDto {
     @Schema(description = "파일 url", example = "https://abde.s3.ap-northeast-2.amazonaws.com/1.png")
     private String url;
 
-    @Schema(description = "파일 사이즈", example = "2.1")
-    private Double size;
+    @Schema(description = "파일 사이즈 (KB 단위로 저장)", example = "189277")
+    private int size;
 }

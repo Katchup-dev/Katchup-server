@@ -30,7 +30,7 @@ public class FileController {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     }
     )
-    @PostMapping("/files/presigned")
+    @GetMapping("/files/presigned")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<FileGetPreSignedResponseDto> createPresigned(Principal principal, @RequestBody FileGetPreSignedRequestDto presignedRequestDto
     ) {

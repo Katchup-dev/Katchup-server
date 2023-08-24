@@ -17,7 +17,10 @@ public class ScreenshotGetPreSignedResponseDto {
     @Schema(description = "스크린샷 PreSigned-Url", example ="preSigned-url")
     private String screenshotPreSignedUrl;
 
-    public static ScreenshotGetPreSignedResponseDto of (String screenshotUUID, String screenshotPreSignedUrl) {
-        return new ScreenshotGetPreSignedResponseDto(screenshotUUID, screenshotPreSignedUrl);
+    @Schema(description = "스크린샷 업로드 일자", example = "2023/08/23")
+    private String screenshotUploadDate;
+
+    public static ScreenshotGetPreSignedResponseDto of (String screenshotUUID, String screenshotPreSignedUrl, String screenshotUploadDate) {
+        return new ScreenshotGetPreSignedResponseDto(screenshotUUID, screenshotPreSignedUrl, screenshotUploadDate);
     }
 }

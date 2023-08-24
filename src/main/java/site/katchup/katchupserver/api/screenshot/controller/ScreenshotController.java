@@ -38,7 +38,7 @@ public class ScreenshotController {
     public ApiResponseDto<ScreenshotGetPreSignedResponseDto> createPresigned(Principal principal, @RequestBody ScreenshotGetPreSignedRequestDto presignedRequestDto
     ) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(screenshotService.getScreenshotPreSignedUrl(memberId, presignedRequestDto));
+        return ApiResponseDto.success(screenshotService.getPreSignedUrl(memberId, presignedRequestDto));
     }
 
     @Operation(summary = "스크린샷 삭제 API")
@@ -52,7 +52,7 @@ public class ScreenshotController {
     public ApiResponseDto deleteScreenshot(
             @PathVariable Long cardId, @PathVariable String screenshotId
     ) {
-        screenshotService.deleteScreenshot(cardId, screenshotId);
+        screenshotService.delete(cardId, screenshotId);
         return success();
     }
 

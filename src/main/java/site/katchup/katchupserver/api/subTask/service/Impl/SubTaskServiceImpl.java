@@ -25,7 +25,7 @@ public class SubTaskServiceImpl implements SubTaskService {
     @Transactional(readOnly = true)
     public List<SubTaskGetResponseDto> getAllSubTask(Long taskId) {
 
-        return subTaskRepository.findAllByTaskId(taskId).stream()
+        return subTaskRepository.findAllByTaskIdAndNotDeleted(taskId).stream()
                 .map(subTask -> SubTaskGetResponseDto.of(subTask.getId(), subTask.getName()))
                 .collect(Collectors.toList());
     }

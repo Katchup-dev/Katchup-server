@@ -1,7 +1,10 @@
 package site.katchup.katchupserver.api.subTask.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.common.exception.NotFoundException;
@@ -12,7 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface SubTaskRepository extends JpaRepository<SubTask, Long> {
-    List<SubTask> findAllByTaskId(Long taskId);
+    @Query("select s from SubTask s where s.task.id = :taskId and s.isDeleted = false")
+    List<SubTask> findAllByTaskIdAndNotDeleted(@Param("taskId") Long taskId);
 
     Optional<SubTask> findSubTaskByTaskAndName(Task task, String name);
 

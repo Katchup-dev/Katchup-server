@@ -63,7 +63,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<CardListGetResponseDto> getCardList(Long taskId) {
-        return subTaskRepository.findAllByTaskId(taskId).stream()
+        return subTaskRepository.findAllByTaskIdAndNotDeleted(taskId).stream()
                 .flatMap(subTask -> subTask.getCards().stream())
                 .collect(Collectors.groupingBy(Card::getSubTask))  // subTaskId 그룹화
                 .values().stream()

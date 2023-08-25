@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.file.domain.File;
 import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
-import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponseDto;
+import site.katchup.katchupserver.api.file.dto.response.FileGetDownloadPreSignedResponseDto;
+import site.katchup.katchupserver.api.file.dto.response.FileGetUploadPreSignedResponseDto;
 import site.katchup.katchupserver.api.file.repository.FileRepository;
 import site.katchup.katchupserver.api.file.service.FileService;
 import site.katchup.katchupserver.api.member.domain.Member;
@@ -28,18 +29,20 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, String fileName) {
+    public FileGetUploadPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String fileName) {
         String fileUploadPrefix = makeUploadPrefix(memberId);
         HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(fileUploadPrefix, fileName);
 
-        return FileGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), fileName
+        return FileGetUploadPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME), fileName
                 , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
     }
 
     @Override
     @Transactional
-    public String findUrl(Long memberId, FileCreateRequestDto requestDto) {
-        return s3Util.findUrlByName(createKey(memberId, requestDto));
+    public FileGetDownloadPreSignedResponseDto getDownloadPreSignedUrl(String fileUUID, String fileName) {
+        File findFile = fileRepository.findByIdOrThrow(UUID.fromString(fileUUID));
+        String downloadUrl = s3Util.getDownloadPreSignedUrl(findFile.getFileKey(), fileName);
+        return FileGetDownloadPreSignedResponseDto.of(downloadUrl);
     }
 
     @Override

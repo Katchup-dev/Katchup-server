@@ -6,10 +6,15 @@ import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import site.katchup.katchupserver.common.exception.InternalServerException;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,6 +49,22 @@ public class S3Util {
 
     public String findUrlByName(String path) {
         return "https://" + bucket + ".s3." + location + ".amazonaws.com/" + path;
+    }
+
+    public String getDownloadPreSignedUrl(String filePath, String fileName) {
+        try {
+            String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
+
+            GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                    new GeneratePresignedUrlRequest(bucket, filePath)
+                            .withMethod(HttpMethod.GET) // HTTP GET 요청
+                            .withResponseHeaders(new ResponseHeaderOverrides().withContentDisposition("attachment; filename=\"" + encodedFileName + "\""))
+                            .withExpiration(getPreSignedUrlExpiration());
+
+            return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+        } catch (UnsupportedEncodingException e) {
+            throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName) {

@@ -41,8 +41,4 @@ public class File extends BaseEntity {
         this.card = card;
         this.size = size;
     }
-
-    public void updateFileName (String newFileName) {
-        this.name = newFileName;
-    }
 }

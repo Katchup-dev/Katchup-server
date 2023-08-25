@@ -4,6 +4,7 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +42,7 @@ public class S3Util {
         return result;
     }
 
-    public String findUrlByName(String prefix, UUID fileUUID, String fileName, String fileUploadDate) {
-        String path = prefix + "/" + fileUploadDate + "/" + fileUUID + fileName;
+    public String findUrlByName(String path) {
         return "https://" + bucket + ".s3." + location + ".amazonaws.com/" + path;
     }
 
@@ -79,5 +79,10 @@ public class S3Util {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         return sdf.format(date).replace("-", "/");
+    }
+
+    public void deleteFile(String fileKey) {
+        DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileKey);
+        amazonS3.deleteObject(request);
     }
 }

@@ -46,12 +46,10 @@ public class ScreenshotController {
                     @ApiResponse(responseCode = "400", description = "스크린샷 삭제 실패", content = @Content),
                     @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
             })
-    @DeleteMapping("/cards/{cardId}/screenshots/{screenshotId}")
+    @DeleteMapping("/screenshots/{screenshotId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto deleteScreenshot(
-            @PathVariable Long cardId, @PathVariable String screenshotId
-    ) {
-        screenshotService.delete(cardId, screenshotId);
+    public ApiResponseDto deleteScreenshot(@PathVariable String screenshotId) {
+        screenshotService.delete(screenshotId);
         return success();
     }
 

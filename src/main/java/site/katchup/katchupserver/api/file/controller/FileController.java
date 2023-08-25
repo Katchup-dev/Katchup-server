@@ -15,6 +15,8 @@ import site.katchup.katchupserver.common.util.MemberUtil;
 
 import java.security.Principal;
 
+import static site.katchup.katchupserver.common.dto.ApiResponseDto.success;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -35,5 +37,18 @@ public class FileController {
     ) {
         Long memberId = MemberUtil.getMemberId(principal);
         return ApiResponseDto.success(fileService.getFilePreSignedUrl(memberId, fileName));
+    }
+
+    @Operation(summary = "파일 삭제 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "파일 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "파일 삭제 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    @DeleteMapping("/files/{fileId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto deleteFile(@PathVariable String fileId) {
+        fileService.deleteFile(fileId);
+        return success();
     }
 }

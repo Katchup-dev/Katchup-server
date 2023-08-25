@@ -26,6 +26,9 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     private String url;
 
+    @Column(nullable = false, name = "file_key")
+    private String fileKey;
+
     @Column(nullable = false)
     private int size;
 
@@ -34,10 +37,11 @@ public class File extends BaseEntity {
     private Card card;
 
     @Builder
-    public File(UUID id, String name, String url, int size, Card card) {
+    public File(UUID id, String name, String url, String fileKey, int size, Card card) {
         this.id = id;
         this.name = name;
         this.url = url;
+        this.fileKey = fileKey;
         this.card = card;
         this.size = size;
     }

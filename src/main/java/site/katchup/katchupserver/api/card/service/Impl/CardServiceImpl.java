@@ -122,6 +122,7 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
+                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
                     .card(savedCard)
                     .build();
@@ -142,6 +143,7 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
+                    .fileKey(fileService.createKey(memberId, fileInfo))
                     .url(fileService.findUrl(memberId, fileInfo))
                     .name(fileInfo.getFileName())
                     .size(fileInfo.getSize())

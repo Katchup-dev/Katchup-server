@@ -144,7 +144,6 @@ public class CardServiceImpl implements CardService {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
                     .fileKey(fileService.createKey(memberId, fileInfo))
-                    .url(fileService.findUrl(memberId, fileInfo))
                     .name(fileInfo.getFileName())
                     .size(fileInfo.getSize())
                     .card(savedCard)
@@ -209,7 +208,7 @@ public class CardServiceImpl implements CardService {
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getFiles().stream()
-                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getUrl(), file.getSize()))
+                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getSize()))
                 .collect(Collectors.toList());
     }
 

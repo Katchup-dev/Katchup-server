@@ -1,18 +1,18 @@
 package site.katchup.katchupserver.api.file.service;
 
 
-import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
-import site.katchup.katchupserver.api.file.dto.response.FileGetPreSignedResponseDto;
+import site.katchup.katchupserver.api.file.dto.response.FileGetDownloadPreSignedResponseDto;
+import site.katchup.katchupserver.api.file.dto.response.FileGetUploadPreSignedResponseDto;
 
 public interface FileService {
+
+    FileGetDownloadPreSignedResponseDto getDownloadPreSignedUrl(String filePath, String fileName);
 
     String createKey(Long memberId, FileCreateRequestDto requestDto);
 
     void deleteFile(String fileId);
 
-    FileGetPreSignedResponseDto getFilePreSignedUrl(Long memberId, String fileName);
-
-    String findUrl(Long memberId, FileCreateRequestDto requestDto);
+    FileGetUploadPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String fileName);
 
 }

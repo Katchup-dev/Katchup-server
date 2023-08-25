@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface CardKeywordRepository extends JpaRepository<CardKeyword, Long> {
     List<CardKeyword> findAllByCardId(Long cardId);
-
 }

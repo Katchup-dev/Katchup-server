@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.card.domain.Card;
+import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
+
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.*;

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
+import site.katchup.katchupserver.api.card.dto.request.CardUpdateRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.service.CardService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
@@ -63,6 +64,21 @@ public class CardController {
             })
     public ApiResponseDto deleteCards(@RequestBody final CardDeleteRequestDto cardDeleteRequestDto) {
         cardService.deleteCardList(cardDeleteRequestDto);
+        return ApiResponseDto.success();
+    }
+
+    @Operation(summary = "업무 카드 수정 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "업무 카드 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "업무 카드 수정 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    @PatchMapping("/{cardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto updateCard(Principal principal, @PathVariable Long cardId,
+                                     @Valid @RequestBody CardUpdateRequestDto cardUpdateRequestDto ) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        cardService.updateCard(memberId, cardId, cardUpdateRequestDto);
         return ApiResponseDto.success();
     }
 }

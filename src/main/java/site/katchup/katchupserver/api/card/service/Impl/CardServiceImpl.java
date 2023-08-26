@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.card.domain.Card;
 import site.katchup.katchupserver.api.card.dto.request.CardCreateRequestDto;
 import site.katchup.katchupserver.api.card.dto.request.CardDeleteRequestDto;
+import site.katchup.katchupserver.api.card.dto.request.CardUpdateRequestDto;
 import site.katchup.katchupserver.api.card.dto.response.CardGetResponseDto;
 import site.katchup.katchupserver.api.card.dto.response.CardListGetResponseDto;
 import site.katchup.katchupserver.api.file.domain.File;
@@ -36,6 +37,8 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
+import site.katchup.katchupserver.common.exception.BadRequestException;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -151,7 +154,56 @@ public class CardServiceImpl implements CardService {
 
             fileRepository.save(newFile);
         }
+    }
 
+    @Override
+    @Transactional
+    public void updateCard(Long memberId, Long cardId, CardUpdateRequestDto requestDto) {
+
+        SubTask subTask;
+        if (requestDto.getSubTaskId() == SUB_TASK_ETC_ID) {
+            Task task = taskRepository.findByIdOrThrow(requestDto.getTaskId());
+            subTask = subTaskRepository.findOrCreateEtcSubTask(task, SUB_TASK_ETC_NAME);
+        } else {
+            subTask = subTaskRepository.findByIdOrThrow(requestDto.getSubTaskId());
+        }
+
+        Card card = cardRepository.findByIdOrThrow(cardId);
+        card.updateCard(getPlacementOrder(subTask), requestDto.getContent(), requestDto.getNote(), subTask);
+
+        List<CardKeyword> cardKeywordList = cardKeywordRepository.findAllByCardId(cardId);
+        cardKeywordRepository.deleteAll(cardKeywordList);
+
+        for (Long keywordId : requestDto.getKeywordIdList()) {
+            CardKeyword cardKeyword = CardKeyword.builder()
+                    .card(card)
+                    .keyword(keywordRepository.findByIdOrThrow(keywordId))
+                    .build();
+            cardKeywordRepository.save(cardKeyword);
+        }
+
+        for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
+            Screenshot newScreenshot = Screenshot.builder()
+                    .id(screenshotInfo.getScreenshotUUID())
+                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo))
+                    .url(screenshotService.findUrl(memberId, screenshotInfo))
+                    .card(card)
+                    .build();
+
+            screenshotRepository.save(newScreenshot);
+        }
+
+        for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
+            File newFile = File.builder()
+                    .id(fileInfo.getFileUUID())
+                    .fileKey(fileService.createKey(memberId, fileInfo))
+                    .name(fileInfo.getFileName())
+                    .size(fileInfo.getSize())
+                    .card(card)
+                    .build();
+
+            fileRepository.save(newFile);
+        }
     }
 
     @Override

@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
 import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
-import site.katchup.katchupserver.api.sticker.dto.request.StickerCreateRequestDto;
 
 import java.util.List;
 

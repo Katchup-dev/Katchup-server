@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.api.file.domain.File;
+import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
 import site.katchup.katchupserver.api.link.domain.Link;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
+import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateRequestDto;
 import site.katchup.katchupserver.api.subTask.domain.SubTask;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
@@ -72,5 +74,13 @@ public class Card extends BaseEntity {
     
     public void plusPlacementOrder() {
         this.placementOrder += 1;
+    }
+
+    public void updateCard(Long placementOrder, String content, String note, SubTask subTask) {
+        this.placementOrder = placementOrder;
+        this.content = content;
+        this.note = note;
+        this.subTask = subTask;
+        this.subTask.addCard(this);
     }
 }

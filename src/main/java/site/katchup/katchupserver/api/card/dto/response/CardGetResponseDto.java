@@ -13,9 +13,12 @@ import java.util.List;
 @AllArgsConstructor(staticName = "of")
 public class CardGetResponseDto {
     private Long cardId;
-    private String category;
-    private String task;
-    private String subTask;
+    private Long categoryId;
+    private String categoryName;
+    private Long taskId;
+    private String taskName;
+    private Long subTaskId;
+    private String subTaskName;
     private String content;
     private String note;
     private List<KeywordGetResponseDto> keywordList;

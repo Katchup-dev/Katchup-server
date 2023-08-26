@@ -16,6 +16,8 @@ public class CardGetResponseDto {
     private String category;
     private String task;
     private String subTask;
+    private String content;
+    private String note;
     private List<KeywordGetResponseDto> keywordList;
     private List<ScreenshotGetResponseDto> screenshotList;
     private List<FileGetResponseDto> fileList;

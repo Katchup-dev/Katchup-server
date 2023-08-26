@@ -37,6 +37,8 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
+import site.katchup.katchupserver.common.exception.BadRequestException;
+import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -167,24 +169,24 @@ public class CardServiceImpl implements CardService {
         }
 
         Card card = cardRepository.findByIdOrThrow(cardId);
-        card.updateCard(requestDto.getContent(), requestDto.getNote(),subTask);
+        card.updateCard(getPlacementOrder(subTask), requestDto.getContent(), requestDto.getNote(), subTask);
 
         List<CardKeyword> cardKeyword = cardKeywordRepository.findAllByCardId(cardId);
 
-        int count = 0;
+        boolean flag = true;
         for (Long keywordId : requestDto.getKeywordIdList()) {
             for (CardKeyword cardKeywords : cardKeyword) {
                 if (Objects.equals(cardKeywords.getKeyword().getId(), keywordId)) {
-                    count += 1;
+                    flag = false;
                 }
             }
-            if (count == 0) {
+            if (flag) {
                 cardKeywordRepository.save(CardKeyword.builder()
                         .card(card)
                         .keyword(keywordRepository.findByIdOrThrow(keywordId))
                         .build());
             }
-            count = 0;
+            flag = true;
         }
 
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {

@@ -76,7 +76,8 @@ public class Card extends BaseEntity {
         this.placementOrder += 1;
     }
 
-    public void updateCard(String content, String note, SubTask subTask) {
+    public void updateCard(Long placementOrder, String content, String note, SubTask subTask) {
+        this.placementOrder = placementOrder;
         this.content = content;
         this.note = note;
         this.subTask = subTask;

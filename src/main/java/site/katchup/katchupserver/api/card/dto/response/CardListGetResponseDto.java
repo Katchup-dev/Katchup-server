@@ -22,9 +22,11 @@ public class CardListGetResponseDto {
     private List<KeywordGetResponseDto> keywordList = new ArrayList<>();
     private String content;
     private Boolean existFile;
+    private Boolean existScreenshot;
 
     public static CardListGetResponseDto of (Card card, SubTask subTask, List<KeywordGetResponseDto> keywordList) {
         Boolean existFile = card.getFiles().isEmpty() ? false : true;
+        Boolean existScreenshot = card.getScreenshots().isEmpty() ? false : true;
         return CardListGetResponseDto.builder()
                 .cardId(card.getId())
                 .subTaskId(subTask.getId())
@@ -33,6 +35,7 @@ public class CardListGetResponseDto {
                 .keywordList(keywordList)
                 .content(card.getContent())
                 .existFile(existFile)
+                .existScreenshot(existScreenshot)
                 .build();
     }
 }

@@ -224,7 +224,7 @@ public class CardServiceImpl implements CardService {
         List<FileGetResponseDto> fileGetResponseDTOList = getFileDtoList(cardId);
         List<ScreenshotGetResponseDto> screenshotResponseDtoList = getScreenshotDtoList(cardId);
 
-        return CardGetResponseDto.of(card.getId(), category.getName(), task.getName(), card.getSubTask().getName(), keywordResponseDtoList, screenshotResponseDtoList, fileGetResponseDTOList);
+        return CardGetResponseDto.of(card.getId(), category.getName(), task.getName(), card.getSubTask().getName(), card.getContent(), card.getNote(), keywordResponseDtoList, screenshotResponseDtoList, fileGetResponseDTOList);
     }
 
     private Long getPlacementOrder(SubTask subTask) {

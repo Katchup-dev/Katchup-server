@@ -128,6 +128,7 @@ public class CardServiceImpl implements CardService {
                     .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
                             screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
+                    .uploadDate(screenshotInfo.getScreenshotUploadDate())
                     .card(savedCard)
                     .build();
 
@@ -151,6 +152,7 @@ public class CardServiceImpl implements CardService {
                     , fileInfo.getFileOriginalName()))
                     .originalName(fileInfo.getFileOriginalName())
                     .changedName(fileInfo.getFileChangedName())
+                    .uploadDate(fileInfo.getFileUploadDate())
                     .size(fileInfo.getSize())
                     .card(savedCard)
                     .build();
@@ -193,6 +195,7 @@ public class CardServiceImpl implements CardService {
                     .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
                             screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
+                    .uploadDate(screenshotInfo.getScreenshotUploadDate())
                     .card(card)
                     .build();
 
@@ -206,6 +209,7 @@ public class CardServiceImpl implements CardService {
                     , fileInfo.getFileOriginalName()))
                     .originalName(fileInfo.getFileOriginalName())
                     .changedName(fileInfo.getFileChangedName())
+                    .uploadDate(fileInfo.getFileUploadDate())
                     .size(fileInfo.getSize())
                     .card(card)
                     .build();
@@ -262,13 +266,13 @@ public class CardServiceImpl implements CardService {
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
-                        .of(screenshot.getId(), screenshot.getUrl(), getStickerDtoList(screenshot.getId())))
+                        .of(screenshot.getId(), screenshot.getUrl(), screenshot.getUploadDate(), getStickerDtoList(screenshot.getId())))
                                 .collect(Collectors.toList());
     }
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getFiles().stream()
-                .map(file -> FileGetResponseDto.of(file.getId(), file.getOriginalName(), file.getChangedName(), file.getSize()))
+                .map(file -> FileGetResponseDto.of(file.getId(), file.getOriginalName(), file.getChangedName(), file.getUploadDate(), file.getSize()))
                 .collect(Collectors.toList());
     }
 

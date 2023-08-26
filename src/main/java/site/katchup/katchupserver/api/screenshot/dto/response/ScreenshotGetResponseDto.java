@@ -18,6 +18,9 @@ public class ScreenshotGetResponseDto {
     @Schema(description = "스크린샷 url", example = "https://abde.s3.ap-northeast-2.amazonaws.com/1.png")
     private String url;
 
+    @Schema(description = "스크린샷 업로드 일자", example = "2023/08/23")
+    private String uploadDate;
+
     @Schema(description = "번호 스티커")
     private List<StickerGetResponseDto> stickerList;
 }

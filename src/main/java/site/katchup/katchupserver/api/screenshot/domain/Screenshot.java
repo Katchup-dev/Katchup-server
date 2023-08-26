@@ -30,6 +30,9 @@ public class Screenshot extends BaseEntity {
     @Column(nullable = false, name = "screenshot_key")
     private String screenshotKey;
 
+    @Column(nullable = false)
+    private String uploadDate;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "card_id")
     private Card card;
@@ -38,10 +41,11 @@ public class Screenshot extends BaseEntity {
     private List<Sticker> sticker = new ArrayList<>();
 
     @Builder
-    public Screenshot(UUID id, String url, String screenshotKey, Card card) {
+    public Screenshot(UUID id, String url, String screenshotKey, String uploadDate, Card card) {
         this.id = id;
         this.url = url;
         this.screenshotKey =screenshotKey;
+        this.uploadDate = uploadDate;
         this.card = card;
     }
 }

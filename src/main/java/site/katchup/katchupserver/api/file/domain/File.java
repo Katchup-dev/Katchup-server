@@ -30,6 +30,9 @@ public class File extends BaseEntity {
     private String fileKey;
 
     @Column(nullable = false)
+    private String uploadDate;
+
+    @Column(nullable = false)
     private int size;
 
     @ManyToOne(fetch = LAZY)
@@ -37,11 +40,13 @@ public class File extends BaseEntity {
     private Card card;
 
     @Builder
-    public File(UUID id, String originalName, String changedName, String fileKey, int size, Card card) {
+    public File(UUID id, String originalName, String changedName, String fileKey,
+                String uploadDate, int size, Card card) {
         this.id = id;
         this.originalName = originalName;
         this.changedName = changedName;
         this.fileKey = fileKey;
+        this.uploadDate = uploadDate;
         this.card = card;
         this.size = size;
     }

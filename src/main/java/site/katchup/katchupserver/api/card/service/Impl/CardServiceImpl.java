@@ -125,7 +125,8 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
-                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo))
+                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
+                            screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
                     .card(savedCard)
                     .build();
@@ -146,8 +147,10 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
-                    .fileKey(fileService.createKey(memberId, fileInfo))
-                    .name(fileInfo.getFileName())
+                    .fileKey(fileService.createKey(memberId, fileInfo.getFileUploadDate(), fileInfo.getFileUUID().toString()
+                    , fileInfo.getFileOriginalName()))
+                    .originalName(fileInfo.getFileOriginalName())
+                    .changedName(fileInfo.getFileChangedName())
                     .size(fileInfo.getSize())
                     .card(savedCard)
                     .build();
@@ -187,7 +190,8 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
-                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo))
+                    .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
+                            screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
                     .card(card)
                     .build();
@@ -198,8 +202,10 @@ public class CardServiceImpl implements CardService {
         for (FileCreateRequestDto fileInfo : requestDto.getFileList()) {
             File newFile = File.builder()
                     .id(fileInfo.getFileUUID())
-                    .fileKey(fileService.createKey(memberId, fileInfo))
-                    .name(fileInfo.getFileName())
+                    .fileKey(fileService.createKey(memberId, fileInfo.getFileUploadDate(), fileInfo.getFileUUID().toString()
+                    , fileInfo.getFileOriginalName()))
+                    .originalName(fileInfo.getFileOriginalName())
+                    .changedName(fileInfo.getFileChangedName())
                     .size(fileInfo.getSize())
                     .card(card)
                     .build();
@@ -262,7 +268,7 @@ public class CardServiceImpl implements CardService {
 
     private List<FileGetResponseDto> getFileDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getFiles().stream()
-                .map(file -> FileGetResponseDto.of(file.getId(), file.getName(), file.getSize()))
+                .map(file -> FileGetResponseDto.of(file.getId(), file.getOriginalName(), file.getChangedName(), file.getSize()))
                 .collect(Collectors.toList());
     }
 

@@ -17,4 +17,5 @@ public interface FileRepository extends JpaRepository<File, UUID> {
         return findById(uuid).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_FILE));
     }
+
 }

@@ -14,6 +14,7 @@ import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -47,18 +48,18 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public String createKey(Long memberId, FileCreateRequestDto requestDto) {
+    public String createKey(Long memberId, String fileDate, String fileUUID, String fileName) {
         String fileUploadPrefix = makeUploadPrefix(memberId);
-        return fileUploadPrefix + "/" + requestDto.getFileUploadDate() + "/" + requestDto.getFileUUID() + requestDto.getFileName();
+        return fileUploadPrefix + "/" + fileDate + "/" + fileUUID + fileName;
     }
 
     @Override
     @Transactional
-    public void deleteFile(String fileId) {
-        File file = fileRepository.findByIdOrThrow(UUID.fromString(fileId));
-        String fileKey = file.getFileKey();
-        s3Util.deleteFile(fileKey);
-        fileRepository.deleteById(UUID.fromString(fileId));
+    public void deleteFile(Long memberId, String fileOriginalName, String fileUploadDate, String fileUUID) {
+        Optional<File> file = fileRepository.findById(UUID.fromString(fileUUID));
+        if (file.isPresent()) {
+            fileRepository.delete(file.get());
+        } s3Util.deleteFile(createKey(memberId, fileUploadDate, fileUUID, fileOriginalName));
     }
     
     private String makeUploadPrefix(Long memberId) {

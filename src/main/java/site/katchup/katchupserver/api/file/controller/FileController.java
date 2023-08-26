@@ -46,10 +46,12 @@ public class FileController {
             @ApiResponse(responseCode = "400", description = "파일 삭제 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
-    @DeleteMapping("/files/{fileId}")
+    @DeleteMapping("/files")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto delete(@PathVariable String fileId) {
-        fileService.deleteFile(fileId);
+    public ApiResponseDto delete(Principal principal, @RequestParam(value = "fileOriginalName") String fileOriginalName
+            , @RequestParam(value = "fileUploadDate") String fileUploadDate, @RequestParam(value = "fileUUID") String fileUUID) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        fileService.deleteFile(memberId, fileOriginalName, fileUploadDate, fileUUID);
         return success();
     }
 

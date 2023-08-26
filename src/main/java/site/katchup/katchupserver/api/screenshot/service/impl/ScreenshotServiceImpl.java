@@ -14,6 +14,7 @@ import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
 import site.katchup.katchupserver.common.util.S3Util;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,23 +41,24 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Override
     @Transactional
     public String findUrl(Long memberId, ScreenshotCreateRequestDto requestDto) {
-        return s3Util.findUrlByName(createKey(memberId, requestDto));
+        return s3Util.findUrlByName(createKey(memberId, requestDto.getScreenshotUploadDate(), requestDto.getScreenshotUUID().toString()
+        , requestDto.getScreenshotName()));
     }
 
     @Override
     @Transactional
-    public String createKey(Long memberId, ScreenshotCreateRequestDto requestDto) {
+    public String createKey(Long memberId, String screenshotDate, String screenshotUUID, String screenshotName) {
         String screenshotUploadPrefix = makeUploadPrefix(memberId);
-        return screenshotUploadPrefix + "/" + requestDto.getScreenshotUploadDate() + "/" + requestDto.getScreenshotUUID() + requestDto.getScreenshotName();
+        return screenshotUploadPrefix + "/" + screenshotDate + "/" + screenshotUUID + screenshotName;
     }
 
     @Override
     @Transactional
-    public void delete(String screenshotId) {
-        Screenshot screenshot = screenshotRepository.findByIdOrThrow(UUID.fromString(screenshotId));
-        String screenshotKey = screenshot.getScreenshotKey();
-        s3Util.deleteFile(screenshotKey);
-        screenshotRepository.deleteById(UUID.fromString(screenshotId));
+    public void deleteFile(Long memberId, String screenshotName, String screenshotUploadDate, String screenshotUUID) {
+        Optional<Screenshot> screenshot = screenshotRepository.findById(UUID.fromString(screenshotUUID));
+        if (screenshot.isPresent()) {
+            screenshotRepository.delete(screenshot.get());
+        } s3Util.deleteFile(createKey(memberId, screenshotUploadDate, screenshotUUID, screenshotName));
     }
 
     private String makeUploadPrefix(Long memberId) {

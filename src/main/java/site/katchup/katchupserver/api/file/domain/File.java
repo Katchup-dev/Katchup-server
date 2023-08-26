@@ -21,7 +21,10 @@ public class File extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String name;
+    private String originalName;
+
+    @Column(nullable = false)
+    private String changedName;
 
     @Column(nullable = false, name = "file_key")
     private String fileKey;
@@ -34,9 +37,10 @@ public class File extends BaseEntity {
     private Card card;
 
     @Builder
-    public File(UUID id, String name, String fileKey, int size, Card card) {
+    public File(UUID id, String originalName, String changedName, String fileKey, int size, Card card) {
         this.id = id;
-        this.name = name;
+        this.originalName = originalName;
+        this.changedName = changedName;
         this.fileKey = fileKey;
         this.card = card;
         this.size = size;

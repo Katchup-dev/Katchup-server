@@ -9,9 +9,9 @@ public interface FileService {
 
     FileGetDownloadPreSignedResponseDto getDownloadPreSignedUrl(String filePath, String fileName);
 
-    String createKey(Long memberId, FileCreateRequestDto requestDto);
+    String createKey(Long memberId, String fileDate, String fileUUID, String fileName);
 
-    void deleteFile(String fileId);
+    void deleteFile(Long memberId, String fileOriginalName, String fileUploadDate, String fileUUID);
 
     FileGetUploadPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String fileName);
 

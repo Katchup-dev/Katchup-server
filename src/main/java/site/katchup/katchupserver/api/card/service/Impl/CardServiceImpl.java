@@ -95,7 +95,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public void createCard(Long memberId, CardCreateRequestDto requestDto) {
+    public Long createCard(Long memberId, CardCreateRequestDto requestDto) {
 
         SubTask subTask;
         if (requestDto.getSubTaskId() == SUB_TASK_ETC_ID) {
@@ -154,6 +154,8 @@ public class CardServiceImpl implements CardService {
 
             fileRepository.save(newFile);
         }
+
+        return savedCard.getId();
     }
 
     @Override

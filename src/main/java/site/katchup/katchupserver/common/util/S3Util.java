@@ -54,11 +54,12 @@ public class S3Util {
     public String getDownloadPreSignedUrl(String filePath, String fileName) {
         try {
             String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
+            String replacedFileName = encodedFileName.replaceAll("\\+", "%20");
 
             GeneratePresignedUrlRequest generatePresignedUrlRequest =
                     new GeneratePresignedUrlRequest(bucket, filePath)
                             .withMethod(HttpMethod.GET) // HTTP GET 요청
-                            .withResponseHeaders(new ResponseHeaderOverrides().withContentDisposition("attachment; filename=\"" + encodedFileName + "\""))
+                            .withResponseHeaders(new ResponseHeaderOverrides().withContentDisposition("attachment; filename=\"" + replacedFileName + "\""))
                             .withExpiration(getPreSignedUrlExpiration());
 
             return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();

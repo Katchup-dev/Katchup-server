@@ -171,22 +171,15 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepository.findByIdOrThrow(cardId);
         card.updateCard(getPlacementOrder(subTask), requestDto.getContent(), requestDto.getNote(), subTask);
 
-        List<CardKeyword> cardKeyword = cardKeywordRepository.findAllByCardId(cardId);
+        List<CardKeyword> cardKeywordList = cardKeywordRepository.findAllByCardId(cardId);
+        cardKeywordRepository.deleteAll(cardKeywordList);
 
-        boolean flag = true;
         for (Long keywordId : requestDto.getKeywordIdList()) {
-            for (CardKeyword cardKeywords : cardKeyword) {
-                if (Objects.equals(cardKeywords.getKeyword().getId(), keywordId)) {
-                    flag = false;
-                }
-            }
-            if (flag) {
-                cardKeywordRepository.save(CardKeyword.builder()
-                        .card(card)
-                        .keyword(keywordRepository.findByIdOrThrow(keywordId))
-                        .build());
-            }
-            flag = true;
+            CardKeyword cardKeyword = CardKeyword.builder()
+                    .card(card)
+                    .keyword(keywordRepository.findByIdOrThrow(keywordId))
+                    .build();
+            cardKeywordRepository.save(cardKeyword);
         }
 
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {

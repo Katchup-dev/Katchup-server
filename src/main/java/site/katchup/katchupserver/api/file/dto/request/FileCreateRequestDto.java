@@ -16,9 +16,13 @@ public class FileCreateRequestDto {
     @NotNull
     private UUID fileUUID;
 
-    @Schema(description = "파일 이름", example = "와이어프레임 및 드라이브 사용법.pdf")
+    @Schema(description = "파일 원본 이름", example = "와이어프레임 및 드라이브 사용법.pdf")
     @NotNull
-    private String fileName;
+    private String fileOriginalName;
+
+    @Schema(description = "파일 변경된 이름", example = "카테고리_업무_세부업무_와이어프레임 사용법.pdf")
+    @NotNull
+    private String fileChangedName;
 
     @Schema(description = "파일 업로드 일자", example = "2023/08/23")
     @NotNull

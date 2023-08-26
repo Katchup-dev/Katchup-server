@@ -15,7 +15,7 @@ public interface CardService {
     List<CardListGetResponseDto> getCardList(Long taskId);
     CardGetResponseDto getCard(Long cardId);
     void deleteCardList(CardDeleteRequestDto cardDeleteRequestDto);
-    void createCard(Long memberId, CardCreateRequestDto cardCreateRequestDto);
+    Long createCard(Long memberId, CardCreateRequestDto cardCreateRequestDto);
     void updateCard(Long memberId, Long cardId, CardUpdateRequestDto cardUpdateRequestDto);
 
 }

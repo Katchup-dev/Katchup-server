@@ -8,10 +8,9 @@ public interface ScreenshotService {
 
     ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, String screenshotName);
 
-    @Transactional
-    String createKey(Long memberId, ScreenshotCreateRequestDto requestDto);
+    String createKey(Long memberId, String screenshotDate, String screenshotUUID, String screenshotName);
 
-    void delete(String screenshotId);
+    void deleteFile(Long memberId, String screenshotName, String screenshotUploadDate, String screenshotUUID);
     String findUrl(Long memberId, ScreenshotCreateRequestDto requestDto);
 
 }

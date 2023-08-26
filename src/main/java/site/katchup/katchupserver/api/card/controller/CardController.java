@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,10 @@ public class CardController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponseDto createCard(Principal principal,
-            @Valid @RequestBody CardCreateRequestDto cardCreateRequestDto ) {
+                                     @Valid @RequestBody CardCreateRequestDto cardCreateRequestDto, HttpServletResponse response) {
         Long memberId = MemberUtil.getMemberId(principal);
-        cardService.createCard(memberId, cardCreateRequestDto);
+        Long cardId = cardService.createCard(memberId, cardCreateRequestDto);
+        response.addHeader("Location", String.valueOf(cardId));
         return ApiResponseDto.success();
     }
 

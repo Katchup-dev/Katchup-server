@@ -9,9 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
-import site.katchup.katchupserver.common.exception.UnauthorizedException;
-import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.security.Key;
 import java.util.Date;
@@ -112,12 +111,8 @@ public class JwtTokenProvider {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Long validateMemberRefreshToken(String accessToken, String refreshToken) {
-        Claims claims = getAccessTokenPayload(accessToken);
-        Long memberId = Long.valueOf(String.valueOf(claims.get("memberId")));
-        if (!memberRepository.existsByIdAndRefreshToken(memberId, refreshToken)) {
-            throw new UnauthorizedException(ErrorCode.INVALID_MEMBER);
-        }
-        return memberId;
+    public Long validateMemberRefreshToken(String refreshToken) {
+        Member member = memberRepository.findByRefreshTokenOrThrow(refreshToken);
+        return member.getId();
     }
 }

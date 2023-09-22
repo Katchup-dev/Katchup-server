@@ -40,9 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         return;
                     } else if (jwtTokenProvider.validateToken(refreshToken) == JwtExceptionType.VALID_JWT_TOKEN) {
                         // 토큰 재발급
-                        Long memberId = jwtTokenProvider.validateMemberRefreshToken(accessToken, refreshToken);
+                        Long memberId = jwtTokenProvider.validateMemberRefreshToken(refreshToken);
                         Authentication authentication = new UserAuthentication(memberId, null, null);
-
                         String newAccessToken = jwtTokenProvider.generateAccessToken(authentication);
 
                         setAuthentication(newAccessToken);

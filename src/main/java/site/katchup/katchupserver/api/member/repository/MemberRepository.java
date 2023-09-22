@@ -9,9 +9,8 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
+    Optional<Member> findByRefreshToken(String refreshToken);
     boolean existsByEmail(String email);
-
-    boolean existsByIdAndRefreshToken(Long id, String refreshToken);
 
     default Member findByEmailOrThrow(String email) {
         return findByEmail(email)
@@ -22,4 +21,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         return findById(memberId)
                 .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_MEMBER));
     }
+
+    default Member findByRefreshTokenOrThrow(String refreshToken) {
+        return findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new UnauthorizedException(ErrorCode.INVALID_MEMBER));
+    }
+
 }

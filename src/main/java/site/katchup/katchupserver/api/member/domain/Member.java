@@ -62,5 +62,9 @@ public class Member extends BaseEntity {
         int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
         this.userUUID = Integer.toString(l,9);
     }
+
+    public void deleted() {
+        this.isDeleted = true;
+    }
 }
 

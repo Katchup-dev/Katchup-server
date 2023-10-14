@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.api.member.dto;
+package site.katchup.katchupserver.api.member.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

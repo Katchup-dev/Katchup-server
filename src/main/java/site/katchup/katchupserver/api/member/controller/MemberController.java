@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import site.katchup.katchupserver.api.member.dto.MemberProfileGetResponseDto;
+import site.katchup.katchupserver.api.member.dto.response.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.util.MemberUtil;

@@ -51,8 +51,9 @@ public class Member extends BaseEntity {
         updateUserUUID();
     }
 
-    public void updateMemberStatus(boolean isNewUser, String refreshToken) {
+    public void updateMemberStatus(boolean isNewUser, boolean isDeleted, String refreshToken) {
         this.isNewUser = isNewUser;
+        this.isDeleted = isDeleted;
         this.refreshToken = refreshToken;
     }
 

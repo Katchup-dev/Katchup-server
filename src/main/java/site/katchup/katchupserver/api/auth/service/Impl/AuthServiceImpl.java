@@ -46,9 +46,9 @@ public class AuthServiceImpl implements AuthService {
 
             memberRepository.save(member);
         }
-        else memberRepository.findByEmailOrThrow(email).updateMemberStatus(false, refreshToken);
+        // 탈퇴한 유저가 회원가입한 경우, 이미 가입한 유저의 경우
+        else memberRepository.findByEmailOrThrow(email).updateMemberStatus(memberRepository.findByEmailOrThrow(email).isDeleted(), false, refreshToken);
 
-        // 등록된 유저 찾기
         Member signedMember = memberRepository.findByEmailOrThrow(email);
 
         Authentication authentication = new UserAuthentication(signedMember.getId(), null, null);

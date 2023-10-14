@@ -14,7 +14,10 @@ import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
 import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
 import site.katchup.katchupserver.api.auth.service.AuthService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
+import site.katchup.katchupserver.common.util.MemberUtil;
 import site.katchup.katchupserver.config.jwt.JwtTokenProvider;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -51,5 +54,20 @@ public class AuthController {
         String refreshToken = jwtTokenProvider.resolveRefreshToken(request);
 
         return ApiResponseDto.success(authService.getNewToken(accessToken, refreshToken));
+    }
+
+    @Operation(summary = "소셜 로그아웃 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "400", description = "로그아웃 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto socialLogout(Principal principal) {
+        Long memberId = MemberUtil.getMemberId(principal);
+        authService.socialLogout(memberId);
+
+        return ApiResponseDto.success();
     }
 }

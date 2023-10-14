@@ -56,6 +56,10 @@ public class Member extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
+    public void clearRefreshToken() {
+        this.refreshToken = null;
+    }
+
     // 10자리의 katchup 유저 코드 생성
     private void updateUserUUID() {
         String uuid = java.util.UUID.randomUUID().toString();

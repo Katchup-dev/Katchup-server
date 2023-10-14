@@ -8,5 +8,6 @@ public interface AuthService {
 
     AuthLoginResponseDto socialLogin(AuthRequestDto authRequestDto);
     AuthTokenGetResponseDto getNewToken(String accessToken, String refreshToken);
+    void socialLogout(Long memberId);
 
 }

@@ -1,9 +1,9 @@
 package site.katchup.katchupserver.api.auth.service.Impl;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.katchup.katchupserver.api.auth.dto.request.AuthRequestDto;
 import site.katchup.katchupserver.api.auth.dto.response.AuthLoginResponseDto;
 import site.katchup.katchupserver.api.auth.dto.response.AuthTokenGetResponseDto;
@@ -17,13 +17,14 @@ import site.katchup.katchupserver.config.jwt.UserAuthentication;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional
     public AuthLoginResponseDto socialLogin(AuthRequestDto authRequestDto) {
 
         GoogleInfoDto googleInfoDto = login(authRequestDto.getAccessToken());
@@ -71,6 +72,13 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public void socialLogout(Long memberId) {
+        Member findMember = memberRepository.findByIdOrThrow(memberId);
+        findMember.clearRefreshToken();
     }
 
     private boolean isMemberByEmail(String email) {

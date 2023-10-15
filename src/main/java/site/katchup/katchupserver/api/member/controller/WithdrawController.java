@@ -16,9 +16,9 @@ import site.katchup.katchupserver.common.util.MemberUtil;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1/withdraws")
 @RequiredArgsConstructor
-@Tag(name = "[Member] 회원 탈퇴 관련 API (V1)")
+@Tag(name = "[Withdraw] 회원 탈퇴 관련 API (V1)")
 public class WithdrawController {
     private final WithdrawService withdrawService;
 

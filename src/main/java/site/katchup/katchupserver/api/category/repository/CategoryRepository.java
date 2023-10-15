@@ -21,6 +21,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("select c from Category c where c.member.id = :memberId and c.isDeleted = false")
     List<Category> findAllByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
 
+    List<Category> findAllByMemberId(Long memberId);
+
     default Category findByIdOrThrow(Long categoryId) {
         return findByIdAndIsDeletedFalse(categoryId).orElseThrow(
                 () -> new NotFoundException(ErrorCode.NOT_FOUND_CATEGORY));

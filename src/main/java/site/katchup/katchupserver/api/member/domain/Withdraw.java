@@ -35,6 +35,6 @@ public class Withdraw {
     public Withdraw(Member member, String reason) {
         this.member = member;
         this.reason = reason;
-        this.deletedAt = now();
+        this.deletedAt = now().plusDays(60);
     }
 }

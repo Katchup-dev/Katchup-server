@@ -29,12 +29,12 @@ public class Withdraw {
     private String reason;
 
     @CreatedDate
-    private LocalDateTime deletedAt;
+    private LocalDateTime expectedDeleteAt;
 
     @Builder
     public Withdraw(Member member, String reason) {
         this.member = member;
         this.reason = reason;
-        this.deletedAt = now().plusDays(60);
+        this.expectedDeleteAt = now().plusDays(60);
     }
 }

@@ -21,6 +21,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("select c from Category c where c.member.id = :memberId and c.isDeleted = false")
     List<Category> findAllByMemberIdAndNotDeleted(@Param("memberId") Long memberId);
 
+    @Query("select c from Category c where c.member.id = :memberId and c.isDeleted = false and c.isShared = true")
+    List<Category> findAllByMemberIdAndNotDeletedAndIsShared(@Param("memberId") Long memberId);
+
     List<Category> findAllByMemberId(Long memberId);
 
     default Category findByIdOrThrow(Long categoryId) {

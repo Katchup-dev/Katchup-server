@@ -10,7 +10,8 @@ import java.util.List;
 public interface CategoryService {
 
     Long createCategoryName(Long memberId, CategoryCreateRequestDto categoryCreateRequestDto);
-    List<CategoryGetResponseDto> getAllCategory(Long memberId);
+    List<CategoryGetResponseDto> getAllCategories(Long memberId);
+    List<CategoryGetResponseDto> getSharedCategories(Long memberId);
     void updateCategoryName(Long memberId, Long categoryId, CategoryUpdateRequestDto categoryUpdateRequestDto);
     void deleteCategory(Long categoryId);
     CategoryPatchSharedStatusResponseDto toggleSharedStatus(Long categoryId);

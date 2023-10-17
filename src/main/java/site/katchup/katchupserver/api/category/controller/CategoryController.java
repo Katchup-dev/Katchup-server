@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseDto;
+import site.katchup.katchupserver.api.category.dto.response.CategoryPatchSharedStatusResponseDto;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
 import site.katchup.katchupserver.common.util.MemberUtil;
@@ -84,5 +85,18 @@ public class CategoryController {
     public ApiResponseDto deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ApiResponseDto.success();
+    }
+
+    @Operation(summary = "카테고리 공유 활성화 토글 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "카테고리 공유 활성화 토글 변경 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 공유 활성화 토글 변경 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    @PatchMapping("/{categoryId}/share")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponseDto<CategoryPatchSharedStatusResponseDto> toggleSharedStatus(@PathVariable Long categoryId) {
+        CategoryPatchSharedStatusResponseDto categorySharedStatusDto = categoryService.toggleSharedStatus(categoryId);
+        return ApiResponseDto.success(categorySharedStatusDto);
     }
 }

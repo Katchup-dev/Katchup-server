@@ -46,17 +46,21 @@ public class CategoryController {
         return ApiResponseDto.success();
     }
 
-    @Operation(summary = "카테고리 조회 API")
+    @Operation(summary = "카테고리 목록 조회 API")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "카테고리 조회 성공"),
-            @ApiResponse(responseCode = "400", description = "카테고리 조회 실패", content = @Content),
+            @ApiResponse(responseCode = "200", description = "카테고리 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "카테고리 목록 조회 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(Principal principal) {
+    public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(Principal principal,
+                                                                       @RequestParam(name = "isShared", required = false) Boolean isShared) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(categoryService.getAllCategory(memberId));
+        if (isShared != null && isShared) {
+            return ApiResponseDto.success(categoryService.getSharedCategories(memberId));
+        }
+        return ApiResponseDto.success(categoryService.getAllCategories(memberId));
     }
 
     @Operation(summary = "카테고리 이름 수정 API")

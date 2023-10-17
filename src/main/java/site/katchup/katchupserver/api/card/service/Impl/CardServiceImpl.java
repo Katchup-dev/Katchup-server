@@ -37,8 +37,6 @@ import site.katchup.katchupserver.api.task.domain.Task;
 import site.katchup.katchupserver.api.task.repository.TaskRepository;
 import site.katchup.katchupserver.api.trash.domain.Trash;
 import site.katchup.katchupserver.api.trash.repository.TrashRepository;
-import site.katchup.katchupserver.common.exception.BadRequestException;
-import site.katchup.katchupserver.common.response.ErrorCode;
 
 import java.util.*;
 import java.util.stream.Collectors;

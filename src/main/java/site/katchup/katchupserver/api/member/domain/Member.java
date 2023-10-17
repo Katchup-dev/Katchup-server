@@ -51,8 +51,9 @@ public class Member extends BaseEntity {
         updateUserUUID();
     }
 
-    public void updateMemberStatus(boolean isNewUser, String refreshToken) {
+    public void updateMemberStatus(boolean isNewUser, boolean isDeleted, String refreshToken) {
         this.isNewUser = isNewUser;
+        this.isDeleted = isDeleted;
         this.refreshToken = refreshToken;
     }
 
@@ -65,6 +66,10 @@ public class Member extends BaseEntity {
         String uuid = java.util.UUID.randomUUID().toString();
         int l = ByteBuffer.wrap(uuid.getBytes()).getInt();
         this.userUUID = Integer.toString(l,9);
+    }
+
+    public void deleted() {
+        this.isDeleted = true;
     }
 }
 

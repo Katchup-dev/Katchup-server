@@ -93,7 +93,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "카테고리 공유 활성화 토글 변경 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
-    @PatchMapping("/{categoryId}/SharedStatus")
+    @PatchMapping("/{categoryId}/sharedStatus")
     @ResponseStatus(HttpStatus.OK)
     public ApiResponseDto<CategoryPatchSharedStatusResponseDto> toggleSharedStatus(@PathVariable Long categoryId) {
         CategoryPatchSharedStatusResponseDto categorySharedStatusDto = categoryService.toggleSharedStatus(categoryId);

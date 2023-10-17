@@ -7,6 +7,7 @@ import site.katchup.katchupserver.api.category.domain.Category;
 import site.katchup.katchupserver.api.category.dto.request.CategoryCreateRequestDto;
 import site.katchup.katchupserver.api.category.dto.request.CategoryUpdateRequestDto;
 import site.katchup.katchupserver.api.category.dto.response.CategoryGetResponseDto;
+import site.katchup.katchupserver.api.category.dto.response.CategoryPatchSharedStatusResponseDto;
 import site.katchup.katchupserver.api.category.repository.CategoryRepository;
 import site.katchup.katchupserver.api.category.service.CategoryService;
 
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -44,7 +46,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<CategoryGetResponseDto> getAllCategory(Long memberId) {
         return categoryRepository.findAllByMemberIdAndNotDeleted(memberId).stream()
                 .map(category -> CategoryGetResponseDto.of(category.getId(), category.getName(), category.isShared()))
@@ -67,6 +68,14 @@ public class CategoryServiceImpl implements CategoryService {
         Category findCategory = categoryRepository.findByIdOrThrow(categoryId);
         findCategory.deleted();
         findCategory.getTasks().forEach(this::deleteTaskAndSubTaskAndCard);
+    }
+
+    @Override
+    @Transactional
+    public CategoryPatchSharedStatusResponseDto toggleSharedStatus(Long categoryId) {
+        Category findCategory = categoryRepository.findByIdOrThrow(categoryId);
+        findCategory.toggleSharedStatus();
+        return CategoryPatchSharedStatusResponseDto.of(findCategory.isShared());
     }
 
     private void checkDuplicateCategoryName(Long memberId, String name) {

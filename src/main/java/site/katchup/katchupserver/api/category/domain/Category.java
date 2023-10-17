@@ -66,4 +66,7 @@ public class Category extends BaseEntity {
         this.name = newName;
     }
 
+    public void toggleSharedStatus() {
+        isShared = !isShared;
+    }
 }

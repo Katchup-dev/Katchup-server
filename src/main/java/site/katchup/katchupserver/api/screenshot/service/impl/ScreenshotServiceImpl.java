@@ -3,7 +3,6 @@ package site.katchup.katchupserver.api.screenshot.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.katchup.katchupserver.api.file.domain.File;
 import site.katchup.katchupserver.api.member.domain.Member;
 import site.katchup.katchupserver.api.member.repository.MemberRepository;
 import site.katchup.katchupserver.api.screenshot.domain.Screenshot;
@@ -11,9 +10,9 @@ import site.katchup.katchupserver.api.screenshot.dto.request.ScreenshotCreateReq
 import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSignedResponseDto;
 import site.katchup.katchupserver.api.screenshot.repository.ScreenshotRepository;
 import site.katchup.katchupserver.api.screenshot.service.ScreenshotService;
-import site.katchup.katchupserver.common.util.S3Util;
+import site.katchup.katchupserver.external.s3.PreSignedUrlVO;
+import site.katchup.katchupserver.external.s3.S3Service;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +23,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
 
     private static final String SCREENSHOT_FOLDER_NAME = "screenshots";
 
-    private final S3Util s3Util;
+    private final S3Service s3Service;
     private final ScreenshotRepository screenshotRepository;
     private final MemberRepository memberRepository;
 
@@ -32,16 +31,16 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Transactional
     public ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, String screenshotName) {
         String screenshotUploadPrefix = makeUploadPrefix(memberId);
-        HashMap<String, String> preSignedUrlInfo = s3Util.generatePreSignedUrl(screenshotUploadPrefix, screenshotName);
+        PreSignedUrlVO preSignedUrlInfo = s3Service.generatePreSignedUrl(screenshotUploadPrefix, screenshotName);
 
-        return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.get(s3Util.KEY_FILENAME)
-                , preSignedUrlInfo.get(s3Util.KEY_PRESIGNED_URL), screenshotName, preSignedUrlInfo.get(s3Util.KEY_FILE_UPLOAD_DATE));
+        return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.getFileName(), preSignedUrlInfo.getPreSignedUrl(),
+                screenshotName, preSignedUrlInfo.getFileUploadDate());
     }
 
     @Override
     @Transactional
     public String findUrl(Long memberId, ScreenshotCreateRequestDto requestDto) {
-        return s3Util.findUrlByName(createKey(memberId, requestDto.getScreenshotUploadDate(), requestDto.getScreenshotUUID().toString()
+        return s3Service.findUrlByName(createKey(memberId, requestDto.getScreenshotUploadDate(), requestDto.getScreenshotUUID().toString()
         , requestDto.getScreenshotName()));
     }
 
@@ -58,13 +57,13 @@ public class ScreenshotServiceImpl implements ScreenshotService {
         Optional<Screenshot> screenshot = screenshotRepository.findById(UUID.fromString(screenshotUUID));
         if (screenshot.isPresent()) {
             screenshotRepository.delete(screenshot.get());
-        } s3Util.deleteFile(createKey(memberId, screenshotUploadDate, screenshotUUID, screenshotName));
+        } s3Service.deleteFile(createKey(memberId, screenshotUploadDate, screenshotUUID, screenshotName));
     }
 
     private String makeUploadPrefix(Long memberId) {
         Member member = memberRepository.findByIdOrThrow(memberId);
         String userUUID = member.getUserUUID();
-        return s3Util.makeUploadPrefix(userUUID, SCREENSHOT_FOLDER_NAME);
+        return s3Service.makeUploadPrefix(userUUID, SCREENSHOT_FOLDER_NAME);
     }
 
 }

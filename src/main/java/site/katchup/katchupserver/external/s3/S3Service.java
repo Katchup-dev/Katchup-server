@@ -1,4 +1,4 @@
-package site.katchup.katchupserver.common.util;
+package site.katchup.katchupserver.external.s3;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
@@ -17,38 +17,29 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class S3Util {
-
-    public static final String KEY_FILENAME = "fileName";
-    public static final String KEY_FILE_UPLOAD_DATE = "fileUploadDate";
-
-    public static final String KEY_PRESIGNED_URL = "preSignedUrl";
+public class S3Service {
 
     private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     @Value("${cloud.aws.region.static}")
-    private String location;
+    private String region;
 
-    public HashMap<String, String> generatePreSignedUrl(String prefix, String fileName) {
-        HashMap<String, String> result = new HashMap<>();
+    public PreSignedUrlVO generatePreSignedUrl(String prefix, String fileName) {
         String uuidFileName = getUUIDFile();
-        result.put(KEY_FILENAME, uuidFileName);
         String filePath = prefix + "/" + getDateFolder() + "/" + uuidFileName + fileName;
         GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, filePath);
-        result.put(KEY_PRESIGNED_URL, amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString());
-        result.put(KEY_FILE_UPLOAD_DATE, getDateFolder());
-        return result;
+        String presignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+        return PreSignedUrlVO.of(uuidFileName, getDateFolder(), presignedUrl);
     }
 
     public String findUrlByName(String path) {
-        return "https://" + bucket + ".s3." + location + ".amazonaws.com/" + path;
+        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + path;
     }
 
     public String getDownloadPreSignedUrl(String filePath, String fileName) {

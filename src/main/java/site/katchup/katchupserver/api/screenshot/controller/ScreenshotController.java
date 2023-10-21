@@ -37,7 +37,7 @@ public class ScreenshotController {
     public ApiResponseDto<ScreenshotGetPreSignedResponseDto> createPresigned(Principal principal, @RequestParam String screenshotName
     ) {
         Long memberId = MemberUtil.getMemberId(principal);
-        return ApiResponseDto.success(screenshotService.getPreSignedUrl(memberId, screenshotName));
+        return ApiResponseDto.success(screenshotService.getUploadPreSignedUrl(memberId, screenshotName));
     }
 
     @Operation(summary = "스크린샷 삭제 API")

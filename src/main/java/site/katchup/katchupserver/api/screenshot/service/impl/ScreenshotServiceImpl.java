@@ -28,24 +28,21 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     private final MemberRepository memberRepository;
 
     @Override
-    @Transactional
-    public ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, String screenshotName) {
+    public ScreenshotGetPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String screenshotName) {
         String screenshotUploadPrefix = makeUploadPrefix(memberId);
-        PreSignedUrlVO preSignedUrlInfo = s3Service.generatePreSignedUrl(screenshotUploadPrefix, screenshotName);
+        PreSignedUrlVO preSignedUrlInfo = s3Service.getUploadPreSignedUrl(screenshotUploadPrefix, screenshotName);
 
         return ScreenshotGetPreSignedResponseDto.of(preSignedUrlInfo.getFileName(), preSignedUrlInfo.getPreSignedUrl(),
                 screenshotName, preSignedUrlInfo.getFileUploadDate());
     }
 
     @Override
-    @Transactional
     public String findUrl(Long memberId, ScreenshotCreateRequestDto requestDto) {
         return s3Service.findUrlByName(createKey(memberId, requestDto.getScreenshotUploadDate(), requestDto.getScreenshotUUID().toString()
         , requestDto.getScreenshotName()));
     }
 
     @Override
-    @Transactional
     public String createKey(Long memberId, String screenshotDate, String screenshotUUID, String screenshotName) {
         String screenshotUploadPrefix = makeUploadPrefix(memberId);
         return screenshotUploadPrefix + "/" + screenshotDate + "/" + screenshotUUID + screenshotName;
@@ -55,9 +52,8 @@ public class ScreenshotServiceImpl implements ScreenshotService {
     @Transactional
     public void deleteFile(Long memberId, String screenshotName, String screenshotUploadDate, String screenshotUUID) {
         Optional<Screenshot> screenshot = screenshotRepository.findById(UUID.fromString(screenshotUUID));
-        if (screenshot.isPresent()) {
-            screenshotRepository.delete(screenshot.get());
-        } s3Service.deleteFile(createKey(memberId, screenshotUploadDate, screenshotUUID, screenshotName));
+        screenshot.ifPresent(screenshotRepository::delete);
+        s3Service.deleteFile(createKey(memberId, screenshotUploadDate, screenshotUUID, screenshotName));
     }
 
     private String makeUploadPrefix(Long memberId) {

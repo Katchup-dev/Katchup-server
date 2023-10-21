@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import site.katchup.katchupserver.common.exception.InternalServerException;
 import site.katchup.katchupserver.common.response.ErrorCode;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
+import software.amazon.awssdk.core.signer.Presigner;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -28,35 +29,15 @@ public class S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
-    @Value("${cloud.aws.region.static}")
-    private String regionString;
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
 
-    @PostConstruct
-    public void setEnv() {
-        System.setProperty("aws.accessKeyId", accessKey);
-        System.setProperty("aws.secretAccessKey", secretKey);
-    }
-
-    private final Region region = Region.of(regionString);
-
-    private final S3Presigner preSigner = S3Presigner.builder()
-            .region(region)
-            .credentialsProvider(SystemPropertyCredentialsProvider.create())
-            .build();
-    private final S3Client s3Client = S3Client.builder()
-            .region(region)
-            .credentialsProvider(SystemPropertyCredentialsProvider.create())
-            .build();
-
+    private final AWSConfig awsConfig;
     private static final Long PRE_SIGNED_URL_EXPIRE_MINUTE = 1L;
 
     public PreSignedUrlVO getUploadPreSignedUrl(final String prefix, final String fileName) {
         final String uuidFileName = getUUIDFile();
         final String key = prefix + "/" + getDateFolder() + "/" + uuidFileName + fileName;
+
+        S3Presigner preSigner = awsConfig.getS3Presigner();
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
@@ -72,11 +53,13 @@ public class S3Service {
     }
 
     public String findUrlByName(String path) {
+        Region region = awsConfig.getRegion();
         return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + path;
     }
 
     public String getDownloadPreSignedUrl(final String key, final String fileName)  {
         try {
+            S3Presigner preSigner = awsConfig.getS3Presigner();
             String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
             String replacedFileName = encodedFileName.replaceAll("\\+", "%20");
 
@@ -113,6 +96,7 @@ public class S3Service {
     }
 
     public void deleteFile(String key) {
+        S3Client s3Client = awsConfig.getS3Client();
         DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
                 .builder()
                 .bucket(bucketName)

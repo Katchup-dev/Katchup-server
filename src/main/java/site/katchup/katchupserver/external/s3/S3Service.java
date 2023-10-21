@@ -1,83 +1,101 @@
 package site.katchup.katchupserver.external.s3;
 
-import com.amazonaws.HttpMethod;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.Headers;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import site.katchup.katchupserver.common.exception.InternalServerException;
 import site.katchup.katchupserver.common.response.ErrorCode;
+import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
+import java.time.Duration;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class S3Service {
 
-    private final AmazonS3 amazonS3;
     @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private String bucketName;
     @Value("${cloud.aws.region.static}")
-    private String region;
+    private String regionString;
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
 
-    public PreSignedUrlVO generatePreSignedUrl(String prefix, String fileName) {
-        String uuidFileName = getUUIDFile();
-        String filePath = prefix + "/" + getDateFolder() + "/" + uuidFileName + fileName;
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = getGeneratePreSignedUrlRequest(bucket, filePath);
-        String presignedUrl = amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
-        return PreSignedUrlVO.of(uuidFileName, getDateFolder(), presignedUrl);
+    @PostConstruct
+    public void setEnv() {
+        System.setProperty("aws.accessKeyId", accessKey);
+        System.setProperty("aws.secretAccessKey", secretKey);
+    }
+
+    private final Region region = Region.of(regionString);
+
+    private final S3Presigner preSigner = S3Presigner.builder()
+            .region(region)
+            .credentialsProvider(SystemPropertyCredentialsProvider.create())
+            .build();
+    private final S3Client s3Client = S3Client.builder()
+            .region(region)
+            .credentialsProvider(SystemPropertyCredentialsProvider.create())
+            .build();
+
+    private static final Long PRE_SIGNED_URL_EXPIRE_MINUTE = 1L;
+
+    public PreSignedUrlVO getUploadPreSignedUrl(final String prefix, final String fileName) {
+        final String uuidFileName = getUUIDFile();
+        final String key = prefix + "/" + getDateFolder() + "/" + uuidFileName + fileName;
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        PutObjectPresignRequest preSignedUrlRequest = PutObjectPresignRequest.builder()
+                        .signatureDuration(Duration.ofMinutes(PRE_SIGNED_URL_EXPIRE_MINUTE))
+                        .putObjectRequest(putObjectRequest)
+                        .build();
+
+        return PreSignedUrlVO.of(uuidFileName, getDateFolder(), preSigner.presignPutObject(preSignedUrlRequest).url().toString());
     }
 
     public String findUrlByName(String path) {
-        return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + path;
+        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + path;
     }
 
-    public String getDownloadPreSignedUrl(String filePath, String fileName) {
+    public String getDownloadPreSignedUrl(final String key, final String fileName)  {
         try {
             String encodedFileName = URLEncoder.encode(fileName, "UTF-8");
             String replacedFileName = encodedFileName.replaceAll("\\+", "%20");
 
-            GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                    new GeneratePresignedUrlRequest(bucket, filePath)
-                            .withMethod(HttpMethod.GET) // HTTP GET 요청
-                            .withResponseHeaders(new ResponseHeaderOverrides().withContentDisposition("attachment; filename=\"" + replacedFileName + "\""))
-                            .withExpiration(getPreSignedUrlExpiration());
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .responseContentDisposition("attachment; filename=\"" + replacedFileName + "\"")
+                    .build();
 
-            return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
+            GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
+                    .signatureDuration(Duration.ofMinutes(PRE_SIGNED_URL_EXPIRE_MINUTE))
+                    .getObjectRequest(getObjectRequest)
+                    .build();
+
+            return preSigner.presignGetObject(getObjectPresignRequest).url().toString();
+
         } catch (UnsupportedEncodingException e) {
             throw new InternalServerException(ErrorCode.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    private GeneratePresignedUrlRequest getGeneratePreSignedUrlRequest(String bucket, String fileName) {
-        GeneratePresignedUrlRequest generatePresignedUrlRequest =
-                new GeneratePresignedUrlRequest(bucket, fileName)
-                        .withMethod(HttpMethod.PUT)
-                        .withExpiration(getPreSignedUrlExpiration());
-
-        generatePresignedUrlRequest.addRequestParameter(
-                Headers.S3_CANNED_ACL,
-                CannedAccessControlList.PublicRead.toString());
-
-        return generatePresignedUrlRequest;
-    }
-
-    private Date getPreSignedUrlExpiration() {
-        Date expiration = new Date();
-        long expTimeMillis = expiration.getTime();
-        expTimeMillis += 1000 * 30;
-        expiration.setTime(expTimeMillis);
-        return expiration;
     }
 
     public String makeUploadPrefix(String userUUID, String folder) {
@@ -94,8 +112,12 @@ public class S3Service {
         return sdf.format(date).replace("-", "/");
     }
 
-    public void deleteFile(String fileKey) {
-        DeleteObjectRequest request = new DeleteObjectRequest(bucket, fileKey);
-        amazonS3.deleteObject(request);
+    public void deleteFile(String key) {
+        DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest
+                .builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        s3Client.deleteObject(deleteObjectRequest);
     }
 }

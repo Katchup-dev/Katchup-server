@@ -1,8 +1,6 @@
 package site.katchup.katchupserver.api.screenshot.domain;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +27,7 @@ public class Screenshot extends BaseEntity {
     @Column(nullable = false)
     private String url;
 
-    @Column(nullable = false, name = "스크린샷 이름.jpg")
+    @Column(nullable = false, name = "screenshot_name")
     private String screenshotName;
 
     @Column(nullable = false, name = "screenshot_key")

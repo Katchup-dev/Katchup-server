@@ -123,6 +123,7 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
+                    .screenshotName(screenshotInfo.getScreenshotName())
                     .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
                             screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))

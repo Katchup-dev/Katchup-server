@@ -14,6 +14,9 @@ public class ScreenshotGetResponseDto {
     @Schema(description = "스크린샷 고유 id", example = "ddwd-wdwd-wdwd-wdwdwdwd")
     private UUID screenshotUUID;
 
+    @Schema(description = "스크린샷 이름", example = "screenshot-name")
+    private String screenshotName;
+
     @Schema(description = "스크린샷 url", example = "https://abde.s3.ap-northeast-2.amazonaws.com/1.png")
     private String screenshotUrl;
 

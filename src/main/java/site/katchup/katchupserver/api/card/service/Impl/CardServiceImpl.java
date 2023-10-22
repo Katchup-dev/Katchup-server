@@ -266,7 +266,7 @@ public class CardServiceImpl implements CardService {
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
-                        .of(screenshot.getId(), screenshot.getUrl(), screenshot.getUploadDate(), getStickerDtoList(screenshot.getId())))
+                        .of(screenshot.getId(), screenshot.getScreenshotName(), screenshot.getUrl(), screenshot.getUploadDate(), getStickerDtoList(screenshot.getId())))
                                 .collect(Collectors.toList());
     }
 

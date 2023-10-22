@@ -31,10 +31,10 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public FileGetUploadPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String fileName) {
         String fileUploadPrefix = makeUploadPrefix(memberId);
-        PreSignedUrlVO presignedUrlInfo = s3Service.generatePreSignedUrl(fileUploadPrefix, fileName);
+        PreSignedUrlVO preSignedUrlInfo = s3Service.getUploadPreSignedUrl(fileUploadPrefix, fileName);
 
-        return FileGetUploadPreSignedResponseDto.of(presignedUrlInfo.getFileName(), fileName,
-                presignedUrlInfo.getPreSignedUrl(), presignedUrlInfo.getFileUploadDate());
+        return FileGetUploadPreSignedResponseDto.of(preSignedUrlInfo.getFileName(), fileName,
+                preSignedUrlInfo.getPreSignedUrl(), preSignedUrlInfo.getFileUploadDate());
     }
 
     @Override
@@ -56,9 +56,8 @@ public class FileServiceImpl implements FileService {
     @Transactional
     public void deleteFile(Long memberId, String fileOriginalName, String fileUploadDate, String fileUUID) {
         Optional<File> file = fileRepository.findById(UUID.fromString(fileUUID));
-        if (file.isPresent()) {
-            fileRepository.delete(file.get());
-        } s3Service.deleteFile(createKey(memberId, fileUploadDate, fileUUID, fileOriginalName));
+        file.ifPresent(fileRepository::delete);
+        s3Service.deleteFile(createKey(memberId, fileUploadDate, fileUUID, fileOriginalName));
     }
     
     private String makeUploadPrefix(Long memberId) {

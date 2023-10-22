@@ -5,7 +5,7 @@ import site.katchup.katchupserver.api.screenshot.dto.response.ScreenshotGetPreSi
 
 public interface ScreenshotService {
 
-    ScreenshotGetPreSignedResponseDto getPreSignedUrl(Long memberId, String screenshotName);
+    ScreenshotGetPreSignedResponseDto getUploadPreSignedUrl(Long memberId, String screenshotName);
 
     String createKey(Long memberId, String screenshotDate, String screenshotUUID, String screenshotName);
 

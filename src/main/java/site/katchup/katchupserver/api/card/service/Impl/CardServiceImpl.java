@@ -123,6 +123,7 @@ public class CardServiceImpl implements CardService {
         for (ScreenshotCreateRequestDto screenshotInfo : requestDto.getScreenshotList()) {
             Screenshot newScreenshot = Screenshot.builder()
                     .id(screenshotInfo.getScreenshotUUID())
+                    .screenshotName(screenshotInfo.getScreenshotName())
                     .screenshotKey(screenshotService.createKey(memberId, screenshotInfo.getScreenshotUploadDate(), screenshotInfo.getScreenshotUUID().toString(),
                             screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
@@ -265,7 +266,7 @@ public class CardServiceImpl implements CardService {
     private List<ScreenshotGetResponseDto> getScreenshotDtoList(Long cardId) {
         return cardRepository.findByIdOrThrow(cardId).getScreenshots().stream()
                 .map(screenshot -> ScreenshotGetResponseDto
-                        .of(screenshot.getId(), screenshot.getUrl(), screenshot.getUploadDate(), getStickerDtoList(screenshot.getId())))
+                        .of(screenshot.getId(), screenshot.getScreenshotName(), screenshot.getUrl(), screenshot.getUploadDate(), getStickerDtoList(screenshot.getId())))
                                 .collect(Collectors.toList());
     }
 

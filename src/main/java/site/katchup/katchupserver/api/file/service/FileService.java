@@ -1,7 +1,5 @@
 package site.katchup.katchupserver.api.file.service;
 
-
-import site.katchup.katchupserver.api.file.dto.request.FileCreateRequestDto;
 import site.katchup.katchupserver.api.file.dto.response.FileGetDownloadPreSignedResponseDto;
 import site.katchup.katchupserver.api.file.dto.response.FileGetUploadPreSignedResponseDto;
 

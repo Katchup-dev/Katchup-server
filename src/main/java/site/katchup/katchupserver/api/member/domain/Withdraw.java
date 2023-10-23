@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import site.katchup.katchupserver.common.util.StringListConverter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -26,13 +28,14 @@ public class Withdraw {
     private Member member;
 
     @Column(nullable = false, length = 2000)
-    private String reason;
+    @Convert(converter = StringListConverter.class)
+    private List<String> reason;
 
     @CreatedDate
     private LocalDateTime expectedDeleteAt;
 
     @Builder
-    public Withdraw(Member member, String reason) {
+    public Withdraw(Member member, List<String> reason) {
         this.member = member;
         this.reason = reason;
         this.expectedDeleteAt = now().plusDays(60);

@@ -32,9 +32,9 @@ class MemberTest {
 
         // then
         assertThat(savedMember.getId()).isNotNull();
-        assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(savedMember.getMemberProfile().getNickname()).isEqualTo(member.getMemberProfile().getNickname());
         assertThat(savedMember.getEmail()).isEqualTo(member.getEmail());
-        assertThat(savedMember.getImageUrl()).isEqualTo(member.getImageUrl());
+        assertThat(savedMember.getMemberProfile().getImageUrl()).isEqualTo(member.getMemberProfile().getImageUrl());
         assertThat(savedMember.isDeleted()).isEqualTo(member.isDeleted());
         assertThat(savedMember.isNewUser()).isEqualTo(member.isNewUser());
         assertThat(savedMember.getRefreshToken()).isEqualTo(member.getRefreshToken());

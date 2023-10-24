@@ -19,14 +19,10 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String nickname;
+    @Embedded
+    MemberProfile memberProfile;
 
-    @Column(nullable = false)
     private String email;
-
-    @Column(name = "image_url")
-    private String imageUrl;
 
     @Column(name = "user_UUID", nullable = false)
     private String userUUID;
@@ -42,9 +38,9 @@ public class Member extends BaseEntity {
 
     @Builder
     public Member(String nickname, String email, String imageUrl, boolean isDeleted, boolean isNewUser, String refreshToken) {
-        this.nickname = nickname;
+        // TODO: default introduction 어떻게 할지에 따라 수정
+        this.memberProfile = new MemberProfile(nickname, "", imageUrl);
         this.email = email;
-        this.imageUrl = imageUrl;
         this.isDeleted = isDeleted;
         this.isNewUser = isNewUser;
         this.refreshToken = refreshToken;
@@ -55,6 +51,10 @@ public class Member extends BaseEntity {
         this.isNewUser = isNewUser;
         this.isDeleted = isDeleted;
         this.refreshToken = refreshToken;
+    }
+
+    public void updateMemberProfile(MemberProfile memberProfile) {
+        this.memberProfile = memberProfile;
     }
 
     public void clearRefreshToken() {

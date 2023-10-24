@@ -5,8 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import site.katchup.katchupserver.api.member.dto.request.MemberProfileUpdateRequestDto;
 import site.katchup.katchupserver.api.member.dto.response.MemberProfileGetResponseDto;
 import site.katchup.katchupserver.api.member.service.MemberService;
 import site.katchup.katchupserver.common.dto.ApiResponseDto;
@@ -35,4 +38,17 @@ public class MemberController {
 
         return ApiResponseDto.success(responseDto);
     }
+
+    @Operation(summary = "회원 프로필 수정 API")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 프로필 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "회원 프로필 수정 실패", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
+    })
+    @PutMapping("/profile/me")
+    public ApiResponseDto updateMemberProfile(@RequestPart("profileImage") MultipartFile profileImage, @Valid MemberProfileUpdateRequestDto request, Principal principal) {
+        memberService.updateMemberProfile(MemberUtil.getMemberId(principal), profileImage, request);
+        return ApiResponseDto.success();
+    }
+
 }

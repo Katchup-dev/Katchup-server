@@ -48,7 +48,7 @@ dependencies {
 
 	// AWS sdk
 	implementation("software.amazon.awssdk:bom:2.21.0")
-	implementation("software.amazon.awssdk:s3:2.21.0")
+	implementation("software.amazon.awssdk:s3:2.21.6")
 
 	// JWT 설정
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

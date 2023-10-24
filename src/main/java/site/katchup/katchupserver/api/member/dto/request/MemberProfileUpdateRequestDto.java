@@ -13,6 +13,7 @@ public class MemberProfileUpdateRequestDto {
     @Schema(description = "회원 닉네임", example = "unan")
     @NotNull
     private String nickname;
+    @Schema(description = "회원 한줄 소개", example = "안녕하세요")
     @NotNull
     private String introduction;
 }

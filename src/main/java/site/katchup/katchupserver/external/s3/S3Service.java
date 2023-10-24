@@ -1,13 +1,12 @@
 package site.katchup.katchupserver.external.s3;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 import site.katchup.katchupserver.common.exception.InternalServerException;
 import site.katchup.katchupserver.common.response.ErrorCode;
-import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
-import software.amazon.awssdk.core.signer.Presigner;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -17,11 +16,14 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.*;
+import java.util.Date;
+import java.util.Locale;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -83,6 +85,18 @@ public class S3Service {
 
     public String makeUploadPrefix(String userUUID, String folder) {
         return String.join("/", userUUID, folder);
+    }
+
+    public String uploadImage(String prefix, MultipartFile multipartFile) throws IOException {
+        final String key = prefix + "/" + getDateFolder() + "/" + getUUIDFile();
+        S3Client s3Client = awsConfig.getS3Client();
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+        RequestBody requestBody = RequestBody.fromBytes(multipartFile.getBytes());
+        s3Client.putObject(putObjectRequest, requestBody);
+        return key;
     }
 
     private String getUUIDFile() {

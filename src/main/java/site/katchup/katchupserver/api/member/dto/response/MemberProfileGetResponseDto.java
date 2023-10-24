@@ -2,10 +2,11 @@ package site.katchup.katchupserver.api.member.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import site.katchup.katchupserver.api.member.domain.Member;
 
 @Data
-@AllArgsConstructor
 @Schema(description = "회원 응답 DTO")
 public class MemberProfileGetResponseDto {
 
@@ -15,4 +16,19 @@ public class MemberProfileGetResponseDto {
     private String nickname;
     @Schema(description = "회원 이메일", example = "katchup@katchup.com")
     private String email;
+
+    @Builder
+    public MemberProfileGetResponseDto(String imageUrl, String nickname, String email) {
+        this.imageUrl = imageUrl;
+        this.nickname = nickname;
+        this.email = email;
+    }
+
+    public static MemberProfileGetResponseDto of(Member member) {
+        return MemberProfileGetResponseDto.builder()
+                .imageUrl(member.getMemberProfile().getImageUrl())
+                .nickname(member.getMemberProfile().getNickname())
+                .email(member.getEmail())
+                .build();
+    }
 }

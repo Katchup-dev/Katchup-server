@@ -28,7 +28,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberProfileGetResponseDto getMemberProfile(Long memberId) {
         Member member = memberRepository.findByIdOrThrow(memberId);
-
         return MemberProfileGetResponseDto.of(member);
     }
 

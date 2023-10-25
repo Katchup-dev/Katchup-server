@@ -14,13 +14,16 @@ public class MemberProfileGetResponseDto {
     private String imageUrl;
     @Schema(description = "회원 닉네임", example = "unan")
     private String nickname;
+    @Schema(description = "회원 소개", example = "안녕하세요")
+    private String introduction;
     @Schema(description = "회원 이메일", example = "katchup@katchup.com")
     private String email;
 
     @Builder
-    public MemberProfileGetResponseDto(String imageUrl, String nickname, String email) {
+    public MemberProfileGetResponseDto(String imageUrl, String nickname, String introduction, String email) {
         this.imageUrl = imageUrl;
         this.nickname = nickname;
+        this.introduction = introduction;
         this.email = email;
     }
 

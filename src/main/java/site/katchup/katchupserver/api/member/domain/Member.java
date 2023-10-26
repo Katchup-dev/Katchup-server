@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import site.katchup.katchupserver.common.domain.BaseEntity;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
@@ -53,8 +54,20 @@ public class Member extends BaseEntity {
         this.refreshToken = refreshToken;
     }
 
-    public void updateMemberProfile(MemberProfile memberProfile) {
-        this.memberProfile = memberProfile;
+    public void updateIntroduction(String introduction) {
+        if (introduction != null) {
+            this.memberProfile.updateIntroduction(introduction);
+        }
+    }
+
+    public void updateNickname(String nickname) {
+        if (nickname != null) {
+            this.memberProfile.updateNickname(nickname);
+        }
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.memberProfile.updateImageUrl(imageUrl);
     }
 
     public void clearRefreshToken() {

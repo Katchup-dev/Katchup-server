@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,7 @@ public class MemberController {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
     @PutMapping("/profile/me")
-    public ApiResponseDto updateMemberProfile(@RequestPart("profileImage") MultipartFile profileImage, @Valid MemberProfileUpdateRequestDto request, Principal principal) {
+    public ApiResponseDto updateMemberProfile(@RequestPart("profileImage") @Nullable MultipartFile profileImage, @Valid MemberProfileUpdateRequestDto request, Principal principal) {
         memberService.updateMemberProfile(MemberUtil.getMemberId(principal), profileImage, request);
         return ApiResponseDto.success();
     }

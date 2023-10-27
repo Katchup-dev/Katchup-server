@@ -22,7 +22,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
-    private static final String PROFILE_IMAGE_PREFIX = "profiles";
+    private static final String PROFILE_IMAGE_FOLDER_NAME = "profiles";
     private static final List<String> VALID_IMAGE_CONTENT_TYPE =  List.of("image/jpeg", "image/jpg", "image/png", "image/gif", "image/tiff", "image/tif");
     private static final long MAX_PROFILE_IMAGE_SIZE = 5 * 1024 * 1024;
 
@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
             if (Objects.nonNull(profileImage)) {
                 validateExtension(profileImage);
                 validateFileSize(profileImage);
-                String key = s3Service.uploadImage(s3Service.makeUploadPrefix(member.getUserUUID(), PROFILE_IMAGE_PREFIX), profileImage);
+                String key = s3Service.uploadImage(s3Service.makeUploadPrefix(member.getUserUUID(), PROFILE_IMAGE_FOLDER_NAME), profileImage);
                 member.updateImageUrl(s3Service.findUrlByName(key));
             }
             member.updateIntroduction(request.getIntroduction());

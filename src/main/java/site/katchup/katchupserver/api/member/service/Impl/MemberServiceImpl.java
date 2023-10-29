@@ -55,13 +55,13 @@ public class MemberServiceImpl implements MemberService {
 
     private void validateFileSize(MultipartFile profileImage) {
         if (profileImage.getSize() > MAX_PROFILE_IMAGE_SIZE) {
-            throw new BadRequestException(ErrorCode.INVALID_FILE_SIZE);
+            throw new BadRequestException(ErrorCode.INVALID_PROFILE_IMAGE_SIZE);
         }
     }
 
     private void validateExtension(MultipartFile profileImage) {
         if (!VALID_IMAGE_CONTENT_TYPE.contains(profileImage.getContentType())) {
-            throw new BadRequestException(ErrorCode.INVALID_FILE_TYPE);
+            throw new BadRequestException(ErrorCode.INVALID_PROFILE_IMAGE_TYPE);
         }
     }
 }

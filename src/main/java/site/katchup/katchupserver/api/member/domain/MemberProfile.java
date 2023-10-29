@@ -28,4 +28,16 @@ public class MemberProfile {
         this.introduction = introduction;
         this.imageUrl = imageUrl;
     }
+
+    protected void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    protected void updateIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    protected void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

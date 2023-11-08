@@ -1,14 +1,11 @@
 package site.katchup.katchupserver.external.s3;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 
@@ -22,9 +19,9 @@ public class AWSConfig {
     private final String secretKey;
     private final String regionString;
 
-    public AWSConfig(@Value("${cloud.aws.credentials.accessKey}") final String accessKey,
-                    @Value("${cloud.aws.credentials.secretKey}") final String secretKey,
-                    @Value("${cloud.aws.region.static}") final String regionString) {
+    public AWSConfig(@Value("${aws-property.access-key}") final String accessKey,
+                    @Value("${aws-property.secret-key}") final String secretKey,
+                    @Value("${aws-property.aws-region}") final String regionString) {
         this.accessKey = accessKey;
         this.secretKey = secretKey;
         this.regionString = regionString;

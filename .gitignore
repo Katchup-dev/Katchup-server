@@ -37,7 +37,6 @@ ide
 .vscode/
 .env
 
-resources/
 .jpb/
-
+application-secret.properties
 .DS_Store

@@ -21,32 +21,12 @@ jobs:
           distribution: 'corretto'
           cache: gradle
 
-      - name: create application-aws file
+      - name: set environment variables
         working-directory: ./
         run: |
           pwd
-          mkdir src/main/resources
-          touch src/main/resources/application-aws.yml
-          echo AWS_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY }} >> src/main/resources/application-aws.yml
-          echo AWS_REGION=${{ secrets.AWS_REGION }} >> src/main/resources/application-aws.yml
-          echo AWS_SECRET_KEY=${{ secrets.AWS_SECRET_KEY }} >> src/main/resources/application-aws.yml
-          echo S3_BUCKET=${{ secrets.S3_BUCKET }} >> src/main/resources/application-aws.yml
-          cat src/main/resources/application-aws.yml
-
-      - name: create .env file
-        working-directory: ./
-        run: |
-          pwd
-          touch .env
-          echo "${{ secrets.ENV }}" >> .env
-          cat .env
-
-      - name: Create application.yml
-        run: |
-          pwd
-          touch src/main/resources/application.yml
-          echo "${{ secrets.APPLICATION_YML }}" >> src/main/resources/application.yml
-          cat src/main/resources/application.yml
+          touch src/main/resources/application-secret.properties
+          echo ${{ secrets.ENV }} >> src/main/resources/application-secret.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

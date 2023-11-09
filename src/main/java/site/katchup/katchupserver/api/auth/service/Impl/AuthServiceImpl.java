@@ -52,7 +52,9 @@ public class AuthServiceImpl implements AuthService {
 
         Member signedMember = memberRepository.findByEmailOrThrow(email);
 
-        Authentication authentication = new UserAuthentication(signedMember.getId(), null, null);
+        Long memberId = signedMember.getId();
+
+        Authentication authentication = new UserAuthentication(memberId, null, null);
 
         String accessToken = jwtTokenProvider.generateAccessToken(authentication);
 
@@ -60,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
 
         return AuthLoginResponseDto.builder()
                 .nickname(nickname)
+                .memberId(memberId)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .isNewUser(signedMember.isNewUser())

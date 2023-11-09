@@ -11,6 +11,8 @@ import lombok.Data;
 public class AuthLoginResponseDto {
     @Schema(description = "닉네임", example = "unan")
     private String nickname;
+    @Schema(description = "멤버 고유 id", example = "382")
+    private Long memberId;
     @Schema(description = "Katchup Access Token", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1bmFuIiwiaWF0IjoxNjI0NjQ0NjY2LCJleHAiOj")
     private String accessToken;
     @Schema(description = "Katchup Refresh Token", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1bmFuIiwiaWF0IjoxNjI0NjQ0NjY2LCJleHAiOj")

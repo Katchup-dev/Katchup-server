@@ -29,7 +29,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class S3Service {
 
-    @Value("${cloud.aws.s3.bucket}")
+    @Value("${aws-property.s3-bucket-name}")
     private String bucketName;
 
     private final AWSConfig awsConfig;

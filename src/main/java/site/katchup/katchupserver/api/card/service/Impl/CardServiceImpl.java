@@ -195,6 +195,7 @@ public class CardServiceImpl implements CardService {
                             screenshotInfo.getScreenshotName()))
                     .url(screenshotService.findUrl(memberId, screenshotInfo))
                     .uploadDate(screenshotInfo.getScreenshotUploadDate())
+                    .screenshotName(screenshotInfo.getScreenshotName())
                     .card(card)
                     .build();
 

@@ -52,11 +52,10 @@ public class CategoryController {
             @ApiResponse(responseCode = "400", description = "카테고리 목록 조회 실패", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content)
     })
-    @GetMapping()
+    @GetMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(Principal principal,
+    public ApiResponseDto<List<CategoryGetResponseDto>> getAllCategory(@PathVariable final Long memberId,
                                                                        @RequestParam(name = "isShared", required = false) Boolean isShared) {
-        Long memberId = MemberUtil.getMemberId(principal);
         if (isShared != null && isShared) {
             return ApiResponseDto.success(categoryService.getSharedCategories(memberId));
         }

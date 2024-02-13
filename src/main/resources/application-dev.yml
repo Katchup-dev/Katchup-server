@@ -52,3 +52,6 @@ springdoc:
     path: /api-docs/json
     groups:
       enabled: true
+slack:
+  bot-token: ${SLACK_BOT_TOKEN}
+  channel: ${SLACK_ALERT_CHANNEL}

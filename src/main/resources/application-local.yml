@@ -35,3 +35,7 @@ aws-property:
   s3-bucket-name: ${AWS_BUCKET_NAME}
   access-key: ${AWS_ACCESS_KEY}
   secret-key: ${AWS_SECRET_KEY}
+
+slack:
+  bot-token: ${SLACK_BOT_TOKEN}
+  channel: ${SLACK_ALERT_CHANNEL}

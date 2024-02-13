@@ -50,7 +50,7 @@ dependencies {
 	implementation("com.slack.api:slack-api-client:1.31.0")
 
 	// AWS sdk
-	implementation("software.amazon.awssdk:bom:2.21.0")
+	implementation("software.amazon.awssdk:bom:2.24.1")
 	implementation("software.amazon.awssdk:s3:2.21.0")
 
 	// JWT 설정
